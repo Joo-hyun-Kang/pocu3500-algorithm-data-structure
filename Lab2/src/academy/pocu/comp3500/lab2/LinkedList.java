@@ -34,46 +34,32 @@ public final class LinkedList {
     }
 
     public static Node insertAt(final Node rootOrNull, final int index, final int data) {
-        //경계 여기임 index가 유효하지 않으면 아무일도 일어나지 않음
-        //더블 포인터 없음
-
         if (index < 0) {
             return rootOrNull;
         }
 
         if (rootOrNull == null) {
-            return LinkedList.append(rootOrNull, data);
+            return LinkedList.append(null, data);
         }
 
-        assert (index >= 0);
-        assert (rootOrNull != null);
-        //index가 유효하지 않은 경우
-        // F T => 무효 tmp == null, count >= 0
-        // F F = > 유효
-        // T T => 돈다
-        // T F => 유효
         Node frontNode = rootOrNull;
         Node backNode = rootOrNull;
 
-        // root 0 ok
-        // root -> node 1 ok
-        // root -> node 2 ?
-        // root -> node 3 no
         int i = 0;
-        for (; i < index; i++) {
-            if (backNode == null) {
-                break;
-            }
+        while (backNode != null && i < index) {
             frontNode = backNode;
             backNode = backNode.getNextOrNull();
+            i++;
         }
 
-        assert (backNode != null);
 
-        if (backNode != null && i == index) {
-            frontNode.setNext(new Node(data));
-            Node insertedNode = frontNode.getNextOrNull();
-            insertedNode.setNext(backNode);
+        if (frontNode == backNode) {
+            return LinkedList.prepend(rootOrNull, data);
+        }
+
+        if (backNode != null) {
+            Node insertedNode = prepend(backNode, data);
+            frontNode.setNext(insertedNode);
         }
 
         return rootOrNull;
