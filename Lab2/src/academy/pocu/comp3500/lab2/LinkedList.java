@@ -38,10 +38,11 @@ public final class LinkedList {
             return rootOrNull;
         }
 
+        /*
         if (rootOrNull == null) {
             return LinkedList.append(null, data);
         }
-
+        */
         Node frontNode = rootOrNull;
         Node backNode = rootOrNull;
 
@@ -52,7 +53,7 @@ public final class LinkedList {
             i++;
         }
 
-
+        // 선조건 backnode는 index 밖이면 null이 됌
         if (frontNode == backNode) {
             return LinkedList.prepend(rootOrNull, data);
         }

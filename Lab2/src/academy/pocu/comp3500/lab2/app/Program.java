@@ -26,7 +26,7 @@ public class Program {
 
             assert (root.getData() == 11);
 
-            root = LinkedList.insertAt(root, 1, 12);
+            root = LinkedList.insertAt(root, 0, 12);
 
             assert (root.getData() == 11);
 
