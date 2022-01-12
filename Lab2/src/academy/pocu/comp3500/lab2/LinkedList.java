@@ -43,7 +43,7 @@ public final class LinkedList {
             return LinkedList.append(null, data);
         }
         */
-        Node frontNode = rootOrNull;
+        Node frontNode = null;
         Node backNode = rootOrNull;
 
         int i = 0;
@@ -53,11 +53,12 @@ public final class LinkedList {
             i++;
         }
 
-        // 선조건 backnode는 index 밖이면 null이 됌
-        if (frontNode == backNode) {
+        //i = 0이면 위에거 안 돌고, root 앞에 붙이면 됌
+        if (frontNode == null) {
             return LinkedList.prepend(rootOrNull, data);
         }
 
+        // 선조건 backnode는 index 밖이면 null이 됌
         if (backNode != null) {
             Node insertedNode = prepend(backNode, data);
             frontNode.setNext(insertedNode);
