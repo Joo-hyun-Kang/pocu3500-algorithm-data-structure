@@ -65,9 +65,44 @@ public final class LinkedList {
             return rootOrNull;
         }
 
+        // root - node - node
+        // front   back
+
+        Node front = null;
+        Node back = rootOrNull;
+
+        int i = 0;
+        while (back != null && i < index) {
+            front = back;
+            back = back.getNextOrNull();
+            i++;
+        }
+        //case
+        // back == null i < index -> no..
+        // back != null i == index ok
+        // back == null i == index no
+
+        // what happen when front == null
+        // root
+
+        // root is not null but i = 0
+        // root - node - node
+        // back
         //
 
-        return null;
+        // root is not null but i = 1
+        // root  - null
+        // front - back
+
+        if (back != null) {
+            if (front == null) {
+                return back.getNextOrNull();
+            }
+
+            front.setNext(back.getNextOrNull());
+        }
+
+        return rootOrNull;
     }
 
     public static int getIndexOf(final Node rootOrNull, final int data) {
