@@ -20,9 +20,9 @@ public class Program {
 
         {
             //LinkdedList.insertAt Test
-            Node root = LinkedList.append(null, 10);
+            Node root = null;
 
-            root = LinkedList.insertAt(root, 0, 11);
+            root = LinkedList.insertAt(root, 1, 11);
 
             root = LinkedList.insertAt(root, 0, 100);
 
@@ -32,7 +32,7 @@ public class Program {
 
             root = LinkedList.insertAt(root, 5, 200);
 
-            root = LinkedList.insertAt(root, 7, 200);
+            root = LinkedList.insertAt(root, -1, 200);
         }
     }
 }
