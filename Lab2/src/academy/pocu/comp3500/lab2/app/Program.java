@@ -24,19 +24,15 @@ public class Program {
 
             root = LinkedList.insertAt(root, 0, 11);
 
-            assert (root.getData() == 11);
+            root = LinkedList.insertAt(root, 0, 100);
 
             root = LinkedList.insertAt(root, 1, 12);
 
-            assert (root.getData() == 11);
+            root = LinkedList.insertAt(root, 2, 200);
 
-            Node next = root.getNextOrNull();
+            root = LinkedList.insertAt(root, 5, 200);
 
-            assert (next.getData() == 12);
-
-            next = next.getNextOrNull();
-
-            assert (next.getData() == 10);
+            root = LinkedList.insertAt(root, 7, 200);
         }
     }
 }
