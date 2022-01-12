@@ -5,6 +5,8 @@ import academy.pocu.comp3500.lab2.datastructure.Node;
 import academy.pocu.comp3500.lab2.Queue;
 import academy.pocu.comp3500.lab2.Stack;
 
+import java.io.LineNumberReader;
+
 public class Program {
 
     public static void main(String[] args) {
@@ -36,18 +38,48 @@ public class Program {
             root = LinkedList.append(root, 11);
             root = LinkedList.append(root, 12);
             root = LinkedList.append(root, 13);
-
             root = LinkedList.removeAt(root, 0);
-
             assert (root.getData() == 11);
-
             root = LinkedList.removeAt(root, 1);
-
             assert (root.getData() == 11);
-
             Node next = root.getNextOrNull();
-
             assert (next.getData() == 13);
         }
+
+        {
+            //LinkedList.getIndexof
+            Node root = null;
+
+            int index = LinkedList.getIndexOf(root, 10);
+            assert (index == -1);
+
+            root = LinkedList.append(root, 10);
+            root = LinkedList.append(root, 20);
+            root = LinkedList.append(root, 30);
+
+            int index1 = LinkedList.getIndexOf(root, 10);
+            int index2 = LinkedList.getIndexOf(root, 20);
+            int index3 = LinkedList.getIndexOf(root, 30);
+            int index4 = LinkedList.getIndexOf(root, 40);
+            assert (index1 == 0);
+            assert (index2 == 1);
+            assert (index3 == 2);
+            assert (index4 == -1);
+        }
+
+        {
+            Node root = LinkedList.append(null, 10);
+
+            root = LinkedList.append(root, 11);
+
+            Node node = LinkedList.getOrNull(root, 0);
+
+            assert (node.getData() == 10);
+
+            node = LinkedList.getOrNull(root, 1);
+
+            assert (node.getData() == 11);
+        }
+
     }
 }
