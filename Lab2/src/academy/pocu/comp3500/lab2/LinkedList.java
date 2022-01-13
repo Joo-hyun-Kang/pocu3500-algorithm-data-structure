@@ -66,9 +66,6 @@ public final class LinkedList {
             return rootOrNull;
         }
 
-        // root - node - node
-        // front   back
-
         Node front = null;
         Node back = rootOrNull;
 
@@ -78,22 +75,6 @@ public final class LinkedList {
             back = back.getNextOrNull();
             i++;
         }
-        //case
-        // back == null i < index -> no..
-        // back != null i == index ok
-        // back == null i == index no
-
-        // what happen when front == null
-        // root
-
-        // root is not null but i = 0
-        // root - node - node
-        // back
-        //
-
-        // root is not null but i = 1
-        // root  - null
-        // front - back
 
         if (back != null) {
             if (front == null) {
@@ -136,18 +117,61 @@ public final class LinkedList {
             tmp = tmp.getNextOrNull();
             i++;
         }
-        // root node 1 ok ret node
-        // root null 1 ok ret null
-        // root null 2 ok ret null
-        // root node node
+
         return tmp;
     }
 
     public static Node reverse(final Node rootOrNull) {
-        return null;
+        if (rootOrNull == null) {
+            return rootOrNull;
+        }
+
+        Node front = rootOrNull;
+        Node back = rootOrNull.getNextOrNull();
+
+        while (back != null) {
+            Node tmp = back.getNextOrNull();
+            back.setNext(front);
+            front = back;
+            back = tmp;
+        }
+
+        assert (front != null);
+        return front;
     }
 
     public static Node interleaveOrNull(final Node root0OrNull, final Node root1OrNull) {
+
+        /*
+            root1 - node1 - node1
+            tmp
+
+            root2 - node2 - node2
+            tmp
+
+            1. root1 뒤에 root2를 연결한다
+            2. root2 뒤에 node1을 연결한다
+            즉, tmp를 이용한다
+         */
+        Node p0 = root0OrNull;
+        Node p1 = root1OrNull;
+
+        assert (p0 != null && p1 != null);
+
+        while (p0 != null || p1 != null) {
+            if (p0 != null) {
+               Node tmp = p0.getNextOrNull();
+                p0.setNext(p1);
+                p0 = tmp;
+            }
+
+            if (p1 != null) {
+                tmp = p1.getNextOrNull();
+                p1.setNext(p0);
+                p1 = tmp;
+            }
+        }
+
         return null;
     }
 }

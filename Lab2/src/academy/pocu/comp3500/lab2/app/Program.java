@@ -68,6 +68,7 @@ public class Program {
         }
 
         {
+            //LinkedList.getOrNull
             Node root = LinkedList.append(null, 10);
 
             root = LinkedList.append(root, 11);
@@ -80,6 +81,37 @@ public class Program {
 
             assert (node.getData() == 11);
         }
+
+        {
+            //LinkedList.reverse
+            Node root = LinkedList.append(null, 10);
+
+            root = LinkedList.append(root, 11);
+            root = LinkedList.append(root, 12);
+            root = LinkedList.append(root, 13);
+            root = LinkedList.append(root, 14);
+
+            root = LinkedList.reverse(root); // root: 14, list: 14 -> 13 -> 12 -> 11 -> 10
+
+            assert (root.getData() == 14);
+
+            Node next = root.getNextOrNull();
+
+            assert (next.getData() == 13);
+
+            next = next.getNextOrNull();
+
+            assert (next.getData() == 12);
+
+            next = next.getNextOrNull();
+
+            assert (next.getData() == 11);
+
+            next = next.getNextOrNull();
+
+            assert (next.getData() == 10);
+        }
+
 
     }
 }
