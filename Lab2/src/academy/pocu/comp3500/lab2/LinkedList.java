@@ -39,23 +39,22 @@ public final class LinkedList {
             return rootOrNull;
         }
 
-        Node frontNode = null;
+        if (rootOrNull == null && index == 0) {
+            return LinkedList.prepend(rootOrNull, data);
+        }
+
         Node backNode = rootOrNull;
 
-        int i = 0;
+        int i = 1;
         while (backNode != null && i < index) {
-            frontNode = backNode;
             backNode = backNode.getNextOrNull();
             i++;
         }
 
-        if (i == index) {
-            if (frontNode == null) {
-                return LinkedList.prepend(rootOrNull, data);
-            }
-
-            Node insertedNode = prepend(backNode, data);
-            frontNode.setNext(insertedNode);
+        if (backNode != null && i == index) {
+            Node tmp = backNode.getNextOrNull();
+            Node insertNode = append(backNode, data);
+            insertNode.setNext(tmp);
         }
 
         return rootOrNull;
