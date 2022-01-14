@@ -53,15 +53,14 @@ public final class LinkedList {
 
         if (frontNode != null && i == index) {
             Node tmp = frontNode.getNextOrNull();
-            Node insertNode = append(frontNode, data);
-            insertNode.setNext(tmp);
+            frontNode.setNext(new Node(data));
+            frontNode.getNextOrNull().setNext(tmp);
         }
 
         return rootOrNull;
     }
 
     public static Node removeAt(final Node rootOrNull, final int index) {
-        /*
         if (index < 0) {
             return rootOrNull;
         }
@@ -90,9 +89,6 @@ public final class LinkedList {
         }
 
         return rootOrNull;
-
-         */
-        return null;
     }
 
     public static int getIndexOf(final Node rootOrNull, final int data) {

@@ -47,6 +47,21 @@ public class Program {
         }
 
         {
+            //LinkdedList.RemoveAt Test
+            Node root = LinkedList.append(null, 10);
+
+            root = LinkedList.append(root, 11);
+            root = LinkedList.append(root, 12);
+            root = LinkedList.append(root, 13);
+            root = LinkedList.removeAt(root, 0);
+            assert (root.getData() == 11);
+            root = LinkedList.removeAt(root, 1);
+            assert (root.getData() == 11);
+            Node next = root.getNextOrNull();
+            assert (next.getData() == 13);
+        }
+
+        {
             //LinkedList.getIndexof
             Node root = null;
 
