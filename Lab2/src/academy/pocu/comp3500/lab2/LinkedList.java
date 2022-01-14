@@ -43,17 +43,17 @@ public final class LinkedList {
             return LinkedList.prepend(rootOrNull, data);
         }
 
-        Node backNode = rootOrNull;
+        Node frontNode = rootOrNull;
 
         int i = 1;
-        while (backNode != null && i < index) {
-            backNode = backNode.getNextOrNull();
+        while (frontNode != null && i < index) {
+            frontNode = frontNode.getNextOrNull();
             i++;
         }
 
-        if (backNode != null && i == index) {
-            Node tmp = backNode.getNextOrNull();
-            Node insertNode = append(backNode, data);
+        if (frontNode != null && i == index) {
+            Node tmp = frontNode.getNextOrNull();
+            Node insertNode = append(frontNode, data);
             insertNode.setNext(tmp);
         }
 
@@ -65,22 +65,27 @@ public final class LinkedList {
             return rootOrNull;
         }
 
-        Node front = null;
-        Node back = rootOrNull;
+        if (rootOrNull != null && index == 0) {
+            Node result = rootOrNull.getNextOrNull();
+            rootOrNull.setNext(null);
+            return result;
+        }
 
-        int i = 0;
-        while (back != null && i < index) {
-            front = back;
-            back = back.getNextOrNull();
+        Node frontNode = rootOrNull;
+
+        int i = 1;
+        while (frontNode != null && i < index) {
+            frontNode = frontNode.getNextOrNull();
             i++;
         }
 
-        if (back != null) {
-            if (front == null) {
-                return back.getNextOrNull();
-            }
+        if (frontNode != null && i == index) {
+            Node removeAtNode = frontNode.getNextOrNull();
 
-            front.setNext(back.getNextOrNull());
+            if (removeAtNode != null) {
+                frontNode.setNext(removeAtNode.getNextOrNull());
+                removeAtNode.setNext(null);
+            }
         }
 
         return rootOrNull;
