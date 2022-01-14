@@ -10,21 +10,18 @@ public class Queue {
     }
 
     public void enqueue(final int data) {
-        this.root = LinkedList.prepend(root, data);
+        this.root = LinkedList.append(root, data);
         size++;
     }
 
     public int peek() {
-        return LinkedList.getOrNull(root, size - 1).getData();
+        return root.getData();
     }
 
     public int dequeue() {
-        int result = LinkedList.getOrNull(root, size - 1).getData();
-
-        this.root = LinkedList.removeAt(root, size - 1);
-
+        int result = root.getData();
+        root = LinkedList.removeAt(root, 0);
         size--;
-
         return result;
     }
 

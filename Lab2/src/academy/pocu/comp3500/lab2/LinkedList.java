@@ -68,7 +68,6 @@ public final class LinkedList {
         if (rootOrNull != null && index == 0) {
             Node result = rootOrNull.getNextOrNull();
             rootOrNull.setNext(null);
-
             return result;
         }
 
@@ -82,7 +81,7 @@ public final class LinkedList {
 
         if (frontNode != null && i == index) {
             Node removeAtNode = frontNode.getNextOrNull();
-            
+
             if (removeAtNode != null) {
                 frontNode.setNext(removeAtNode.getNextOrNull());
                 removeAtNode.setNext(null);
