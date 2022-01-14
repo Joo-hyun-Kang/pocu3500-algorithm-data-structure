@@ -39,7 +39,7 @@ public final class LinkedList {
             return rootOrNull;
         }
 
-        if (rootOrNull == null && index == 0) {
+        if (index == 0) {
             return LinkedList.prepend(rootOrNull, data);
         }
 

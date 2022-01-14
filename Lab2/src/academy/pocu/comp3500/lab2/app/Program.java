@@ -31,6 +31,20 @@ public class Program {
             root = LinkedList.insertAt(root, -1, 200);
         }
 
+
+        {
+            Node root = LinkedList.append(null, 10);
+
+            root = LinkedList.insertAt(root, 0, 11);
+            assert (root.getData() == 11);
+            root = LinkedList.insertAt(root, 1, 12);
+            assert (root.getData() == 11);
+            Node next = root.getNextOrNull();
+            assert (next.getData() == 12);
+            next = next.getNextOrNull();
+            assert (next.getData() == 10);
+        }
+
         {
             //LinkdedList.RemoveAt Test
             Node root = LinkedList.append(null, 10);
