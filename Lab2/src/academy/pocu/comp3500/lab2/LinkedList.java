@@ -136,35 +136,34 @@ public final class LinkedList {
             back = tmp;
         }
 
-        assert (front != null);
+        /* Now rootOrNull is last node */
+        rootOrNull.setNext(null);
         return front;
     }
 
     public static Node interleaveOrNull(final Node root0OrNull, final Node root1OrNull) {
-
         Node p0 = root0OrNull;
         Node p1 = root1OrNull;
 
         while (p0 != null || p1 != null) {
-            p0 = switchList(p0, p1);
-            p1 = switchList(p1, p0);
+            p0 = switchRootBranch(p0, p1);
+            p1 = switchRootBranch(p1, p0);
         }
 
         return root0OrNull != null ? root0OrNull : root1OrNull;
     }
 
-    private static Node switchList(Node root, Node newList) {
+    private static Node switchRootBranch(Node root, Node newBranch) {
         if (root == null) {
             return root;
         }
 
-        Node oldList = root.getNextOrNull();
+        Node oldBranch = root.getNextOrNull();
 
-        if (newList != null) {
-            root.setNext(newList);
+        if (newBranch != null) {
+            root.setNext(newBranch);
         }
 
-        return oldList;
+        return oldBranch;
     }
 }
-
