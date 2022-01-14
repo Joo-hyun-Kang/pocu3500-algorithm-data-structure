@@ -1,19 +1,36 @@
 package academy.pocu.comp3500.lab2;
 
-public class Queue {
-    public void enqueue(final int data) {
+import academy.pocu.comp3500.lab2.datastructure.Node;
 
+public class Queue {
+    Node root;
+
+    public Queue() {
+    }
+
+    public void enqueue(final int data) {
+        this.root = LinkedList.append(root, data);
     }
 
     public int peek() {
-        return -1;
+        return root.getData();
     }
 
     public int dequeue() {
-        return -1;
+        int result = root.getData();
+        this.root = LinkedList.removeAt(root, 0);
+        return result;
     }
 
     public int getSize() {
-        return -1;
+        int size = 0;
+        Node tmp = root;
+
+        while (tmp != null) {
+            tmp = tmp.getNextOrNull();
+            size++;
+        }
+
+        return size;
     }
 }
