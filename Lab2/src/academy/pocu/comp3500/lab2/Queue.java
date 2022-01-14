@@ -20,8 +20,8 @@ public class Queue {
 
     public int dequeue() {
         int result = root.getData();
-        root = LinkedList.removeAt(root, 0);
-        size--;
+        this.root = LinkedList.removeAt(root, 0);
+        this.size--;
         return result;
     }
 
