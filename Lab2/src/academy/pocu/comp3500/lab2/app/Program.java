@@ -133,44 +133,69 @@ public class Program {
 
         {
             /* interleaveOrNull offical */
-            Node root1 = LinkedList.append(null, 10);
-            root1 = LinkedList.append(root1, 20);
+            {
+                // case 1
+                // root - node - null
+                // null
 
-            Node root2 = LinkedList.append(null, 100);
+                Node root1 = LinkedList.append(null, 10);
+                root1 = LinkedList.append(root1, 20);
+                Node root2 = LinkedList.append(null, 100);
 
-            // case 1
-            // root - node - null
-            // null
-            Node newRoot = LinkedList.interleaveOrNull(root1, null);
-            assert (newRoot.getData() == 10);
-            assert (newRoot.getNextOrNull().getData() == 20);
-            assert (newRoot.getNextOrNull().getNextOrNull() == null);
+                Node newRoot = LinkedList.interleaveOrNull(root1, null);
+                assert (newRoot.getData() == 10);
+                assert (newRoot.getNextOrNull().getData() == 20);
+                assert (newRoot.getNextOrNull().getNextOrNull() == null);
+            }
 
-            // case 2
-            // null
-            // root - node - null
-            newRoot = LinkedList.interleaveOrNull(null, root1);
-            assert (newRoot.getData() == 10);
-            assert (newRoot.getNextOrNull().getData() == 20);
-            assert (newRoot.getNextOrNull().getNextOrNull() == null);
+            {
+                // case 2
+                // null
+                // root - node - null
 
-            // case 3
-            // root node
-            // root null
-            newRoot = LinkedList.interleaveOrNull(root1, root2);
-            assert (newRoot.getData() == 10);
-            assert (newRoot.getNextOrNull().getData() == 100);
-            assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
-            assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+                Node root1 = LinkedList.append(null, 10);
+                root1 = LinkedList.append(root1, 20);
+                Node root2 = LinkedList.append(null, 100);
 
-            // case 4
-            // root null
-            // root node
-            newRoot = LinkedList.interleaveOrNull(root2, root1);
-            assert (newRoot.getData() == 100);
-            assert (newRoot.getNextOrNull().getData() == 10);
-            assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
-            assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+                Node newRoot = LinkedList.interleaveOrNull(null, root1);
+                assert (newRoot.getData() == 10);
+                assert (newRoot.getNextOrNull().getData() == 20);
+                assert (newRoot.getNextOrNull().getNextOrNull() == null);
+            }
+
+            {
+                // case 3
+                // root node
+                // root null
+
+                Node root1 = LinkedList.append(null, 10);
+                root1 = LinkedList.append(root1, 20);
+                Node root2 = LinkedList.append(null, 100);
+
+                Node newRoot = LinkedList.interleaveOrNull(root1, root2);
+                assert (newRoot.getData() == 10);
+                assert (newRoot.getNextOrNull().getData() == 100);
+                assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
+                assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+            }
+
+
+            {
+                // case 4
+                // root null
+                // root node
+
+                Node root1 = LinkedList.append(null, 10);
+                root1 = LinkedList.append(root1, 20);
+                Node root2 = LinkedList.append(null, 100);
+
+                Node newRoot = LinkedList.interleaveOrNull(root2, root1);
+                assert (newRoot.getData() == 100);
+                assert (newRoot.getNextOrNull().getData() == 10);
+                assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
+                assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+            }
+
         }
 
     }

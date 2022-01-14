@@ -142,40 +142,29 @@ public final class LinkedList {
 
     public static Node interleaveOrNull(final Node root0OrNull, final Node root1OrNull) {
 
-        /*
-            root1 - node1 - node1
-            tmp
-
-            root2 - node2 - node2
-            tmp
-
-            1. root1 뒤에 root2를 연결한다
-            2. root2 뒤에 node1을 연결한다
-            즉, tmp를 이용한다
-         */
         Node p0 = root0OrNull;
         Node p1 = root1OrNull;
-        Node tmp;
-
-        // root1 - node
-        // root2
-        assert (p0 != null && p1 != null);
 
         while (p0 != null || p1 != null) {
-            // 함수로 빼셈
-            if (p0 != null && p1 != null) {
-                tmp = p0.getNextOrNull();
-                p0.setNext(p1);
-                p0 = tmp;
-            }
-
-            if (p0 != null && p1 != null) {
-                tmp = p1.getNextOrNull();
-                p1.setNext(p0);
-                p1 = tmp;
-            }
+            p0 = switchList(p0, p1);
+            p1 = switchList(p1, p0);
         }
 
         return root0OrNull != null ? root0OrNull : root1OrNull;
     }
+
+    private static Node switchList(Node root, Node newList) {
+        if (root == null) {
+            return root;
+        }
+
+        Node oldList = root.getNextOrNull();
+
+        if (newList != null) {
+            root.setNext(newList);
+        }
+
+        return oldList;
+    }
 }
+
