@@ -61,6 +61,7 @@ public final class LinkedList {
     }
 
     public static Node removeAt(final Node rootOrNull, final int index) {
+        /*
         if (index < 0) {
             return rootOrNull;
         }
@@ -89,6 +90,9 @@ public final class LinkedList {
         }
 
         return rootOrNull;
+
+         */
+        return null;
     }
 
     public static int getIndexOf(final Node rootOrNull, final int data) {
