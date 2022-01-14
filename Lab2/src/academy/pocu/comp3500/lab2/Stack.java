@@ -4,12 +4,14 @@ import academy.pocu.comp3500.lab2.datastructure.Node;
 
 public final class Stack {
     Node root;
+    int size;
 
     public Stack() {
     }
 
     public void push(final int data) {
         this.root = LinkedList.prepend(root, data);
+        this.size++;
     }
 
     public int peek() {
@@ -19,19 +21,11 @@ public final class Stack {
     public int pop() {
         int pop = root.getData();
         this.root = LinkedList.removeAt(root, 0);
-
+        this.size--;
         return pop;
     }
 
     public int getSize() {
-        int size = 0;
-        Node tmp = root;
-
-        while (tmp != null) {
-            tmp = tmp.getNextOrNull();
-            size++;
-        }
-
-        return size;
+        return this.size;
     }
 }
