@@ -92,26 +92,86 @@ public class Program {
             root = LinkedList.append(root, 14);
 
             root = LinkedList.reverse(root); // root: 14, list: 14 -> 13 -> 12 -> 11 -> 10
-
             assert (root.getData() == 14);
-
             Node next = root.getNextOrNull();
-
             assert (next.getData() == 13);
-
             next = next.getNextOrNull();
-
             assert (next.getData() == 12);
-
             next = next.getNextOrNull();
-
             assert (next.getData() == 11);
-
             next = next.getNextOrNull();
-
             assert (next.getData() == 10);
         }
 
+        {
+            /* interleaveOrNull offical */
+            Node root1 = LinkedList.append(null, 10);
+
+            root1 = LinkedList.append(root1, 11);
+            root1 = LinkedList.append(root1, 12);
+
+            Node root2 = LinkedList.append(null, 13);
+
+            root2 = LinkedList.append(root2, 14);
+            root2 = LinkedList.append(root2, 15);
+
+            Node newRoot = LinkedList.interleaveOrNull(root1, root2); // newRoot: 10, list: 10 -> 13 -> 11 -> 14 -> 12 -> 15
+            assert (newRoot.getData() == 10);
+
+            Node next = newRoot.getNextOrNull();
+
+            assert (next.getData() == 13);
+            next = next.getNextOrNull();
+            assert (next.getData() == 11);
+            next = next.getNextOrNull();
+            assert (next.getData() == 14);
+            next = next.getNextOrNull();
+            assert (next.getData() == 12);
+            next = next.getNextOrNull();
+            assert (next.getData() == 15);
+        }
+
+        {
+            /* interleaveOrNull offical */
+            Node root1 = LinkedList.append(null, 10);
+            root1 = LinkedList.append(root1, 20);
+
+            Node root2 = LinkedList.append(null, 100);
+
+            // case 1
+            // root - node - null
+            // null
+            Node newRoot = LinkedList.interleaveOrNull(root1, null);
+            assert (newRoot.getData() == 10);
+            assert (newRoot.getNextOrNull().getData() == 20);
+            assert (newRoot.getNextOrNull().getNextOrNull() == null);
+
+            // case 2
+            // null
+            // root - node - null
+            newRoot = LinkedList.interleaveOrNull(null, root1);
+            assert (newRoot.getData() == 10);
+            assert (newRoot.getNextOrNull().getData() == 20);
+            assert (newRoot.getNextOrNull().getNextOrNull() == null);
+
+            // case 3
+            // root node
+            // root null
+            newRoot = LinkedList.interleaveOrNull(root1, root2);
+            assert (newRoot.getData() == 10);
+            assert (newRoot.getNextOrNull().getData() == 100);
+            assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
+            assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+
+            // case 4
+            // root null
+            // root node
+            newRoot = LinkedList.interleaveOrNull(root2, root1);
+            assert (newRoot.getData() == 100);
+            assert (newRoot.getNextOrNull().getData() == 10);
+            assert (newRoot.getNextOrNull().getNextOrNull().getData() == 20);
+            assert (newRoot.getNextOrNull().getNextOrNull().getNextOrNull() == null);
+        }
 
     }
 }

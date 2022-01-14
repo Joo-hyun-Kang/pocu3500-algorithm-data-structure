@@ -155,23 +155,27 @@ public final class LinkedList {
          */
         Node p0 = root0OrNull;
         Node p1 = root1OrNull;
+        Node tmp;
 
+        // root1 - node
+        // root2
         assert (p0 != null && p1 != null);
 
         while (p0 != null || p1 != null) {
-            if (p0 != null) {
-               Node tmp = p0.getNextOrNull();
+            // 함수로 빼셈
+            if (p0 != null && p1 != null) {
+                tmp = p0.getNextOrNull();
                 p0.setNext(p1);
                 p0 = tmp;
             }
 
-            if (p1 != null) {
+            if (p0 != null && p1 != null) {
                 tmp = p1.getNextOrNull();
                 p1.setNext(p0);
                 p1 = tmp;
             }
         }
 
-        return null;
+        return root0OrNull != null ? root0OrNull : root1OrNull;
     }
 }
