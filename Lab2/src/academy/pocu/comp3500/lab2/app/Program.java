@@ -290,6 +290,18 @@ public class Program {
             data = queue.dequeue();
 
             assert (data == 21);
+
+            queue.enqueue(20);
+            queue.enqueue(21);
+
+            data = queue.dequeue();
+
+            assert (data == 20);
+
+            data = queue.dequeue();
+
+            assert (data == 21);
+
         }
 
         {
