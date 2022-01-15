@@ -14,8 +14,7 @@ public class Queue {
         if (size == 0) {
             back = new Node(data);
             front = back;
-        }
-        else {
+        } else {
             back.setNext(new Node(data));
             back = back.getNextOrNull();
         }
