@@ -61,7 +61,11 @@ public final class PocuBasketballAssociation {
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
-        return null;
+        if (players == null) {
+            return null;
+        }
+
+        return players[ArrayUtils.binarySearch(players, targetPoints)];
     }
 
     public static Player findPlayerShootingPercentage(final Player[] players, int targetShootingPercentage) {

@@ -13,19 +13,40 @@ public final class ArrayUtils {
 
     private static int binarySearchRecursive(final Player[] players, int left, int right, int target) {
         if (left > right) {
-            return -1;
+            if (left > players.length - 1) {
+                left = players.length - 1;
+            }
+
+            if (right < 0) {
+                right = 0;
+            }
+
+            int leftApproximation = players[left].getPointsPerGame() - target;
+
+            int rightApproximation = target - players[right].getPointsPerGame();
+
+            return leftApproximation > rightApproximation ? right : left;
         }
 
         int middle = (left + right) / 2;
         int result = -1;
 
-        if (players[middle].getPointsPerGame() < target) {
+        if (target < players[middle].getPointsPerGame()) {
             result = binarySearchRecursive(players, left, middle - 1, target);
-        } else if (players[middle].getPointsPerGame() > target) {
+        } else if (target > players[middle].getPointsPerGame()) {
             result = binarySearchRecursive(players, middle + 1, right, target);
         } else {
             result = middle;
         }
+
+        /*
+        if (result == -1) {
+            int leftApproximation = target - players[left].getPointsPerGame();
+            int rightApproximation = players[right].getPointsPerGame() - target;
+
+            result = leftApproximation > rightApproximation ? right : left;
+        }
+        */
 
         return result;
     }
