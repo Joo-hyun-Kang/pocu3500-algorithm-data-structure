@@ -1,10 +1,28 @@
 package academy.pocu.comp3500.assignment1;
 
 import academy.pocu.comp3500.assignment1.pba.GameStat;
+import academy.pocu.comp3500.assignment1.pba.Player;
 
 public final class ArrayUtils {
     private ArrayUtils() {
     }
+
+    /*
+    public static int binarySearch(final Player[] players, int target) {
+        return binarySearchRecursive(players, 0, players.length - 1, target);
+    }
+
+    private static int binarySearchRecursive(final Player[] players, int left, int right, int target) {
+        if (left > right) {
+            return -1;
+        }
+
+        int middle = (left + right) / 2;
+        if (players[middle]. < 0)
+
+
+    }
+     */
 
     public static void gameStateQuickSort(final GameStat[] gameStats) {
         gameStateQuickSortRecursive(gameStats, 0, gameStats.length - 1);

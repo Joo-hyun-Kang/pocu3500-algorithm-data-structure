@@ -9,6 +9,25 @@ public class Program {
     public static void main(String[] args) {
         {
             GameStat[] gameStats = new GameStat[] {
+                    new GameStat("Player 1", 1, 13, 5, 6, 10, 1)
+            };
+
+            Player[] players = new Player[] {
+                    new Player()
+            };
+
+            PocuBasketballAssociation.processGameStats(null, players);
+
+            Player player = getPlayerOrNull(players, "Player 1");
+            assert (player != null);
+            assert (player.getPointsPerGame() == 13);
+            assert (player.getAssistsPerGame() == 10);
+            assert (player.getPassesPerGame() == 1);
+            assert (player.getShootingPercentage() == 83);
+        }
+
+        {
+            GameStat[] gameStats = new GameStat[] {
                     new GameStat("Player 1", 1, 13, 5, 6, 10, 1),
                     new GameStat("Player 2", 2, 5, 2, 5, 0, 10),
                     new GameStat("Player 1", 3, 12, 6, 9, 8, 5),

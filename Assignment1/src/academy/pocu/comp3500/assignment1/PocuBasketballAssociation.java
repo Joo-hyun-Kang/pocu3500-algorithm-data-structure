@@ -8,6 +8,10 @@ public final class PocuBasketballAssociation {
     }
 
     public static void processGameStats(final GameStat[] gameStats, final Player[] outPlayers) {
+        if (gameStats == null || outPlayers == null) {
+            return ;
+        }
+
         ArrayUtils.gameStateQuickSort(gameStats);
 
         int index = 0;
