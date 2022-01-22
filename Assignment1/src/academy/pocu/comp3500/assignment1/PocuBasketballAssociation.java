@@ -60,9 +60,9 @@ public final class PocuBasketballAssociation {
 
         outPlayers[index].setPassesPerGame(pass / gameCount);
 
-        double shootingPercent = (double)goalSuccess / goalAttempt * 100;
+        double shootingPercent = (double) goalSuccess / goalAttempt * 100;
 
-        outPlayers[index].setShootingPercentage((int)shootingPercent);
+        outPlayers[index].setShootingPercentage((int) shootingPercent);
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
@@ -82,6 +82,17 @@ public final class PocuBasketballAssociation {
     }
 
     public static long find3ManDreamTeam(final Player[] players, final Player[] outPlayers, final Player[] scratch) {
+        //팀에 속한 패스 수 전체 * 어시스트 최소 값
+        /*
+        new Player("Player 2", 5, 12, 14, 50),
+        new Player("Player 6", 15, 2, 5, 40),
+        new Player("Player 5", 11, 1, 11, 54),
+        new Player("Player 4", 10, 3, 51, 88),
+        new Player("Player 7", 16, 8, 5, 77),
+        new Player("Player 1", 1, 15, 2, 22),
+        new Player("Player 3", 7, 5, 8, 66)
+         */
+
         return -1;
     }
 
