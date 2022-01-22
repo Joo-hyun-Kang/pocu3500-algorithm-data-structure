@@ -16,7 +16,7 @@ public class Program {
                     new Player()
             };
 
-            PocuBasketballAssociation.processGameStats(null, players);
+            PocuBasketballAssociation.processGameStats(gameStats, players);
 
             Player player = getPlayerOrNull(players, "Player 1");
             assert (player != null);
@@ -29,8 +29,8 @@ public class Program {
         {
             GameStat[] gameStats = new GameStat[] {
                     new GameStat("Player 1", 1, 13, 5, 6, 10, 1),
-                    new GameStat("Player 2", 2, 5, 2, 5, 0, 10),
                     new GameStat("Player 1", 3, 12, 6, 9, 8, 5),
+                    new GameStat("Player 2", 2, 5, 2, 5, 0, 10),
                     new GameStat("Player 3", 1, 31, 15, 40, 5, 3),
                     new GameStat("Player 2", 1, 3, 1, 3, 12, 2),
                     new GameStat("Player 1", 2, 11, 6, 11, 9, 3),

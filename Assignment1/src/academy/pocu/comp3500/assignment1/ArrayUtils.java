@@ -7,7 +7,6 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    /*
     public static int binarySearch(final Player[] players, int target) {
         return binarySearchRecursive(players, 0, players.length - 1, target);
     }
@@ -18,11 +17,18 @@ public final class ArrayUtils {
         }
 
         int middle = (left + right) / 2;
-        if (players[middle]. < 0)
+        int result = -1;
 
+        if (players[middle].getPointsPerGame() < target) {
+            result = binarySearchRecursive(players, left, middle - 1, target);
+        } else if (players[middle].getPointsPerGame() > target) {
+            result = binarySearchRecursive(players, middle + 1, right, target);
+        } else {
+            result = middle;
+        }
 
+        return result;
     }
-     */
 
     public static void gameStateQuickSort(final GameStat[] gameStats) {
         gameStateQuickSortRecursive(gameStats, 0, gameStats.length - 1);

@@ -9,7 +9,7 @@ public final class PocuBasketballAssociation {
 
     public static void processGameStats(final GameStat[] gameStats, final Player[] outPlayers) {
         if (gameStats == null || outPlayers == null) {
-            return ;
+            return;
         }
 
         ArrayUtils.gameStateQuickSort(gameStats);
@@ -26,7 +26,7 @@ public final class PocuBasketballAssociation {
         int goalAttemptByState = 0;
 
         for (int j = 0; j < gameStats.length; j++) {
-            if (outPlayers[index].getName() != gameStats[j].getPlayerName()) {
+            if (!outPlayers[index].getName().equals(gameStats[j].getPlayerName())) {
                 setPlayerState(outPlayers, index, pointByState, assistByState, passByState, goalSuccessByState, goalAttemptByState, gameCount);
 
                 pointByState = 0;
@@ -57,7 +57,7 @@ public final class PocuBasketballAssociation {
         outPlayers[index].setPointsPerGame(point / gameCount);
         outPlayers[index].setAssistsPerGame(assist / gameCount);
         outPlayers[index].setPassesPerGame(pass / gameCount);
-        outPlayers[index].setShootingPercentage((int)(100 * (goalSuccess / (double)goalAttempt)));
+        outPlayers[index].setShootingPercentage((int)(100 * ((double)goalSuccess / goalAttempt)));
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
