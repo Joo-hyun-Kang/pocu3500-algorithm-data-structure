@@ -55,9 +55,14 @@ public final class PocuBasketballAssociation {
 
     private static void setPlayerState(final Player[] outPlayers, int index, int point, int assist, int pass, int goalSuccess, int goalAttempt, int gameCount) {
         outPlayers[index].setPointsPerGame(point / gameCount);
+
         outPlayers[index].setAssistsPerGame(assist / gameCount);
+
         outPlayers[index].setPassesPerGame(pass / gameCount);
-        outPlayers[index].setShootingPercentage((int)(100 * ((double)goalSuccess / goalAttempt)));
+
+        double shootingPercent = (double)goalSuccess / goalAttempt * 100;
+
+        outPlayers[index].setShootingPercentage((int)shootingPercent);
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
