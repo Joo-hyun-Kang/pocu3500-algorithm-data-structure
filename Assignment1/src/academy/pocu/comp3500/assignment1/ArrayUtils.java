@@ -7,11 +7,11 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    public static int binarySearch(final Player[] players, int target) {
-        return binarySearchRecursive(players, 0, players.length - 1, target);
+    public static int binarySearchPoint(final Player[] players, int target) {
+        return binarySearchPointRecursive(players, 0, players.length - 1, target);
     }
 
-    private static int binarySearchRecursive(final Player[] players, int left, int right, int target) {
+    private static int binarySearchPointRecursive(final Player[] players, int left, int right, int target) {
         if (left > right) {
             if (left > players.length - 1) {
                 left = players.length - 1;
@@ -32,21 +32,47 @@ public final class ArrayUtils {
         int result = -1;
 
         if (target < players[middle].getPointsPerGame()) {
-            result = binarySearchRecursive(players, left, middle - 1, target);
+            result = binarySearchPointRecursive(players, left, middle - 1, target);
         } else if (target > players[middle].getPointsPerGame()) {
-            result = binarySearchRecursive(players, middle + 1, right, target);
+            result = binarySearchPointRecursive(players, middle + 1, right, target);
         } else {
             result = middle;
         }
 
-        /*
-        if (result == -1) {
-            int leftApproximation = target - players[left].getPointsPerGame();
-            int rightApproximation = players[right].getPointsPerGame() - target;
+        return result;
+    }
 
-            result = leftApproximation > rightApproximation ? right : left;
+    public static int binarySearchShooting(final Player[] players, int target) {
+        return binarySearchShootingRecursive(players, 0, players.length - 1, target);
+    }
+
+    private static int binarySearchShootingRecursive(final Player[] players, int left, int right, int target) {
+        if (left > right) {
+            if (left > players.length - 1) {
+                left = players.length - 1;
+            }
+
+            if (right < 0) {
+                right = 0;
+            }
+
+            int leftApproximation = players[left].getShootingPercentage() - target;
+
+            int rightApproximation = target - players[right].getShootingPercentage();
+
+            return leftApproximation > rightApproximation ? right : left;
         }
-        */
+
+        int middle = (left + right) / 2;
+        int result = -1;
+
+        if (target < players[middle].getShootingPercentage()) {
+            result = binarySearchShootingRecursive(players, left, middle - 1, target);
+        } else if (target > players[middle].getShootingPercentage()) {
+            result = binarySearchShootingRecursive(players, middle + 1, right, target);
+        } else {
+            result = middle;
+        }
 
         return result;
     }

@@ -65,11 +65,15 @@ public final class PocuBasketballAssociation {
             return null;
         }
 
-        return players[ArrayUtils.binarySearch(players, targetPoints)];
+        return players[ArrayUtils.binarySearchPoint(players, targetPoints)];
     }
 
     public static Player findPlayerShootingPercentage(final Player[] players, int targetShootingPercentage) {
-        return null;
+        if (players == null) {
+            return null;
+        }
+
+        return players[ArrayUtils.binarySearchShooting(players, targetShootingPercentage)];
     }
 
     public static long find3ManDreamTeam(final Player[] players, final Player[] outPlayers, final Player[] scratch) {
