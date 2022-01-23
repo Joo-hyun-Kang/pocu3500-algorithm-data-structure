@@ -13,11 +13,6 @@ public final class MissionControl {
         for (int i = 0; i < altitudes.length; i++) {
             if (altitudes[i] > max) {
                 max = altitudes[i];
-            }
-        }
-
-        for (int i = 0; i < altitudes.length; i++) {
-            if (altitudes[i] == max) {
                 index = i;
             }
         }
@@ -28,6 +23,8 @@ public final class MissionControl {
     public static ArrayList<Integer> findAltitudeTimes(final int[] altitudes, final int targetAltitude) {
 
         ArrayList<Integer> list = new ArrayList<>();
+
+        //  final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7, 4, 3, 2 };
 
         for (int i = 0; i < altitudes.length; i++) {
             if (altitudes[i] == targetAltitude) {
