@@ -88,6 +88,9 @@ public final class PocuBasketballAssociation {
         int teamWork = 0;
 
         for (int i = 0; i < players.length; i++) {
+            if (players[i].getAssistsPerGame() == 0) {
+                continue;
+            }
             scratch[back] = players[i];
             back++;
             stackCount++;
@@ -110,6 +113,34 @@ public final class PocuBasketballAssociation {
 
                 back--;
                 stackCount--;
+            }
+        }
+
+        if (outPlayers == null) {
+            for (int i = 0; i < players.length; i++) {
+                scratch[back] = players[i];
+                back++;
+                stackCount++;
+
+                if (stackCount >= 3) {
+                    int passTotal = scratch[0].getPassesPerGame() + scratch[1].getPassesPerGame() + scratch[2].getPassesPerGame();
+
+                    int assistMin = scratch[0].getAssistsPerGame() < scratch[1].getAssistsPerGame() ? scratch[0].getAssistsPerGame() : scratch[1].getAssistsPerGame();
+
+                    assistMin = assistMin < scratch[2].getAssistsPerGame() ? assistMin : scratch[2].getAssistsPerGame();
+
+                    int temp = passTotal * assistMin;
+
+                    if (temp > teamWork) {
+                        teamWork = temp;
+                        outPlayers[0] = scratch[0];
+                        outPlayers[1] = scratch[1];
+                        outPlayers[2] = scratch[2];
+                    }
+
+                    back--;
+                    stackCount--;
+                }
             }
         }
 
