@@ -80,7 +80,7 @@ public final class PocuBasketballAssociation {
     }
 
     public static long find3ManDreamTeam(final Player[] players, final Player[] outPlayers, final Player[] scratch) {
-        ArrayUtils.playerPassQuickSort(players);
+        ArrayUtils.playerAssistQuickSort(players);
 
         int back = 0;
         int stackCount = 0;
@@ -123,10 +123,108 @@ public final class PocuBasketballAssociation {
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
-        return -1;
+        ArrayUtils.playerAssistQuickSort(players);
+
+        int back = 0;
+        int stackCount = 0;
+
+        int teamWork = 0;
+        int passMin = Integer.MAX_VALUE;
+
+        for (int i = 0; i < players.length; i++) {
+            scratch[back] = players[i];
+            back++;
+            stackCount++;
+
+            if (stackCount >= k) {
+
+                int passTotal = 0;
+                for (int j = 0; j < scratch.length; j++) {
+                    if (scratch[j].getPassesPerGame() < passMin) {
+                        passMin = scratch[j].getPassesPerGame();
+                        back = j;
+                    }
+
+                    passTotal += scratch[j].getPassesPerGame();
+                }
+
+                int assistMin = players[i].getAssistsPerGame();
+
+                int temp = passTotal * assistMin;
+
+                if (temp > teamWork) {
+                    teamWork = temp;
+                    for (int j = 0; j < scratch.length; j++) {
+                        outPlayers[j] = scratch[j];
+                    }
+                }
+
+                stackCount--;
+                passMin = Integer.MAX_VALUE;
+            }
+        }
+
+        return teamWork;
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
-        return -1;
+
+        ArrayUtils.playerAssistQuickSort(players);
+
+        long teamWork = 0;
+        int teamSize = 0;
+
+        for (int i = players.length; i > 0; i--) {
+            long temp = findDreamTeamSizeK(players, i, scratch);
+
+            if (temp > teamWork) {
+                teamWork = temp;
+                teamSize = i;
+            }
+        }
+
+        return teamSize;
+    }
+
+    private static long findDreamTeamSizeK(final Player[] players, int k, final Player[] scratch) {
+
+        int back = 0;
+        int stackCount = 0;
+
+        int teamWork = 0;
+        int passMin = Integer.MAX_VALUE;
+
+        for (int i = 0; i < players.length; i++) {
+            scratch[back] = players[i];
+            back++;
+            stackCount++;
+
+
+            if (stackCount >= k) {
+
+                int passTotal = 0;
+                for (int j = 0; j < k; j++) {
+                    if (scratch[j].getPassesPerGame() < passMin) {
+                        passMin = scratch[j].getPassesPerGame();
+                        back = j;
+                    }
+
+                    passTotal += scratch[j].getPassesPerGame();
+                }
+
+                int assistMin = players[i].getAssistsPerGame();
+
+                int temp = passTotal * assistMin;
+
+                if (temp > teamWork) {
+                    teamWork = temp;
+                }
+
+                stackCount--;
+                passMin = Integer.MAX_VALUE;
+            }
+        }
+
+        return teamWork;
     }
 }

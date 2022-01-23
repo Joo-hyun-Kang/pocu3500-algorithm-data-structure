@@ -8,11 +8,11 @@ public class Program {
 
     public static void main(String[] args) {
         {
-            GameStat[] gameStats = new GameStat[] {
+            GameStat[] gameStats = new GameStat[]{
                     new GameStat("Player 1", 1, 13, 5, 6, 10, 1)
             };
 
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player()
             };
 
@@ -27,7 +27,7 @@ public class Program {
         }
 
         {
-            GameStat[] gameStats = new GameStat[] {
+            GameStat[] gameStats = new GameStat[]{
                     new GameStat("Player 1", 1, 13, 5, 6, 10, 1),
                     new GameStat("Player 1", 3, 12, 6, 9, 8, 5),
                     new GameStat("Player 2", 2, 5, 2, 5, 0, 10),
@@ -41,7 +41,7 @@ public class Program {
                     new GameStat("Player 2", 4, 5, 1, 3, 1, 9),
             };
 
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player(),
                     new Player(),
                     new Player(),
@@ -80,7 +80,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 1", 1, 5, 1, 60),
                     new Player("Player 2", 5, 2, 11, 31),
                     new Player("Player 3", 7, 4, 7, 44),
@@ -99,7 +99,7 @@ public class Program {
         {
             {
                 {
-                    Player[] players = new Player[] {
+                    Player[] players = new Player[]{
                             new Player("Player 1", 1, 5, 1, 60),
                             new Player("Player 2", 5, 2, 11, 31),
                             new Player("Player 3", 7, 4, 7, 44),
@@ -123,7 +123,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 4", 10, 10, 15, 25),
                     new Player("Player 2", 5, 2, 11, 31),
                     new Player("Player 3", 7, 4, 7, 44),
@@ -140,7 +140,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 4", 10, 10, 15, 25),
                     new Player("Player 2", 5, 2, 11, 31),
                     new Player("Player 3", 7, 4, 7, 44),
@@ -161,7 +161,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 5, 12, 14, 50),
                     new Player("Player 6", 15, 2, 5, 40),
                     new Player("Player 5", 11, 1, 11, 54),
@@ -189,7 +189,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 5, 12, 14, 50),
                     new Player("Player 6", 15, 2, 5, 40),
                     new Player("Player 5", 11, 1, 11, 54),
@@ -217,11 +217,8 @@ public class Program {
         }
 
 
-
-
-
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 5, 12, 14, 50),
                     new Player("Player 6", 15, 2, 5, 40),
                     new Player("Player 5", 11, 1, 11, 54),
@@ -248,7 +245,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 12, 14, 0),
                     new Player("Player 6", 0, 2, 5, 0),
                     new Player("Player 5", 0, 1, 11, 0),
@@ -273,7 +270,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 12, 14, 0),
                     new Player("Player 6", 0, 2, 5, 0),
                     new Player("Player 5", 0, 1, 11, 0),
@@ -296,7 +293,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 12, 14, 0),
                     new Player("Player 6", 0, 2, 5, 0),
                     new Player("Player 5", 0, 2, 5, 0),
@@ -320,7 +317,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 2, 14, 0),
                     new Player("Player 6", 0, 1, 5, 0),
                     new Player("Player 5", 0, 1, 5, 0),
@@ -347,7 +344,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 2, 14, 0),
                     new Player("Player 6", 0, 1, 5, 0),
                     new Player("Player 5", 0, 1, 6, 0),
@@ -374,7 +371,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 2, 14, 0),
                     new Player("Player 6", 0, 1, 5, 0),
                     new Player("Player 5", 0, 1, 6, 0),
@@ -401,7 +398,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 2, 14, 0),
                     new Player("Player 6", 0, 1, 5, 0),
                     new Player("Player 5", 0, 1, 0, 0),
@@ -428,7 +425,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 7, 14, 0),
                     new Player("Player 6", 0, 6, 5, 0),
                     new Player("Player 5", 0, 5, 12, 0),
@@ -455,7 +452,7 @@ public class Program {
         }
 
         {
-            Player[] players = new Player[] {
+            Player[] players = new Player[]{
                     new Player("Player 2", 0, 7, 14, 0),
                     new Player("Player 6", 0, 6, 5, 0),
                     new Player("Player 5", 0, 5, 12, 0),
@@ -482,6 +479,62 @@ public class Program {
         }
 
 
+        {
+            Player[] players = new Player[]{
+                    new Player("Player 2", 5, 5, 17, 50),
+                    new Player("Player 6", 15, 4, 10, 40),
+                    new Player("Player 5", 11, 3, 25, 54),
+                    new Player("Player 4", 10, 9, 1, 88),
+                    new Player("Player 7", 16, 7, 5, 77),
+                    new Player("Player 1", 1, 2, 8, 22),
+                    new Player("Player 9", 42, 15, 4, 56),
+                    new Player("Player 8", 33, 11, 3, 72),
+            };
+
+            final int TEAM_SIZE = 4;
+
+            Player[] outPlayers = new Player[TEAM_SIZE];
+            Player[] scratch = new Player[TEAM_SIZE];
+
+            long maxTeamwork = PocuBasketballAssociation.findDreamTeam(players, TEAM_SIZE, outPlayers, scratch);
+
+            assert (maxTeamwork == 171);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 7");
+            assert (player != null);
+        }
+
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 1", 2, 5, 10, 78),
+                    new Player("Player 2", 10, 4, 5, 66),
+                    new Player("Player 3", 3, 3, 2, 22),
+                    new Player("Player 4", 1, 9, 8, 12),
+                    new Player("Player 5", 11, 1, 12, 26),
+                    new Player("Player 6", 7, 2, 10, 15),
+                    new Player("Player 7", 8, 15, 3, 11),
+                    new Player("Player 8", 5, 7, 13, 5),
+                    new Player("Player 9", 8, 2, 7, 67),
+                    new Player("Player 10", 1, 11, 1, 29),
+                    new Player("Player 11", 2, 6, 9, 88)
+            };
+
+            Player[] tempPlayers = new Player[players.length];
+
+            int k = PocuBasketballAssociation.findDreamTeamSize(players, tempPlayers);
+
+            assert (k == 6);
+        }
     }
 
     private static Player getPlayerOrNull(final Player[] players, final String id) {

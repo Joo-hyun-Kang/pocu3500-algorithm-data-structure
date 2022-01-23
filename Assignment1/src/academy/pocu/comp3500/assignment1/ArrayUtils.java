@@ -7,22 +7,22 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
-    public static void playerPassQuickSort(final Player[] players) {
-        playerPassQuickSortRecursive(players, 0, players.length - 1);
+    public static void playerAssistQuickSort(final Player[] players) {
+        playerAssistQuickSortRecursive(players, 0, players.length - 1);
     }
 
-    private static void playerPassQuickSortRecursive(final Player[] players, int left, int right) {
+    private static void playerAssistQuickSortRecursive(final Player[] players, int left, int right) {
         if (left >= right) {
             return;
         }
 
-        int pivotPos = passPartition(players, left, right);
+        int pivotPos = AssistPartition(players, left, right);
 
-        playerPassQuickSortRecursive(players, left, pivotPos - 1);
-        playerPassQuickSortRecursive(players, pivotPos + 1, right);
+        playerAssistQuickSortRecursive(players, left, pivotPos - 1);
+        playerAssistQuickSortRecursive(players, pivotPos + 1, right);
     }
 
-    private static int passPartition(final Player[] players, int left, int right) {
+    private static int AssistPartition(final Player[] players, int left, int right) {
         int pivotPass = players[right].getPassesPerGame();
         int pivotAssist = players[right].getAssistsPerGame();
 
