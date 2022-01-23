@@ -86,11 +86,9 @@ public final class PocuBasketballAssociation {
         int stackCount = 0;
 
         int teamWork = 0;
+        int passMin = Integer.MAX_VALUE;
 
         for (int i = 0; i < players.length; i++) {
-            if (players[i].getAssistsPerGame() == 0) {
-                continue;
-            }
             scratch[back] = players[i];
             back++;
             stackCount++;
@@ -98,9 +96,7 @@ public final class PocuBasketballAssociation {
             if (stackCount >= 3) {
                 int passTotal = scratch[0].getPassesPerGame() + scratch[1].getPassesPerGame() + scratch[2].getPassesPerGame();
 
-                int assistMin = scratch[0].getAssistsPerGame() < scratch[1].getAssistsPerGame() ? scratch[0].getAssistsPerGame() : scratch[1].getAssistsPerGame();
-
-                assistMin = assistMin < scratch[2].getAssistsPerGame() ? assistMin : scratch[2].getAssistsPerGame();
+                int assistMin = players[i].getAssistsPerGame();
 
                 int temp = passTotal * assistMin;
 
@@ -111,36 +107,15 @@ public final class PocuBasketballAssociation {
                     outPlayers[2] = scratch[2];
                 }
 
-                back--;
-                stackCount--;
-            }
-        }
-
-        if (outPlayers == null) {
-            for (int i = 0; i < players.length; i++) {
-                scratch[back] = players[i];
-                back++;
-                stackCount++;
-
-                if (stackCount >= 3) {
-                    int passTotal = scratch[0].getPassesPerGame() + scratch[1].getPassesPerGame() + scratch[2].getPassesPerGame();
-
-                    int assistMin = scratch[0].getAssistsPerGame() < scratch[1].getAssistsPerGame() ? scratch[0].getAssistsPerGame() : scratch[1].getAssistsPerGame();
-
-                    assistMin = assistMin < scratch[2].getAssistsPerGame() ? assistMin : scratch[2].getAssistsPerGame();
-
-                    int temp = passTotal * assistMin;
-
-                    if (temp > teamWork) {
-                        teamWork = temp;
-                        outPlayers[0] = scratch[0];
-                        outPlayers[1] = scratch[1];
-                        outPlayers[2] = scratch[2];
+                for (int j = 0; j < scratch.length; j++) {
+                    if (scratch[j].getPassesPerGame() < passMin) {
+                        passMin = scratch[j].getPassesPerGame();
+                        back = j;
                     }
-
-                    back--;
-                    stackCount--;
                 }
+
+                stackCount--;
+                passMin = Integer.MAX_VALUE;
             }
         }
 

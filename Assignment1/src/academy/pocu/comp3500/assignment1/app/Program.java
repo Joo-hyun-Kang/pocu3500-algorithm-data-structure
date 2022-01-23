@@ -321,33 +321,6 @@ public class Program {
 
         {
             Player[] players = new Player[] {
-                    new Player("Player 2", 0, 12, 14, 0),
-                    new Player("Player 6", 0, 2, 5, 0),
-                    new Player("Player 5", 0, 2, 5, 0),
-                    new Player("Player 1", 0, 1, 29, 0),
-                    new Player("Player 7", 0, 1, 29, 0),
-                    new Player("Player 8", 0, 1, 29, 0),
-                    new Player("Player 10", 0, 1, 29, 0),
-            };
-
-            Player[] outPlayers = new Player[3];
-            Player[] scratch = new Player[3];
-
-            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
-            assert (maxTeamwork == 87);
-
-            Player player = getPlayerOrNull(outPlayers, "Player 10");
-            assert (player != null);
-
-            player = getPlayerOrNull(outPlayers, "Player 8");
-            assert (player != null);
-
-            player = getPlayerOrNull(outPlayers, "Player 1");
-            assert (player != null);
-        }
-
-        {
-            Player[] players = new Player[] {
                     new Player("Player 2", 0, 2, 14, 0),
                     new Player("Player 6", 0, 1, 5, 0),
                     new Player("Player 5", 0, 1, 5, 0),
