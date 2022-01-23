@@ -26,6 +26,15 @@ public final class MissionControl {
     }
 
     public static ArrayList<Integer> findAltitudeTimes(final int[] altitudes, final int targetAltitude) {
-        return null;
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < altitudes.length; i++) {
+            if (altitudes[i] == targetAltitude) {
+                list.add(i);
+            }
+        }
+
+        return list;
     }
 }
