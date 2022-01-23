@@ -188,6 +188,326 @@ public class Program {
             assert (player != null);
         }
 
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 5, 12, 14, 50),
+                    new Player("Player 6", 15, 2, 5, 40),
+                    new Player("Player 5", 11, 1, 11, 54),
+                    //new Player("Player 4", 10, 3, 51, 88),
+                    //new Player("Player 7", 16, 8, 5, 77),
+                    //new Player("Player 1", 1, 15, 2, 22),
+                    //new Player("Player 3", 7, 5, 8, 66)
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+
+            assert (maxTeamwork == 30);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+        }
+
+
+
+
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 5, 12, 14, 50),
+                    new Player("Player 6", 15, 2, 5, 40),
+                    new Player("Player 5", 11, 1, 11, 54),
+                    new Player("Player 4", 10, 3, 51, 88),
+                    new Player("Player 7", 16, 8, 5, 77),
+                    new Player("Player 1", 1, 15, 2, 22),
+                    new Player("Player 3", 7, 5, 8, 66)
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 219);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 4");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 3");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 12, 14, 0),
+                    new Player("Player 6", 0, 2, 5, 0),
+                    new Player("Player 5", 0, 1, 11, 0),
+                    new Player("Player 4", 0, 3, 51, 0),
+                    new Player("Player 1", 0, 15, 2, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 201);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 1");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 4");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 12, 14, 0),
+                    new Player("Player 6", 0, 2, 5, 0),
+                    new Player("Player 5", 0, 1, 11, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 30);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 12, 14, 0),
+                    new Player("Player 6", 0, 2, 5, 0),
+                    new Player("Player 5", 0, 2, 5, 0),
+                    new Player("Player 1", 0, 1, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 48);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 12, 14, 0),
+                    new Player("Player 6", 0, 2, 5, 0),
+                    new Player("Player 5", 0, 2, 5, 0),
+                    new Player("Player 1", 0, 1, 29, 0),
+                    new Player("Player 7", 0, 1, 29, 0),
+                    new Player("Player 8", 0, 1, 29, 0),
+                    new Player("Player 10", 0, 1, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 87);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 10");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 8");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 1");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 2, 14, 0),
+                    new Player("Player 6", 0, 1, 5, 0),
+                    new Player("Player 5", 0, 1, 5, 0),
+                    new Player("Player 1", 0, 2, 29, 0),
+                    new Player("Player 7", 0, 2, 29, 0),
+                    new Player("Player 8", 0, 1, 29, 0),
+                    new Player("Player 10", 0, 1, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 144);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 7");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 1");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 2, 14, 0),
+                    new Player("Player 6", 0, 1, 5, 0),
+                    new Player("Player 5", 0, 1, 6, 0),
+                    new Player("Player 1", 0, 2, 29, 0),
+                    new Player("Player 7", 0, 0, 29, 0),
+                    new Player("Player 8", 0, 0, 29, 0),
+                    new Player("Player 10", 0, 0, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 49);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 1");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 2, 14, 0),
+                    new Player("Player 6", 0, 1, 5, 0),
+                    new Player("Player 5", 0, 1, 6, 0),
+                    new Player("Player 1", 0, 0, 29, 0),
+                    new Player("Player 7", 0, 0, 29, 0),
+                    new Player("Player 8", 0, 0, 29, 0),
+                    new Player("Player 10", 0, 0, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 25);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 2, 14, 0),
+                    new Player("Player 6", 0, 1, 5, 0),
+                    new Player("Player 5", 0, 1, 0, 0),
+                    new Player("Player 1", 0, 2, 0, 0),
+                    new Player("Player 7", 0, 0, 29, 0),
+                    new Player("Player 8", 0, 0, 29, 0),
+                    new Player("Player 10", 0, 0, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 19);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 1");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 6");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 7, 14, 0),
+                    new Player("Player 6", 0, 6, 5, 0),
+                    new Player("Player 5", 0, 5, 12, 0),
+                    new Player("Player 1", 0, 4, 10, 0),
+                    new Player("Player 7", 0, 3, 29, 0),
+                    new Player("Player 8", 0, 2, 29, 0),
+                    new Player("Player 10", 0, 1, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 165);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 7");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 2", 0, 7, 14, 0),
+                    new Player("Player 6", 0, 6, 5, 0),
+                    new Player("Player 5", 0, 5, 12, 0),
+                    new Player("Player 1", 0, 4, 10, 0),
+                    new Player("Player 7", 0, 3, 29, 0),
+                    new Player("Player 8", 0, 2, 29, 0),
+                    new Player("Player 10", 0, 1, 29, 0),
+            };
+
+            Player[] outPlayers = new Player[3];
+            Player[] scratch = new Player[3];
+
+            long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch);
+            assert (maxTeamwork == 165);
+
+            Player player = getPlayerOrNull(outPlayers, "Player 7");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 5");
+            assert (player != null);
+
+            player = getPlayerOrNull(outPlayers, "Player 2");
+            assert (player != null);
+        }
+
 
     }
 

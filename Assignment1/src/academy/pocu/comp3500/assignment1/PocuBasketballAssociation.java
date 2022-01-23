@@ -83,29 +83,34 @@ public final class PocuBasketballAssociation {
         ArrayUtils.playerPassQuickSort(players);
 
         int back = 0;
-        int queueCount = 0;
+        int stackCount = 0;
 
         int teamWork = 0;
-        int highestPassPlayerAssistMin = players[0].getAssistsPerGame() < players[1].getAssistsPerGame() ? players[0].getAssistsPerGame() : players[1].getAssistsPerGame();
 
-        for (int i = 2; i < players.length; i++) {
-                int passTotal = players[0].getPassesPerGame() + players[1].getPassesPerGame() + players[i].getPassesPerGame();
+        for (int i = 0; i < players.length; i++) {
+            scratch[back] = players[i];
+            back++;
+            stackCount++;
 
-                int assistMin;
-                if (highestPassPlayerAssistMin < players[i].getAssistsPerGame()) {
-                    assistMin = highestPassPlayerAssistMin;
-                } else {
-                    assistMin = players[i].getAssistsPerGame();
-                }
+            if (stackCount >= 3) {
+                int passTotal = scratch[0].getPassesPerGame() + scratch[1].getPassesPerGame() + scratch[2].getPassesPerGame();
+
+                int assistMin = scratch[0].getAssistsPerGame() < scratch[1].getAssistsPerGame() ? scratch[0].getAssistsPerGame() : scratch[1].getAssistsPerGame();
+
+                assistMin = assistMin < scratch[2].getAssistsPerGame() ? assistMin : scratch[2].getAssistsPerGame();
 
                 int temp = passTotal * assistMin;
 
                 if (temp > teamWork) {
                     teamWork = temp;
-                    outPlayers[0] = players[0];
-                    outPlayers[1] = players[1];
-                    outPlayers[2] = players[i];
+                    outPlayers[0] = scratch[0];
+                    outPlayers[1] = scratch[1];
+                    outPlayers[2] = scratch[2];
                 }
+
+                back--;
+                stackCount--;
+            }
         }
 
         return teamWork;

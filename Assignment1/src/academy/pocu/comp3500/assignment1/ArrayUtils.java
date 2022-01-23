@@ -24,11 +24,12 @@ public final class ArrayUtils {
 
     private static int PassPartition(final Player[] players, int left, int right) {
         int pivot = players[right].getPassesPerGame();
+        int pivotAssist = players[right].getAssistsPerGame();
 
         int i = left;
 
         for (int j = left; j < right; ++j) {
-            if (players[j].getPassesPerGame() > pivot) {
+            if (players[j].getPassesPerGame() > pivot || (players[j].getPassesPerGame() == pivot && players[j].getAssistsPerGame() > pivotAssist)) {
                 swap(players, i, j);
                 i++;
             }
