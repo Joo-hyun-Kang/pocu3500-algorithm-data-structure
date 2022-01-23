@@ -16,13 +16,13 @@ public final class ArrayUtils {
             return;
         }
 
-        int pivotPos = AssistPartition(players, left, right);
+        int pivotPos = assistPartition(players, left, right);
 
         playerAssistQuickSortRecursive(players, left, pivotPos - 1);
         playerAssistQuickSortRecursive(players, pivotPos + 1, right);
     }
 
-    private static int AssistPartition(final Player[] players, int left, int right) {
+    private static int assistPartition(final Player[] players, int left, int right) {
         int pivotPass = players[right].getPassesPerGame();
         int pivotAssist = players[right].getAssistsPerGame();
 
