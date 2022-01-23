@@ -1,4 +1,4 @@
-package academy.pocu.comp3500.lab3.app;
+package academy.pocu.comp3500.lab3;
 
 import java.util.ArrayList;
 
