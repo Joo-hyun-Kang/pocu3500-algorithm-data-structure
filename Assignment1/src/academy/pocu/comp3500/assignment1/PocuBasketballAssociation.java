@@ -60,9 +60,7 @@ public final class PocuBasketballAssociation {
 
         outPlayers[index].setPassesPerGame(pass / gameCount);
 
-        double shootingPercent = (double) goalSuccess / goalAttempt * 100;
-
-        outPlayers[index].setShootingPercentage((int) shootingPercent);
+        outPlayers[index].setShootingPercentage((int) (goalSuccess / (double) goalAttempt * 100));
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
@@ -82,18 +80,35 @@ public final class PocuBasketballAssociation {
     }
 
     public static long find3ManDreamTeam(final Player[] players, final Player[] outPlayers, final Player[] scratch) {
-        //팀에 속한 패스 수 전체 * 어시스트 최소 값
-        /*
-        new Player("Player 2", 5, 12, 14, 50),
-        new Player("Player 6", 15, 2, 5, 40),
-        new Player("Player 5", 11, 1, 11, 54),
-        new Player("Player 4", 10, 3, 51, 88),
-        new Player("Player 7", 16, 8, 5, 77),
-        new Player("Player 1", 1, 15, 2, 22),
-        new Player("Player 3", 7, 5, 8, 66)
-         */
+        ArrayUtils.playerPassQuickSort(players);
 
-        return -1;
+        int back = 0;
+        int queueCount = 0;
+
+        int teamWork = 0;
+        int highestPassPlayerAssistMin = players[0].getAssistsPerGame() < players[1].getAssistsPerGame() ? players[0].getAssistsPerGame() : players[1].getAssistsPerGame();
+
+        for (int i = 2; i < players.length; i++) {
+                int passTotal = players[0].getPassesPerGame() + players[1].getPassesPerGame() + players[i].getPassesPerGame();
+
+                int assistMin;
+                if (highestPassPlayerAssistMin < players[i].getAssistsPerGame()) {
+                    assistMin = highestPassPlayerAssistMin;
+                } else {
+                    assistMin = players[i].getAssistsPerGame();
+                }
+
+                int temp = passTotal * assistMin;
+
+                if (temp > teamWork) {
+                    teamWork = temp;
+                    outPlayers[0] = players[0];
+                    outPlayers[1] = players[1];
+                    outPlayers[2] = players[i];
+                }
+        }
+
+        return teamWork;
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {

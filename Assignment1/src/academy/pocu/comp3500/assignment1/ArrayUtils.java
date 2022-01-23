@@ -7,6 +7,45 @@ public final class ArrayUtils {
     private ArrayUtils() {
     }
 
+    public static void playerPassQuickSort(final Player[] players) {
+        playerPassQuickSortRecursive(players, 0, players.length - 1);
+    }
+
+    private static void playerPassQuickSortRecursive(final Player[] players, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        int pivotPos = PassPartition(players, left, right);
+
+        playerPassQuickSortRecursive(players, left, pivotPos - 1);
+        playerPassQuickSortRecursive(players, pivotPos + 1, right);
+    }
+
+    private static int PassPartition(final Player[] players, int left, int right) {
+        int pivot = players[right].getPassesPerGame();
+
+        int i = left;
+
+        for (int j = left; j < right; ++j) {
+            if (players[j].getPassesPerGame() > pivot) {
+                swap(players, i, j);
+                i++;
+            }
+        }
+
+        int pivotPos = i;
+        swap(players, pivotPos, right);
+
+        return pivotPos;
+    }
+
+    private static void swap(final Player[] players, int dst, int src) {
+        Player temp = players[dst];
+        players[dst] = players[src];
+        players[src] = temp;
+    }
+
     public static int binarySearchPoint(final Player[] players, int target) {
         return binarySearchPointRecursive(players, 0, players.length - 1, target);
     }
