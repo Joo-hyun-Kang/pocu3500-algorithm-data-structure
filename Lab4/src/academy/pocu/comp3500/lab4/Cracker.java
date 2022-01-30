@@ -16,13 +16,20 @@ public final class Cracker {
 
     public String[] run(final RainbowTable[] rainbowTables) {
         String[] plainPassword = new String[userTable.length];
-        
+
+        loop :
         for (int i = 0; i < rainbowTables.length; i++) {
-            for (int j = 0; j < 2; j++) {
+            for (int j = 0; j < userTable.length; j++) {
                 if (rainbowTables[i].contains(userTable[j].getPasswordHash())) {
                     plainPassword[j] = rainbowTables[i].get(userTable[j].getPasswordHash());
                 } else {
                     plainPassword[j] = null;
+                }
+            }
+
+            for (int j = 0; j < userTable.length; j++) {
+                if (plainPassword[j] != null) {
+                    break loop;
                 }
             }
         }
