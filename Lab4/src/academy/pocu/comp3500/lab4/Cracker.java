@@ -24,8 +24,6 @@ public final class Cracker {
                 if (rainbowTables[i].contains(userTable[j].getPasswordHash())) {
                     plainPassword[j] = rainbowTables[i].get(userTable[j].getPasswordHash());
                     isNotNull = true;
-                } else {
-                    plainPassword[j] = null;
                 }
             }
 
@@ -33,7 +31,7 @@ public final class Cracker {
                 break;
             }
         }
-        
+
         return plainPassword;
     }
 }

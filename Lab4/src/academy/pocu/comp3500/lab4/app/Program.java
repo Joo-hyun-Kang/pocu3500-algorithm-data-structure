@@ -128,5 +128,20 @@ public class Program {
             assert(plainTexts[1] != null && plainTexts[1].equals("password"));
             assert(plainTexts[2] == null);
         }
+
+        {
+            User[] userTable = new User[] {
+                    new User("001", email, "08WISV7yGWsQpUCXlnErNl6ledurwx7pRhPGiS3zhIA="),
+                    new User("002", normalUser2, "XohImNooBHFR0VvjcYpJ3NgPQ1qq73WKhHvch0VQtg="),
+                    new User("003", normalUser1, "/Z7d6Us6HBWG5GIez6AHWSJg2irdWAdXKlsO+6WnVhI=")
+            };
+
+            Cracker cracker = new Cracker(userTable, email, password);
+            String[] plainTexts = cracker.run(rainbowTables);
+
+            assert(plainTexts[0] == null);
+            assert(plainTexts[1] == null);
+            assert(plainTexts[2] == null);
+        }
     }
 }
