@@ -79,7 +79,7 @@ public final class Cracker {
         int i = 0;
         while (serverHashAlgorithmIndex != -1 && i < userTable.length) {
             if (rainbowTables[serverHashAlgorithmIndex].contains(userTable[i].getPasswordHash())) {
-                    plainPassword[i] = rainbowTables[serverHashAlgorithmIndex].get(userTable[i].getPasswordHash());
+                plainPassword[i] = rainbowTables[serverHashAlgorithmIndex].get(userTable[i].getPasswordHash());
             }
             i++;
         }
