@@ -4,5 +4,6 @@ import java.math.BigInteger;
 
 public class KeyGenerator {
     public static boolean isPrime(final BigInteger number) {
+        return false;
     }
 }
