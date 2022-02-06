@@ -1,31 +1,34 @@
 package academy.pocu.comp3500.lab5;
 
 public class Bank {
-    private byte[][] mPubkeys;
-    private long[] mAmounts;
+    private byte[][] bankPubkeys;
+    private long[] bankAmounts;
 
     public Bank(byte[][] pubKeys, final long[] amounts) {
-        this.mPubkeys = pubKeys;
-        this.mAmounts = amounts;
+        this.bankPubkeys = pubKeys;
+        this.bankAmounts = amounts;
     }
 
     public long getBalance(final byte[] pubKey) {
-        /*
-        for (int i = 0; i < mPubkeys.length; i++) {
+        if (bankPubkeys == null && pubKey == null) {
+            return -1;
+        }
+
+        for (int i = 0; i < bankPubkeys.length; i++) {
             boolean isNoAccount = false;
 
-            for (int j = 0; j < mPubkeys[i].length; j++) {
-                if (mPubkeys[i][j] !=  pubKey[j]) {
+            for (int j = 0; j < bankPubkeys[i].length; j++) {
+                if (bankPubkeys[i][j] !=  pubKey[j]) {
                     isNoAccount = true;
                     break;
                 }
             }
 
             if (isNoAccount == false) {
-                return mAmounts[i];
+                return bankAmounts[i];
             }
         }
-        */
+
         return -1;
     }
 
