@@ -10,7 +10,7 @@ public class Bank {
     }
 
     public long getBalance(final byte[] pubKey) {
-
+        /*
         for (int i = 0; i < mPubkeys.length; i++) {
             boolean isNoAccount = false;
 
@@ -25,7 +25,7 @@ public class Bank {
                 return mAmounts[i];
             }
         }
-
+        */
         return -1;
     }
 
