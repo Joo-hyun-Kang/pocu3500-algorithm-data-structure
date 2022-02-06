@@ -18,7 +18,7 @@ public class Bank {
             boolean isNoAccount = false;
 
             for (int j = 0; j < bankPubkeys[i].length; j++) {
-                if (bankPubkeys[i][j] !=  pubKey[j]) {
+                if (bankPubkeys[i][j] != pubKey[j]) {
                     isNoAccount = true;
                     break;
                 }
