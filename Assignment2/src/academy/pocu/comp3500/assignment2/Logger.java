@@ -9,15 +9,30 @@ import java.io.IOException;
 
 public final class Logger {
     private static ArrayList<String> loggingTexts = new ArrayList<>();
+    private static int depth = 0;
 
     public static void log(final String text) {
-        loggingTexts.add(text);
+        String whiteSpaces = "";
+
+        if (depth != 0) {
+            int spaceLength = 2;
+            spaceLength *= depth;
+
+            char spaces[] = new char[spaceLength];
+            for (int i = 0; i < spaceLength; i++) {
+                spaces[i] = ' ';
+            }
+
+            whiteSpaces = new String(spaces);
+        }
+
+        loggingTexts.add(String.format("%s%s", whiteSpaces, text));
     }
 
-    public static void printTo(final BufferedWriter writer) throws  IOException{
+    public static void printTo(final BufferedWriter writer) throws IOException{
         for (int i = 0; i < loggingTexts.getSize(); i++) {
-                writer.write(loggingTexts.get(i));
-                writer.newLine();
+            writer.write(loggingTexts.get(i));
+            writer.newLine();
         }
 
         writer.flush();
@@ -32,10 +47,11 @@ public final class Logger {
     }
 
     public static Indent indent() {
+        depth++;
         return null;
     }
 
     public static void unindent() {
-
+        depth--;
     }
 }
