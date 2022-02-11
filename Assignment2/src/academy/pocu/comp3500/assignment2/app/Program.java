@@ -12,23 +12,22 @@ import static academy.pocu.comp3500.assignment2.Logger.*;
 
 public class Program {
 
-    public static void main(String[] args) throws  IOException {
+    public static void main(String[] args) throws IOException {
+
+        //D00
+
         BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
 
-        log("first level 1");
+        log("this is not indented");
 
         Logger.indent();
         {
-            log("second level 1");
-            log("second level 2");
-
-            doMagic();
-
-            log("second level 3");
+            log("but this is");
+            log("so is this");
         }
         Logger.unindent();
 
-        log("first level 2");
+        log("but not this");
         Logger.printTo(writer);
     }
 

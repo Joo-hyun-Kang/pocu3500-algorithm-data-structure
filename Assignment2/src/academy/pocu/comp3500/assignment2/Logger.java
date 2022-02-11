@@ -29,7 +29,7 @@ public final class Logger {
         loggingTexts.add(String.format("%s%s", whiteSpaces, text));
     }
 
-    public static void printTo(final BufferedWriter writer) throws IOException{
+    public static void printTo(final BufferedWriter writer) throws IOException {
         for (int i = 0; i < loggingTexts.getSize(); i++) {
             writer.write(loggingTexts.get(i));
             writer.newLine();
