@@ -48,7 +48,7 @@ public final class Logger {
 
     public static Indent indent() {
         depth++;
-        return null;
+        return new Indent();
     }
 
     public static void unindent() {

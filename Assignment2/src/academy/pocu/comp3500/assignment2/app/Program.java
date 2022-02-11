@@ -14,21 +14,15 @@ public class Program {
 
     public static void main(String[] args) throws IOException {
 
-        //D00
+            BufferedWriter writer = new BufferedWriter(new FileWriter("test1.log"));
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
+            log("Depth 0");
+            log("Depth 1");
 
-        log("this is not indented");
+            //indent.discard();
 
-        Logger.indent();
-        {
-            log("but this is");
-            log("so is this");
-        }
-        Logger.unindent();
+            Logger.printTo(writer);
 
-        log("but not this");
-        Logger.printTo(writer);
     }
 
     public static void doMagic() {
