@@ -13,16 +13,23 @@ import static academy.pocu.comp3500.assignment2.Logger.*;
 public class Program {
 
     public static void main(String[] args) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter("test1.log"));
+        log("first level 1");
 
-            log("Depth 0");
-            log("Depth 1");
+        Logger.indent();
+        {
+            log("second level 1");
+            log("second level 2");
 
-            //indent.discard();
+            //doMagic();
 
-            Logger.printTo(writer);
+            log("second level 3");
+        }
+        Logger.unindent();
 
+        log("first level 2");
+        Logger.printTo(writer);
     }
 
     public static void doMagic() {
