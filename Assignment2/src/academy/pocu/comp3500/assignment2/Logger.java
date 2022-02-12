@@ -61,7 +61,7 @@ public final class Logger {
                 k = j;
             }
 
-
+            /*
             if (k > 0 && i == indents.get(k - 1).getEnd()) {
                 if (indents.get(k - 1).getLevel() == 1) {
                     whiteSpaces = "";
@@ -72,14 +72,13 @@ public final class Logger {
                 k--;
             }
 
+             */
+
             writer.write(whiteSpaces);
             writer.write(loggingTexts.get(i));
+            writer.newLine();
 
             i++;
-
-            if (i != loggingTexts.getSize()) {
-                writer.write(System.lineSeparator());
-            }
         }
 
         writer.flush();
@@ -107,6 +106,10 @@ public final class Logger {
     }
 
     public static void unindent() {
+        if (indents.getSize() == 0) {
+            return;
+        }
+
         indents.get(indents.getSize() - indentDepths.dequeue()).setEnd(loggingTexts.getSize());
 
         depth--;

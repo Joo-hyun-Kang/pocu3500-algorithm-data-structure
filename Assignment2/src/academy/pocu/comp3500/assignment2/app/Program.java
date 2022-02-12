@@ -16,7 +16,11 @@ public class Program {
     public static void main(String[] args) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
 
+
+        Logger.unindent();
         Logger.indent();
+
+
         log("hello");
         log("world");
         log("this is logging at the top level");
