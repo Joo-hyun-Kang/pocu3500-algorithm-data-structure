@@ -2,18 +2,32 @@ package academy.pocu.comp3500.lab6;
 
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 
+import java.net.Inet4Address;
+
 public class League {
-    private Player[] players;
+    private TreeNode root;
+    private int playerCount;
 
     public League() {
     }
 
     public League(Player[] players) {
-        this.players = players;
+        TreeNode root = new TreeNode(players[0]);
+
+        for (int i = 1; i < players.length; i++) {
+            TreeNode.insertRecursive(root, players[i]);
+        }
+
+        this.root = root;
+        this.playerCount = players.length;
     }
 
     public Player findMatchOrNull(final Player player) {
-        return null;
+        if (player == null || playerCount < 2) {
+            return null;
+        }
+
+        return TreeNode.getPlayerOrNull(root, player, Integer.MAX_VALUE, null).getPlayer();
     }
 
     public Player[] getTop(final int count) {
