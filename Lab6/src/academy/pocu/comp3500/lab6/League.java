@@ -31,6 +31,10 @@ public class League {
     }
 
     public Player[] getTop(final int count) {
+        if (playerCount <= 0 || count <= 0 || playerCount < count) {
+            return new Player[0];
+        }
+
         TreeNode.setCount(count);
         TreeNode.setIndex(0);
 
@@ -41,7 +45,17 @@ public class League {
     }
 
     public Player[] getBottom(final int count) {
-        return null;
+        if (playerCount <= 0 || count <= 0 || playerCount < count) {
+            return new Player[0];
+        }
+
+        TreeNode.setCount(count);
+        TreeNode.setIndex(0);
+
+        Player[] bottomPlayers = new Player[count];
+        TreeNode.traverseInorder(root, bottomPlayers, 0);
+
+        return bottomPlayers;
     }
 
     public boolean join(final Player player) {

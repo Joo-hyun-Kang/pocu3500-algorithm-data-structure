@@ -108,9 +108,25 @@ public class TreeNode {
             return ;
         }
 
-        traversePostOrder(node.right, players, levels + 1);
-        players[index++] = node.player;
-        traversePostOrder(node.left, players, levels + 1);
+        traverseReverse(node.right, outPlayers, levels + 1);
+        outPlayers[index++] = node.player;
+        traverseReverse(node.left, outPlayers, levels + 1);
+
+    }
+
+    public static void traverseInorder(TreeNode node, Player[] outPlayers, int levels) {
+        if (node == null) {
+            count--;
+            return ;
+        }
+
+        if (count == 0) {
+            return ;
+        }
+
+        traverseInorder(node.left, outPlayers, levels + 1);
+        outPlayers[index++] = node.player;
+        traverseInorder(node.right, outPlayers, levels + 1);
 
     }
 

@@ -8,9 +8,9 @@ public class Program {
     public static void main(String[] args) {
         League emptyLeague = new League();
 
-        //Player[] emptyLeaguePlayers = emptyLeague.getTop(10);
+        Player[] emptyLeaguePlayers = emptyLeague.getTop(10);
 
-        //assert (emptyLeaguePlayers.length == 0);
+        assert (emptyLeaguePlayers.length == 0);
 
         Player player1 = new Player(1, "player1", 4);
         Player player2 = new Player(2, "player2", 6);
@@ -37,5 +37,12 @@ public class Program {
         assert (topPlayers[0].getId() == player6.getId());
         assert (topPlayers[1].getId() == player5.getId());
         assert (topPlayers[2].getId() == player4.getId());
+
+        Player[] bottomPlayers = league.getBottom(3);
+
+        assert (bottomPlayers[0].getId() == player1.getId());
+        assert (bottomPlayers[1].getId() == player2.getId());
+        assert (bottomPlayers[2].getId() == player3.getId());
+
     }
 }
