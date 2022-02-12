@@ -16,7 +16,7 @@ public class Program {
     public static void main(String[] args) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
 
-        /*
+
         {
             log("but this is");
             log("but this is");
@@ -42,25 +42,27 @@ public class Program {
 
             Logger.printTo(writer);
         }
+
+        /*
+        {
+            Logger.unindent();
+            Logger.indent();
+
+            log("this is not indented");
+
+            Logger.unindent();
+            Logger.indent();
+            Logger.unindent();
+
+            log("but this is");
+            log("so is this");
+
+
+            log("but not this");
+            Logger.printTo(writer);
+        }
+
          */
-
-
-        Logger.unindent();
-        Logger.indent();
-
-        log("this is not indented");
-
-        Logger.unindent();
-        Logger.indent();
-        Logger.unindent();
-
-        log("but this is");
-        log("so is this");
-
-
-        log("but not this");
-        Logger.printTo(writer);
-
     }
 
     public static void doMagic() {
