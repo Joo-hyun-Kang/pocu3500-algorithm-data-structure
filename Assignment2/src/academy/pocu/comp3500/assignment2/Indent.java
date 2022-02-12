@@ -43,6 +43,6 @@ public final class Indent {
     }
 
     public String getDelimiters() {
-        return  delimiters;
+        return delimiters;
     }
 }

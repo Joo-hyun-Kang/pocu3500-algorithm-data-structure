@@ -77,9 +77,7 @@ public final class Logger {
 
             i++;
 
-            if (i != loggingTexts.getSize()) {
-                writer.newLine();
-            }
+            writer.newLine();
         }
 
         writer.flush();
