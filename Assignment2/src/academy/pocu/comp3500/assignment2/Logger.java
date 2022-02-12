@@ -46,22 +46,27 @@ public final class Logger {
 
         while (i < loggingTexts.getSize()) {
             if (j < indents.getSize() && i == indents.get(j).getStart()) {
-                int spaceLength = 2;
-                spaceLength *= indents.get(j).getLevel();
-
-                char spaces[] = new char[spaceLength];
-                for (int z = 0; z < spaceLength; z++) {
-                    spaces[z] = ' ';
+                while (j < level && indents.get(j).getStart() == indents.get(j).getEnd()) {
+                    j++;
                 }
 
-                indents.get(j).setDelimiters(new String(spaces));
-                whiteSpaces = indents.get(j).getDelimiters();
-                j++;
+                if (j != level) {
+                    int spaceLength = 2;
+                    spaceLength *= indents.get(j).getLevel();
 
-                k = j;
+                    char spaces[] = new char[spaceLength];
+                    for (int z = 0; z < spaceLength; z++) {
+                        spaces[z] = ' ';
+                    }
+
+                    indents.get(j).setDelimiters(new String(spaces));
+                    whiteSpaces = indents.get(j).getDelimiters();
+                    j++;
+
+                    k = j;
+                }
             }
 
-            /*
             if (k > 0 && i == indents.get(k - 1).getEnd()) {
                 if (indents.get(k - 1).getLevel() == 1) {
                     whiteSpaces = "";
@@ -71,8 +76,6 @@ public final class Logger {
 
                 k--;
             }
-
-             */
 
             writer.write(whiteSpaces);
             writer.write(loggingTexts.get(i));
