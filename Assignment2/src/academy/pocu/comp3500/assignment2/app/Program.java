@@ -2,6 +2,7 @@ package academy.pocu.comp3500.assignment2.app;
 
 import academy.pocu.comp3500.assignment2.Indent;
 import academy.pocu.comp3500.assignment2.Logger;
+import academy.pocu.comp3500.assignment2.datastructure.Stack;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,13 +23,33 @@ public class Program {
             log("second level 1");
             log("second level 2");
 
-            //doMagic();
+            doMagic();
 
             log("second level 3");
         }
+
         Logger.unindent();
 
         log("first level 2");
+
+
+        log("first level 1");
+
+        Logger.indent();
+        {
+            log("second level 1");
+            log("second level 2");
+
+            doMagic();
+
+            log("second level 3");
+        }
+
+        Logger.unindent();
+
+        log("first level 2");
+
+
         Logger.printTo(writer);
     }
 

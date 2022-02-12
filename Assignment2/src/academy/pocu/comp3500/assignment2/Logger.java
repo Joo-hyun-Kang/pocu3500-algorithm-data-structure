@@ -10,9 +10,9 @@ import java.io.IOException;
 
 public final class Logger {
     private static ArrayList<String> loggingTexts = new ArrayList<>();
-    private static ArrayList<Indent> indentLevles = new ArrayList<>();
-    private static int depths;
-
+    private static ArrayList<Indent> indents = new ArrayList<>();
+    private static Queue<Integer> indentDepths = new Queue<>();
+    private static int depth = 1;
 
     public static void log(final String text) {
         /*
@@ -37,28 +37,49 @@ public final class Logger {
     }
 
     public static void printTo(final BufferedWriter writer) throws IOException {
+        int i = 0;
         int j = 0;
+        int k = 0;
+
+        int level = indents.getSize();
         String whiteSpaces = "";
 
-        for (int i = 0; i < loggingTexts.getSize(); i++) {
-            if (j < indentLevles.getSize() && i == indentLevles.get(j).getStart()) {
-                //빈칸 출력
+        while (i < loggingTexts.getSize()) {
+            if (j < indents.getSize() && i == indents.get(j).getStart()) {
                 int spaceLength = 2;
-                spaceLength *= j + 1;
+                spaceLength *= indents.get(j).getLevel();
 
                 char spaces[] = new char[spaceLength];
                 for (int z = 0; z < spaceLength; z++) {
                     spaces[z] = ' ';
                 }
 
-                whiteSpaces = new String(spaces);
-
+                indents.get(j).setDelimiters(new String(spaces));
+                whiteSpaces = indents.get(j).getDelimiters();
                 j++;
+
+                k = j;
+            }
+
+
+            if (k > 0 && i == indents.get(k - 1).getEnd()) {
+                if (indents.get(k - 1).getLevel() == 1) {
+                    whiteSpaces = "";
+                } else {
+                    whiteSpaces = indents.get(k - 2).getDelimiters();
+                }
+
+                k--;
             }
 
             writer.write(whiteSpaces);
             writer.write(loggingTexts.get(i));
-            writer.newLine();
+
+            i++;
+
+            if (i != loggingTexts.getSize()) {
+                writer.newLine();
+            }
         }
 
         writer.flush();
@@ -72,13 +93,20 @@ public final class Logger {
     }
 
     public static Indent indent() {
-        indentLevles.add(new Indent(loggingTexts.getSize()));
-        depths++;
+        Indent tmp = new Indent(loggingTexts.getSize());
 
-        return indentLevles.get(depths - 1);
+        indents.add(tmp);
+
+        tmp.setLevel(depth);
+
+        indentDepths.enqueue(depth++);
+
+        return indents.get(indents.getSize() - 1);
     }
 
     public static void unindent() {
-        indentLevles.get(depths - 1).setEnd(loggingTexts.getSize());
+        indents.get(indents.getSize() - indentDepths.dequeue()).setEnd(loggingTexts.getSize());
+
+        depth--;
     }
 }

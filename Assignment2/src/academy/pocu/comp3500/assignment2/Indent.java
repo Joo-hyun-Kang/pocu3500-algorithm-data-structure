@@ -5,6 +5,8 @@ import academy.pocu.comp3500.assignment2.datastructure.ArrayList;
 public final class Indent {
     private int start;
     private int end;
+    private int level;
+    private String delimiters;
     private boolean isDiscard;
 
     public Indent(int start) {
@@ -19,11 +21,27 @@ public final class Indent {
         this.end = end;
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setDelimiters(String delimiters) {
+        this.delimiters = delimiters;
+    }
+
     public int getStart() {
         return start;
     }
 
     public int getEnd() {
         return end;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public String getDelimiters() {
+        return  delimiters;
     }
 }
