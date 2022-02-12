@@ -21,6 +21,7 @@ public class Program {
         log("world");
         log("this is logging at the top level");
 
+        /*
         Logger.indent();
         {
             log("second level 1");
@@ -52,6 +53,8 @@ public class Program {
 
         log("first level 2");
 
+
+        */
         Logger.printTo(writer);
 
     }
