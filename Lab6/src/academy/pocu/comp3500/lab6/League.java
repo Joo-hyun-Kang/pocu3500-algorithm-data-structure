@@ -31,7 +31,13 @@ public class League {
     }
 
     public Player[] getTop(final int count) {
-        return null;
+        TreeNode.setCount(count);
+        TreeNode.setIndex(0);
+
+        Player[] topPlayers = new Player[count];
+        TreeNode.traverseReverse(root, topPlayers, 0);
+
+        return topPlayers;
     }
 
     public Player[] getBottom(final int count) {

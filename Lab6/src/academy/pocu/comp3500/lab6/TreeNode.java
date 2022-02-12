@@ -7,7 +7,8 @@ public class TreeNode {
     private Player player;
     private TreeNode left;
     private TreeNode right;
-    private static int approximation;
+    private static int count;
+    private static int index;
 
     public TreeNode(Player player) {
         this.player = player;
@@ -75,7 +76,7 @@ public class TreeNode {
 
             TreeNode value;
             if (leftRetDiff == rightRetDiff) {
-               return value = leftRet.player.getRating() > rightRet.player.getRating() ? leftRet : rightRet;
+                return value = leftRet.player.getRating() > rightRet.player.getRating() ? leftRet : rightRet;
             }
 
             return value = leftRetDiff < rightRetDiff ? leftRet : rightRet;
@@ -97,4 +98,27 @@ public class TreeNode {
         return absDiff;
     }
 
+    public static void traverseReverse(TreeNode node, Player[] outPlayers, int levels) {
+        if (node == null) {
+            count--;
+            return ;
+        }
+
+        if (count == 0) {
+            return ;
+        }
+
+        traversePostOrder(node.right, players, levels + 1);
+        players[index++] = node.player;
+        traversePostOrder(node.left, players, levels + 1);
+
+    }
+
+    public static void setCount(int count) {
+        TreeNode.count = count;
+    }
+
+    public static void setIndex(int index) {
+        TreeNode.index = index;
+    }
 }

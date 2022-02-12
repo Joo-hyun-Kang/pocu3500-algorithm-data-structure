@@ -30,5 +30,12 @@ public class Program {
 
         match = league.findMatchOrNull(player6);
         assert (match.getId() == player5.getId());
+
+        // getTop(), getBottom()
+        Player[] topPlayers = league.getTop(3);
+
+        assert (topPlayers[0].getId() == player6.getId());
+        assert (topPlayers[1].getId() == player5.getId());
+        assert (topPlayers[2].getId() == player4.getId());
     }
 }
