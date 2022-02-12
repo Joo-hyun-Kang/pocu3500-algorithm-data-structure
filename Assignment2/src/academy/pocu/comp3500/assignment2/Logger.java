@@ -93,7 +93,9 @@ public final class Logger {
     }
 
     public static Indent indent() {
-        Indent tmp = new Indent(loggingTexts.getSize());
+        final int UNINDENT_INITIAL = -1;
+
+        Indent tmp = new Indent(loggingTexts.getSize(), UNINDENT_INITIAL);
 
         indents.add(tmp);
 

@@ -9,8 +9,9 @@ public final class Indent {
     private String delimiters;
     private boolean isDiscard;
 
-    public Indent(int start) {
+    public Indent(int start, int end) {
         this.start = start;
+        this.end = end;
     }
 
     public void discard() {

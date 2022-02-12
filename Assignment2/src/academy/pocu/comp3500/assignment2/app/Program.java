@@ -49,8 +49,8 @@ public class Program {
 
         log("first level 2");
 
-
         Logger.printTo(writer);
+
     }
 
     public static void doMagic() {
