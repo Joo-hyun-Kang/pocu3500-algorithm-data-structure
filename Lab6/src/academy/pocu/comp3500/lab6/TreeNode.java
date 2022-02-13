@@ -82,10 +82,8 @@ public class TreeNode {
             return value = leftRetDiff < rightRetDiff ? leftRet : rightRet;
 
         } else if ((player.getRating() < node.player.getRating())) {
-
             return getPlayerOrNull(node.left, player, approximation, result);
         } else {
-
             return getPlayerOrNull(node.right, player, approximation, result);
         }
     }
@@ -104,12 +102,14 @@ public class TreeNode {
             return ;
         }
 
-        if (count == 0) {
+        traverseReverse(node.right, outPlayers, levels + 1);
+
+        if (count < 0) {
             return ;
         }
 
-        traverseReverse(node.right, outPlayers, levels + 1);
         outPlayers[index++] = node.player;
+
         traverseReverse(node.left, outPlayers, levels + 1);
 
     }
@@ -120,12 +120,14 @@ public class TreeNode {
             return ;
         }
 
-        if (count == 0) {
+        traverseInorder(node.left, outPlayers, levels + 1);
+
+        if (count < 0) {
             return ;
         }
 
-        traverseInorder(node.left, outPlayers, levels + 1);
         outPlayers[index++] = node.player;
+
         traverseInorder(node.right, outPlayers, levels + 1);
 
     }
