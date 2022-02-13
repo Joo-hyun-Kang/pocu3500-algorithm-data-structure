@@ -15,48 +15,52 @@ public final class Logger {
         loggingTexts.add(text);
     }
 
-    public static void printTo(final BufferedWriter writer) throws IOException {
-        int i = 0;
-        int j = 0;
+    public static void printTo(final BufferedWriter writer) {
+        try {
+            int i = 0;
+            int j = 0;
 
-        String whiteSpaces = "";
-        Stack<Indent> levels = new Stack<>();
+            String whiteSpaces = "";
+            Stack<Indent> levels = new Stack<>();
 
-        while (i < loggingTexts.getSize()) {
-            while (j < indents.getSize() && i == indents.get(j).getStart()) {
-                int indentCount = indents.get(j).getEnd() - indents.get(j).getStart();
+            while (i < loggingTexts.getSize()) {
+                while (j < indents.getSize() && i == indents.get(j).getStart()) {
+                    int indentCount = indents.get(j).getEnd() - indents.get(j).getStart();
 
-                if (indentCount != 0 && indents.get(j).isNotDiscard()) {
-                    levels.push(indents.get(j));
-                    whiteSpaces = indents.get(j).getDelimiters();
+                    if (indentCount != 0 && indents.get(j).isNotDiscard()) {
+                        levels.push(indents.get(j));
+                        whiteSpaces = indents.get(j).getDelimiters();
+                    }
+
+                    /*
+                    if (indentCount > 0 && indents.get(j).isNotDiscard()) {
+                        while (i < )
+                    }
+                     */
+                    j++;
                 }
 
-                /*
-                if (indentCount > 0 && indents.get(j).isNotDiscard()) {
-                    while (i < )
+                while (levels.getSize() > 0 && i == levels.peek().getEnd()) {
+                    levels.pop();
+
+                    if (levels.getSize() > 0) {
+                        whiteSpaces = levels.peek().getDelimiters();
+                    } else {
+                        whiteSpaces = "";
+                    }
                 }
-                 */
-                j++;
+
+                    String result = String.format("%s%s", whiteSpaces, loggingTexts.get(i));
+                    writer.write(result);
+                    writer.newLine();
+
+                i++;
             }
 
-            while (levels.getSize() > 0 && i == levels.peek().getEnd()) {
-                levels.pop();
-
-                if (levels.getSize() > 0) {
-                    whiteSpaces = levels.peek().getDelimiters();
-                } else {
-                    whiteSpaces = "";
-                }
-            }
-
-            writer.write(whiteSpaces);
-            writer.write(loggingTexts.get(i));
-            writer.write('\n');
-
-            i++;
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        writer.flush();
     }
 
     public static void printTo(final BufferedWriter writer, final String filter) {

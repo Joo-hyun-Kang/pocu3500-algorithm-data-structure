@@ -64,7 +64,7 @@ public class Program {
 
 
             log("but not this");
-            Logger.printTo(writer);
+
             Logger.printTo(writer);
         }
 
