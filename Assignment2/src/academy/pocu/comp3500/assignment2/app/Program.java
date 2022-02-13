@@ -16,7 +16,7 @@ public class Program {
     public static void main(String[] args) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("mylog1.log"));
 
-
+        /*
         {
             log("but this is");
             log("but this is");
@@ -26,10 +26,7 @@ public class Program {
             Logger.unindent();
             Logger.indent();
             Logger.unindent();
-            Logger.indent();
-            Logger.unindent();
-            Logger.indent();
-            Logger.unindent();
+
             Logger.indent();
 
 
@@ -43,7 +40,9 @@ public class Program {
             Logger.printTo(writer);
         }
 
-        /*
+         */
+
+         /*
         {
             Logger.unindent();
             Logger.indent();
@@ -61,8 +60,24 @@ public class Program {
             log("but not this");
             Logger.printTo(writer);
         }
-
          */
+
+        log("first level 1");
+
+        Logger.indent();
+        {
+            log("second level 1");
+            log("second level 2");
+
+            doMagic();
+
+            log("second level 3");
+        }
+        Logger.unindent();
+
+        log("first level 2");
+        Logger.printTo(writer);
+
     }
 
     public static void doMagic() {

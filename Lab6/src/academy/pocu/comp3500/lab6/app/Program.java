@@ -114,12 +114,8 @@ public class Program {
             Player player6 = new Player(6, "player6", 12);
             Player player7 = new Player(7, "player7", 4);
 
-            //League league = new League(new Player[]{player6, player4, player1});
-
             League league = new League(new Player[]{player6});
             boolean leaveSuccess = league.leave(player7);
-            assert (leaveSuccess);
-
 
         }
 
