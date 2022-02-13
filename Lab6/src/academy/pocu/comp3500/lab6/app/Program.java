@@ -6,7 +6,7 @@ import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 public class Program {
 
     public static void main(String[] args) {
-
+        /*
         {
             League emptyLeague = new League();
 
@@ -68,6 +68,8 @@ public class Program {
             assert(success = league.join(player2) == false); // false
         }
 
+
+         */
         {
             League league = new League();
 

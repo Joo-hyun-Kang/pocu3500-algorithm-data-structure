@@ -66,11 +66,15 @@ public class League {
 
         if (root == null) {
             root = new TreeNode(player);
+            this.playerCount++;
             return true;
         }
 
-        //TreeNode.joinRecursive(root, player, null, Direction.NONE);
-        return false;
+        boolean result = TreeNode.joinRecursive(root, player, null, Direction.NONE);
+
+        this.playerCount++;
+
+        return result;
     }
 
     public boolean leave(final Player player) {
