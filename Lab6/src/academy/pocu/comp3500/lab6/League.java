@@ -72,7 +72,9 @@ public class League {
 
         boolean result = TreeNode.joinRecursive(root, player, null, Direction.NONE);
 
-        this.playerCount++;
+        if (result == true) {
+            this.playerCount++;
+        }
 
         return result;
     }
