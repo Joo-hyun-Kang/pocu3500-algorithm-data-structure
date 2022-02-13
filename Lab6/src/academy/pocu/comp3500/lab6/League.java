@@ -3,6 +3,8 @@ package academy.pocu.comp3500.lab6;
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 
 import java.net.Inet4Address;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class League {
     private TreeNode root;
@@ -38,10 +40,10 @@ public class League {
         TreeNode.setCount(count);
         TreeNode.setIndex(0);
 
-        Player[] topPlayers = new Player[count];
+        ArrayList<Player> topPlayers = new ArrayList();
         TreeNode.traverseReverse(root, topPlayers, 0);
 
-        return topPlayers;
+        return topPlayers.toArray(new Player[playerCount]);
     }
 
     public Player[] getBottom(final int count) {

@@ -32,7 +32,7 @@ public class Program {
         assert (match.getId() == player5.getId());
 
         // getTop(), getBottom()
-        Player[] topPlayers = league.getTop(3);
+        Player[] topPlayers = league.getTop(10);
 
         assert (topPlayers[0].getId() == player6.getId());
         assert (topPlayers[1].getId() == player5.getId());
