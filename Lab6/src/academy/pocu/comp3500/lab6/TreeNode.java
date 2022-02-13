@@ -180,8 +180,7 @@ public class TreeNode {
                 if (current.left == null && current.right == null) {
                     if (direction == Direction.NONE) {
                         parent.getLeft().setPlayer(null);
-                    }
-                    else if (direction == Direction.LEFT) {
+                    } else if (direction == Direction.LEFT) {
                         parent.setLeft(null);
                     } else {
                         parent.setRight(null);
