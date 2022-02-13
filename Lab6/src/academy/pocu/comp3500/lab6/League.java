@@ -31,7 +31,7 @@ public class League {
     }
 
     public Player[] getTop(final int count) {
-        if (playerCount <= 0 || count <= 0 || playerCount < count) {
+        if (playerCount <= 0 || count <= 0) {
             return new Player[0];
         }
 
@@ -45,7 +45,7 @@ public class League {
     }
 
     public Player[] getBottom(final int count) {
-        if (playerCount <= 0 || count <= 0 || playerCount < count) {
+        if (playerCount <= 0 || count <= 0) {
             return new Player[0];
         }
 

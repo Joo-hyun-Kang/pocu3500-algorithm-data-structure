@@ -99,13 +99,13 @@ public class TreeNode {
     public static void traverseReverse(TreeNode node, Player[] outPlayers, int levels) {
         if (node == null) {
             count--;
-            return ;
+            return;
         }
 
         traverseReverse(node.right, outPlayers, levels + 1);
 
         if (count < 0) {
-            return ;
+            return;
         }
 
         outPlayers[index++] = node.player;
@@ -117,13 +117,13 @@ public class TreeNode {
     public static void traverseInorder(TreeNode node, Player[] outPlayers, int levels) {
         if (node == null) {
             count--;
-            return ;
+            return;
         }
 
         traverseInorder(node.left, outPlayers, levels + 1);
 
         if (count < 0) {
-            return ;
+            return;
         }
 
         outPlayers[index++] = node.player;
