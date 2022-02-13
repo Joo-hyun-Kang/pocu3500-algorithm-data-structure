@@ -80,6 +80,16 @@ public class League {
     }
 
     public boolean leave(final Player player) {
-        return false;
+        if (player == null || playerCount == 0) {
+            return false;
+        }
+
+        boolean result = TreeNode.leaveRecursive(root, player, null, Direction.NONE);
+
+        if (result == true) {
+            this.playerCount--;
+        }
+
+        return result;
     }
 }

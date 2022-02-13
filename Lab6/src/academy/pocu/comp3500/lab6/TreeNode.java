@@ -131,12 +131,12 @@ public class TreeNode {
         TreeNode.index = index;
     }
 
-    public static boolean joinRecursive(TreeNode node, Player player, TreeNode preNodeOrNull, Direction direction) {
+    public static boolean joinRecursive(TreeNode node, Player player, TreeNode parent, Direction direction) {
         if (node == null) {
             if (direction == Direction.LEFT) {
-                preNodeOrNull.left = new TreeNode(player);
+                parent.left = new TreeNode(player);
             } else {
-                preNodeOrNull.right = new TreeNode(player);
+                parent.right = new TreeNode(player);
             }
 
             return true;
@@ -160,7 +160,88 @@ public class TreeNode {
         return result;
     }
 
-    public static boolean removeRecursive(TreeNode node, Player player) {
-        return false;
+    public static boolean leaveRecursive(TreeNode current, Player player, TreeNode parentOrNull, Direction direction) {
+        if (current == null) {
+            return false;
+        }
+
+        boolean result = false;
+
+        if (player.getRating() == current.player.getRating()) {
+            if (player.getId() == current.player.getId()) {
+
+                if (current.left == null && current.right == null) {
+                    if (direction == Direction.LEFT) {
+                        parentOrNull.setLeft(null);
+                    } else {
+                        parentOrNull.setRight(null);
+                    }
+
+                    result = true;
+                } else if (current.left != null && current.right == null) {
+                    TreeNode tmp = searchInorderSuccessor(current.left, null);
+
+                    current.setPlayer(tmp.getPlayer());
+
+                    leaveRecursive(current.left, current.getPlayer(), current, Direction.NONE);
+
+                    result = true;
+                } else if (current.left == null && current.right != null) {
+                    TreeNode tmp = searchInorderPreSuccessor(current.right, null);
+
+                    current.setPlayer(tmp.getPlayer());
+
+                    leaveRecursive(current.right, current.getPlayer(), current, Direction.NONE);
+
+                    result = true;
+                } else {
+                    TreeNode tmp = searchInorderPreSuccessor(current.right, null);
+
+                    current.setPlayer(tmp.getPlayer());
+
+                    leaveRecursive(current.right, current.getPlayer(), current, Direction.NONE);
+
+                    result = true;
+                }
+
+                return result;
+            }
+        }
+
+        if (player.getRating() < current.player.getRating()) {
+            result = leaveRecursive(current.left, player, current, Direction.LEFT);
+        } else {
+            result = leaveRecursive(current.right, player, current, Direction.RIGHT);
+        }
+
+        return result;
+    }
+
+    private static TreeNode searchInorderSuccessor(TreeNode current, TreeNode parentOrNull) {
+        if (current == null) {
+            return parentOrNull;
+        }
+
+        return searchInorderSuccessor(current.right, current);
+    }
+
+    private static TreeNode searchInorderPreSuccessor(TreeNode current, TreeNode parentOrNull) {
+        if (current == null) {
+            return parentOrNull;
+        }
+
+        return searchInorderPreSuccessor(current.left, current);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setLeft(TreeNode left) {
+        this.left = left;
+    }
+
+    public void setRight(TreeNode right) {
+        this.right = right;
     }
 }
