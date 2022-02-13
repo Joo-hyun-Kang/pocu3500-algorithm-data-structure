@@ -171,6 +171,7 @@ public class TreeNode {
             if (player.getId() == current.player.getId()) {
 
                 if (current.left == null && current.right == null) {
+
                     if (direction == Direction.LEFT) {
                         parentOrNull.setLeft(null);
                     } else {
@@ -183,7 +184,7 @@ public class TreeNode {
 
                     current.setPlayer(tmp.getPlayer());
 
-                    leaveRecursive(current.left, current.getPlayer(), current, Direction.NONE);
+                    leaveRecursive(current.left, current.getPlayer(), current, Direction.LEFT);
 
                     result = true;
                 } else if (current.left == null && current.right != null) {
@@ -191,7 +192,7 @@ public class TreeNode {
 
                     current.setPlayer(tmp.getPlayer());
 
-                    leaveRecursive(current.right, current.getPlayer(), current, Direction.NONE);
+                    leaveRecursive(current.right, current.getPlayer(), current, Direction.RIGHT);
 
                     result = true;
                 } else {
@@ -199,7 +200,7 @@ public class TreeNode {
 
                     current.setPlayer(tmp.getPlayer());
 
-                    leaveRecursive(current.right, current.getPlayer(), current, Direction.NONE);
+                    leaveRecursive(current.right, current.getPlayer(), current, Direction.RIGHT);
 
                     result = true;
                 }

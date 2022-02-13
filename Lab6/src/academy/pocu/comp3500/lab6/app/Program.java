@@ -106,8 +106,6 @@ public class Program {
         }
 
         {
-            League league = new League();
-
             Player player1 = new Player(1, "player1", 4);
             Player player2 = new Player(2, "player2", 6);
             Player player3 = new Player(3, "player3", 7);
@@ -115,30 +113,12 @@ public class Program {
             Player player5 = new Player(5, "player5", 11);
             Player player6 = new Player(6, "player6", 12);
 
-            //League league = new League(new Player[]{player6, player4, player1, player2, player5, player3})
+            League league = new League(new Player[]{player6, player4, player1});
 
-            league.join(player1);
-
-            boolean leaveSuccess = league.leave(player1);
+            boolean leaveSuccess = league.leave(player6);
             assert (leaveSuccess);
 
-            boolean sucess = league.join(player6);
-            assert(sucess);
 
-            sucess = league.join(player4);
-            assert(sucess);
-
-            sucess = league.join(player1);
-            assert(sucess);
-
-            sucess = league.join(player2);
-            assert(sucess);
-
-            sucess = league.join(player5);
-            assert(sucess);
-
-            sucess = league.join(player3);
-            assert(sucess);
         }
 
     }
