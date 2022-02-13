@@ -11,6 +11,7 @@ public final class Indent {
 
     public Indent(int start) {
         this.start = start;
+        this.end = -1;
     }
 
     public void discard() {

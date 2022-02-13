@@ -61,23 +61,12 @@ public class Program {
             Logger.printTo(writer);
         }
          */
-
+        Logger.indent();
+        log("first level 1");
+        log("first level 1");
         log("first level 1");
 
-        Logger.indent();
-        {
-            log("second level 1");
-            log("second level 2");
-
-            doMagic();
-
-            log("second level 3");
-        }
-        Logger.unindent();
-
-        log("first level 2");
         Logger.printTo(writer);
-
     }
 
     public static void doMagic() {
