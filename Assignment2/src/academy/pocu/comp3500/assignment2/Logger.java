@@ -26,11 +26,16 @@ public final class Logger {
             while (j < indents.getSize() && i == indents.get(j).getStart()) {
                 int indentCount = indents.get(j).getEnd() - indents.get(j).getStart();
 
-                if (indentCount != 0) {
+                if (indentCount != 0 && indents.get(j).isNotDiscard()) {
                     levels.push(indents.get(j));
                     whiteSpaces = indents.get(j).getDelimiters();
                 }
 
+                /*
+                if (indentCount > 0 && indents.get(j).isNotDiscard()) {
+                    while (i < )
+                }
+                 */
                 j++;
             }
 
@@ -46,7 +51,7 @@ public final class Logger {
 
             writer.write(whiteSpaces);
             writer.write(loggingTexts.get(i));
-            writer.newLine();
+            writer.write('\n');
 
             i++;
         }

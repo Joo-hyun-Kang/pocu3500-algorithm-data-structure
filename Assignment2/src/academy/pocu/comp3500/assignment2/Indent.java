@@ -7,15 +7,16 @@ public final class Indent {
     private int end;
     private int level;
     private String delimiters;
-    private boolean isDiscard;
+    private boolean isNotDiscard;
 
     public Indent(int start) {
         this.start = start;
         this.end = -1;
+        isNotDiscard = true;
     }
 
     public void discard() {
-        isDiscard = true;
+        isNotDiscard = false;
     }
 
     public void setEnd(int end) {
@@ -44,5 +45,9 @@ public final class Indent {
 
     public String getDelimiters() {
         return delimiters;
+    }
+
+    public boolean isNotDiscard() {
+        return isNotDiscard;
     }
 }
