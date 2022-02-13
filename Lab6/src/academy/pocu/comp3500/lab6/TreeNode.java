@@ -1,6 +1,8 @@
 package academy.pocu.comp3500.lab6;
 
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
+import static academy.pocu.comp3500.lab6.Direction.*;
+
 
 public class TreeNode {
     private Player player;
@@ -129,5 +131,34 @@ public class TreeNode {
 
     public static void setIndex(int index) {
         TreeNode.index = index;
+    }
+
+    public static boolean joinRecursive(TreeNode node, Player player, TreeNode preNodeOrNull, Direction direction) {
+        if (node == null) {
+            if (direction == LEFT) {
+                preNodeOrNull.left = new TreeNode(player);
+            } else {
+                preNodeOrNull.right = new TreeNode(player);
+            }
+
+            return true;
+        }
+
+        if (player.getRating() == node.player.getRating()) {
+            if (player.getId() == player.getId()) {
+
+                return false;
+            }
+        }
+
+        boolean result = false;
+
+        if (player.getRating() < node.player.getRating()) {
+            result = joinRecursive(node.left, player, node, LEFT);
+        } else {
+            result = joinRecursive(node.right, player, node, RIGHT);
+        }
+
+        return result;
     }
 }
