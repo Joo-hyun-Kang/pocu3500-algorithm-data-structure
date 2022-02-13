@@ -9,12 +9,19 @@ public class TreeNode {
     private static int count;
     private static int index;
 
+    public TreeNode() {
+    }
+
     public TreeNode(Player player) {
         this.player = player;
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public TreeNode getLeft() {
+        return left;
     }
 
     public static TreeNode insertRecursive(TreeNode node, Player player) {
@@ -160,7 +167,7 @@ public class TreeNode {
         return result;
     }
 
-    public static boolean leaveRecursive(TreeNode current, Player player, TreeNode parentOrNull, Direction direction) {
+    public static boolean leaveRecursive(TreeNode current, Player player, TreeNode parent, Direction direction) {
         if (current == null) {
             return false;
         }
@@ -171,11 +178,13 @@ public class TreeNode {
             if (player.getId() == current.player.getId()) {
 
                 if (current.left == null && current.right == null) {
-
-                    if (direction == Direction.LEFT) {
-                        parentOrNull.setLeft(null);
+                    if (direction == Direction.NONE) {
+                        parent.getLeft().setPlayer(null);
+                    }
+                    else if (direction == Direction.LEFT) {
+                        parent.setLeft(null);
                     } else {
-                        parentOrNull.setRight(null);
+                        parent.setRight(null);
                     }
 
                     result = true;

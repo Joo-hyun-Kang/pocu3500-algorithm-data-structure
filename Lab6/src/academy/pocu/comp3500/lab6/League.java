@@ -84,13 +84,14 @@ public class League {
             return false;
         }
 
-        if (playerCount == 1) {
-            root = null;
-            this.playerCount--;
-            return true;
-        }
+        TreeNode parent = new TreeNode();
+        parent.setLeft(root);
 
-        boolean result = TreeNode.leaveRecursive(root, player, null, Direction.NONE);
+        boolean result = TreeNode.leaveRecursive(root, player, parent, Direction.NONE);
+
+        if (root.getPlayer() == null) {
+            root = null;
+        }
 
         if (result == true) {
             this.playerCount--;
