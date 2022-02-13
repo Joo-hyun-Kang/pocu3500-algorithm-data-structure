@@ -84,6 +84,12 @@ public class League {
             return false;
         }
 
+        if (playerCount == 1) {
+            root = null;
+            this.playerCount--;
+            return true;
+        }
+
         boolean result = TreeNode.leaveRecursive(root, player, null, Direction.NONE);
 
         if (result == true) {
