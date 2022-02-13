@@ -8,7 +8,6 @@ public class Program {
     public static void main(String[] args) {
 
         {
-
             League emptyLeague = new League();
 
             Player[] emptyLeaguePlayers = emptyLeague.getTop(10);
@@ -69,6 +68,17 @@ public class Program {
             assert(success = league.join(player2) == false); // false
         }
 
+        {
+            League league = new League();
+
+            Player newPlayer = new Player(1, "player1", 12);
+            boolean sucess = league.join(newPlayer);
+            assert(sucess);
+
+            newPlayer = new Player(2, "player2", 15);
+            sucess = league.join(newPlayer);
+            assert(sucess);
+        }
 
     }
 }
