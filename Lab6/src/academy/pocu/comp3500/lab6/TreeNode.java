@@ -1,7 +1,8 @@
 package academy.pocu.comp3500.lab6;
 
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
-import static academy.pocu.comp3500.lab6.Direction.*;
+import static academy.pocu.comp3500.lab6.Direction.LEFT;
+import static academy.pocu.comp3500.lab6.Direction.RIGHT;
 
 
 public class TreeNode {
