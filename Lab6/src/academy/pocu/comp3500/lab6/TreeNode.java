@@ -1,10 +1,6 @@
 package academy.pocu.comp3500.lab6;
 
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
-import com.sun.source.tree.Tree;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class TreeNode {
     private Player player;
@@ -99,7 +95,7 @@ public class TreeNode {
         return absDiff;
     }
 
-    public static void traverseReverse(TreeNode node, ArrayList<Player> outPlayers, int levels) {
+    public static void traverseReverse(TreeNode node, Player[] outPlayers, int levels) {
         if (node == null) {
             count--;
             return;
@@ -111,7 +107,7 @@ public class TreeNode {
             return;
         }
 
-        outPlayers.add(node.player);
+        outPlayers[index++] = node.player;
 
         traverseReverse(node.left, outPlayers, levels + 1);
 
