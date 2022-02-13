@@ -69,7 +69,8 @@ public class League {
             return true;
         }
 
-        return TreeNode.joinRecursive(root, player, null, Direction.NONE);
+        //TreeNode.joinRecursive(root, player, null, Direction.NONE);
+        return false;
     }
 
     public boolean leave(final Player player) {
