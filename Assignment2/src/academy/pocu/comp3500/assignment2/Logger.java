@@ -50,9 +50,9 @@ public final class Logger {
                     }
                 }
 
-                    String result = String.format("%s%s", whiteSpaces, loggingTexts.get(i));
-                    writer.write(result);
-                    writer.newLine();
+                String result = String.format("%s%s", whiteSpaces, loggingTexts.get(i));
+                writer.write(result);
+                writer.newLine();
 
                 i++;
             }
