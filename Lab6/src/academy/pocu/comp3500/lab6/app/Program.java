@@ -6,6 +6,7 @@ import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 public class Program {
 
     public static void main(String[] args) {
+
         League emptyLeague = new League();
 
         Player[] emptyLeaguePlayers = emptyLeague.getTop(10);
@@ -32,17 +33,31 @@ public class Program {
         assert (match.getId() == player5.getId());
 
         // getTop(), getBottom()
-        Player[] topPlayers = league.getTop(10);
+        Player[] topPlayers = league.getTop(3);
 
         assert (topPlayers[0].getId() == player6.getId());
         assert (topPlayers[1].getId() == player5.getId());
         assert (topPlayers[2].getId() == player4.getId());
 
-        Player[] bottomPlayers = league.getBottom(3);
+        Player[] bottomPlayers = league.getBottom(5000);
 
         assert (bottomPlayers[0].getId() == player1.getId());
         assert (bottomPlayers[1].getId() == player2.getId());
         assert (bottomPlayers[2].getId() == player3.getId());
 
+
+        /*
+        Player player1 = new Player(1, "player1", 12);
+        Player player2 = new Player(2, "player2", 15);
+
+        League league = new League(new Player[]{player1, player2});
+
+        Player newPlayer = new Player(3, "player3", 13);
+
+        boolean success = league.join(newPlayer); // true
+        assert(success = league.join(newPlayer) == false); // false
+        assert(success = league.join(player2) == false); // false
+
+         */
     }
 }

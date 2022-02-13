@@ -1,6 +1,7 @@
 package academy.pocu.comp3500.lab6;
 
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
+import com.sun.source.tree.Tree;
 
 public class League {
     private TreeNode root;
@@ -33,10 +34,10 @@ public class League {
             return new Player[0];
         }
 
-        TreeNode.setCount(count);
+        int length = playerCount < count ? playerCount : count;
+        TreeNode.setCount(length);
         TreeNode.setIndex(0);
 
-        int length = playerCount < count ? playerCount : count;
         Player[] topPlayers = new Player[length];
         TreeNode.traverseReverse(root, topPlayers, 0);
 
@@ -48,10 +49,11 @@ public class League {
             return new Player[0];
         }
 
-        TreeNode.setCount(count);
+        int length = playerCount < count ? playerCount : count;
+
+        TreeNode.setCount(length);
         TreeNode.setIndex(0);
 
-        int length = playerCount < count ? playerCount : count;
         Player[] bottomPlayers = new Player[length];
         TreeNode.traverseInorder(root, bottomPlayers, 0);
 
@@ -59,6 +61,8 @@ public class League {
     }
 
     public boolean join(final Player player) {
+        TreeNode.insertRecursive(root, player);
+
         return false;
     }
 

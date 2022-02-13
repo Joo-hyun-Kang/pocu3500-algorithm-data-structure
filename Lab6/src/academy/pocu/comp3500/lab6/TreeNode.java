@@ -17,14 +17,6 @@ public class TreeNode {
         return player;
     }
 
-    public TreeNode getLeft() {
-        return left;
-    }
-
-    public TreeNode getRight() {
-        return right;
-    }
-
     public static TreeNode insertRecursive(TreeNode node, Player player) {
         if (node == null) {
             return new TreeNode(player);
@@ -97,38 +89,38 @@ public class TreeNode {
 
     public static void traverseReverse(TreeNode node, Player[] outPlayers, int levels) {
         if (node == null) {
-            count--;
             return;
         }
 
         traverseReverse(node.right, outPlayers, levels + 1);
 
-        if (count < 0) {
+        if (index < count) {
+            outPlayers[index++] = node.player;
+        }
+
+        if (index >= count) {
             return;
         }
 
-        outPlayers[index++] = node.player;
-
         traverseReverse(node.left, outPlayers, levels + 1);
-
     }
 
     public static void traverseInorder(TreeNode node, Player[] outPlayers, int levels) {
         if (node == null) {
-            count--;
             return;
         }
 
         traverseInorder(node.left, outPlayers, levels + 1);
 
-        if (count < 0) {
+        if (index < count) {
+            outPlayers[index++] = node.player;
+        }
+
+        if (index >= count) {
             return;
         }
 
-        outPlayers[index++] = node.player;
-
         traverseInorder(node.right, outPlayers, levels + 1);
-
     }
 
     public static void setCount(int count) {
