@@ -1,13 +1,21 @@
 package academy.pocu.comp3500.lab5.app;
 
-import academy.pocu.comp3500.lab5.Bank;
 import academy.pocu.comp3500.lab5.KeyGenerator;
-
+import academy.pocu.comp3500.lab5.Bank;
 import java.math.BigInteger;
+
+
 
 public class Program {
 
     public static void main(String[] args) {
+        boolean twoIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(2)); // true
+        boolean threeIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(3)); // true
+        boolean largeNumber = KeyGenerator.isPrime(BigInteger.valueOf(101)); // true
+        boolean largeNumberIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(30239863)); // true
+
+
+        // Bank
         final String TEST_PUBLIC_KEY_1 = "30820122300d06092a864886f70d01010105000382010f003082010a0282010100b2bb213e18fe414ff32bf17f6630d542a667275813627445a92043791cd924dc4dec2007a10aa6a268bfef2b56677e2cecd0092a2e348aec34316edc20648820fee83125daba065826d2cbcc684fcbafc8fb22930eb6bd827713d7c7e598b9efd83689745288e9a1630175bf2759e5749cdfbad304921d15bb901d1ba0ca31b367733161d60839c7378be720863cb5e20d845edff236f442bc0bb6ac726970038b4490d2d4f25b3b0721510cea4aa45a50fe59fa09cdadcd4c0d1ab7f268e02b3cced773985e10a18f72cb808d104874e43a0c2eb0e44345751fefd6153211a9b3dc53592e2c203694bd501d6fabc3ae53b7ec8207de79bc8188a74e0d359f290203010001";
         final String TEST_PRIVATE_KEY_1 = "308204be020100300d06092a864886f70d0101010500048204a8308204a40201000282010100b2bb213e18fe414ff32bf17f6630d542a667275813627445a92043791cd924dc4dec2007a10aa6a268bfef2b56677e2cecd0092a2e348aec34316edc20648820fee83125daba065826d2cbcc684fcbafc8fb22930eb6bd827713d7c7e598b9efd83689745288e9a1630175bf2759e5749cdfbad304921d15bb901d1ba0ca31b367733161d60839c7378be720863cb5e20d845edff236f442bc0bb6ac726970038b4490d2d4f25b3b0721510cea4aa45a50fe59fa09cdadcd4c0d1ab7f268e02b3cced773985e10a18f72cb808d104874e43a0c2eb0e44345751fefd6153211a9b3dc53592e2c203694bd501d6fabc3ae53b7ec8207de79bc8188a74e0d359f290203010001028201006d1649f3dccd528fb99bd88a29952494c97bac47d58d01ea828f6e9f3d3c4b832b0c3380748a4baa54c4d0f56287483ba34e5649a869e960c17a6a6f7055ebc037d5002a5a95afc99de88afaf7afbc624e08f9d147e9c1411fecbc87055b7221319617cf2790e907d7a5cc781f4c7effedbfa007ab8282be00fcb4c7681c00b8b625a772ad0a50047128d9a0c87286bb94b7c3791f1b1d5465e57726440f93da0cb4a125e25c607b85b52647b5a6297e4ff327e94eaa8a0bf42999e9704a43adb524bfa018"
                 + "92a33dc6bac2d3ef18f5fb726f2b4ba05a5d9e0255ba1c10261fbba41eb67c6d0c9f6451134462959098318922671efd329848803d06e27573a00102818100fe41190885fd8081fa6b1f7835212f38cc7a1ac347af29daecede85086c3884e888855a82f5d5b911677135d4bda8d4a0dfbff8ec36c2bc4de8d2fd59569aceb1d6c88a28dfd8adf40f1b5875fa45cab4237f5fa32821db5c627ec7ce1d22970bc2a263d45e6396ec0755ec7cd999ba04196cb6c242caaa227a90179779dd0b102818100b3f548ef813691dabc39497064a50df193dc3c6d22d2c52fac56f6d59a33e21da8f05dd01a4db5c86a6a0fd4b6b863d5bb1d705af383c194ee972cb53df22b84fb3899be0b47f92941daba20ffab2bf6d6fbc0a1c8472049071c7d800c09fe88d09d86a341eae402805dec7bf82b4241779525950ae754411b2b60d0ebe093f90281804ffa1c2cc1311fa64326452ce3d17f702769d5574e0a3c69401409faa299891be2f8b7b102cd240b7c7c925bcb8b80dc258ffa30672a748e25cf5597a2bb2e087b25f3c8e64f35caca3bfdf50a51c250a0b0c7b01f092cdd4beaad0a0f62b36461dc04514bd682846307c87ba321c9815c805996b7be512256c563d0589f0cd1028181009d6e46d927ec0a5b15f0f3db3c60dcbaeb446f2476a376d7c6e7e95662696335d956366bd8a70511886e"
@@ -28,7 +36,6 @@ public class Program {
         long senderInitialBalance = 20000;
         long receiverInitialBalance = 3000;
 
-
         Bank bank = new Bank(new byte[][]{senderPublicKey, receiverPublicKey}, new long[]{senderInitialBalance, receiverInitialBalance});
 
         long senderBalance = bank.getBalance(senderPublicKey);
@@ -36,6 +43,27 @@ public class Program {
 
         assert (senderBalance == senderInitialBalance);
         assert (receiverBalance == receiverInitialBalance);
+
+        final long AMOUNT = 5000;
+        final long WRONG_AMOUNT = 4000;
+        final String TEST_1_TEST_2_5000_SIGNATURE = "355913bad7f97ecf38c27a234d1957de9fe366eedc66a365114692833fb6045c5b907c1bea26bd30d23b92d98f2fc3d5e5dbd9d377c8ce499ffd7120fffb3b3bbdd9cecfcef883a672e86510b3b6a8364b2ef146a51cbb0cd3f71ca412bfebfa050547616f2bb8839caf282f4a5abbd56860649b7f292ec670995b0d48d7d085637d647ea9aaf99ffdce84c87a8360718cc38f4657af81ebd1beebe0e71ed132ce5c59718a2d097ff13128c02d34fd681c0cf409381e715aa0593c28e1606e193476f153d4c1676194460e8f17916c1f30151f0cc503aa965553589006e3be38c2ed3a91601340261778f05d9439b2232a3ea0574dd74af01c53dee79651846e";
+        byte[] signature = decodeFromHexString(TEST_1_TEST_2_5000_SIGNATURE);
+
+        boolean wrongAmountTransferResult = bank.transfer(senderPublicKey, receiverPublicKey, WRONG_AMOUNT, signature);
+        assert (!wrongAmountTransferResult);
+
+        boolean wrongAccountTransferResult = bank.transfer(receiverPublicKey, senderPublicKey, AMOUNT, signature);
+        assert (!wrongAccountTransferResult);
+
+        boolean transferResult = bank.transfer(senderPublicKey, receiverPublicKey, AMOUNT, signature);
+        assert (transferResult);
+
+        senderBalance = bank.getBalance(senderPublicKey);
+        receiverBalance = bank.getBalance(receiverPublicKey);
+
+        assert (senderBalance == senderInitialBalance - AMOUNT);
+        assert (receiverBalance == receiverInitialBalance + AMOUNT);
+
     }
 
     private static byte[] decodeFromHexString(String hexString) {
