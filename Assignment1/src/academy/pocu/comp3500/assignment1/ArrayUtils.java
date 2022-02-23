@@ -29,7 +29,7 @@ public final class ArrayUtils {
         int i = left;
 
         for (int j = left; j < right; ++j) {
-            if ((players[j].getAssistsPerGame() > pivotAssist || (players[j].getAssistsPerGame() > pivotAssist && players[j].getPassesPerGame() > pivotPass))) {
+            if (players[j].getAssistsPerGame() > pivotAssist) {
                 swap(players, i, j);
                 i++;
             }

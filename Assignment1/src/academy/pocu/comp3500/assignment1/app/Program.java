@@ -535,6 +535,19 @@ public class Program {
 
             assert (k == 6);
         }
+
+        {
+            Player[] players = new Player[] {
+                    new Player("Player 1", 2, 2, 1, 78),
+                    new Player("Player 2", 10, 1, 10, 66),
+            };
+
+            Player[] tempPlayers = new Player[players.length];
+
+            int k = PocuBasketballAssociation.findDreamTeamSize(players, tempPlayers);
+
+            assert (k == 2);
+        }
     }
 
     private static Player getPlayerOrNull(final Player[] players, final String id) {
