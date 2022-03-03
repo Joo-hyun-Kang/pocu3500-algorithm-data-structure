@@ -2,16 +2,24 @@ package academy.pocu.comp3500.lab7.app;
 
 import academy.pocu.comp3500.lab7.Decryptor;
 
+import java.util.ArrayList;
+
 public class Program {
 
     public static void main(String[] args) {
         {
-            //String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
-            String[] codeWords = new String[]{"aaaa"};
+            ArrayList<String> test = new ArrayList<>();
+            test.add("1234");
+            test.add("3333");
+            test.remove(1);
+
+
+
+            String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
 
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("aa");
+            String[] candidates = decryptor.findCandidates("cat");
 
             assert (candidates.length == 1);
             assert (candidates[0].equals("cat"));
@@ -66,7 +74,7 @@ public class Program {
         }
 
         {
-            String[] codeWords = new String[]{"asDFasd"};
+            String[] codeWords = new String[]{"asDFasd", "asdFasd"};
             Decryptor decryptor = new Decryptor(codeWords);
 
             String[] candidates = decryptor.findCandidates("asDSAdf");

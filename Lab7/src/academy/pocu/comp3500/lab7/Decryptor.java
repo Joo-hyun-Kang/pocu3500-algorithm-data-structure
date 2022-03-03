@@ -11,6 +11,8 @@ public class Decryptor {
 
     public String[] findCandidates(final String word) {
 
+
+
         String wordLowercase = convertLowercase(word);
 
         ArrayList<String> result = new ArrayList<>();
@@ -20,7 +22,10 @@ public class Decryptor {
         //반환을 6개 하게 됌
         ArrayList<String> codeWords = new ArrayList<>();
         for (String code : this.codeWords) {
-            codeWords.add(code);
+            String temp = convertLowercase(code);
+            if (!codeWords.contains(temp)) {
+                codeWords.add(temp);
+            }
         }
 
         findCandidatesRecursive(wordLowercase, 0, word.length() - 1, result, codeWords);
@@ -34,9 +39,8 @@ public class Decryptor {
         if (start == end) {
             int index = 0;
             for (String code : codeWords) {
-                String lowercase = convertLowercase(code);
-                if (lowercase.equals(word)) {
-                    result.add(lowercase);
+                if (code.equals(word)) {
+                    result.add(code);
                     codeWords.remove(index);
                     break;
                 }
