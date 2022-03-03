@@ -1,8 +1,6 @@
 package academy.pocu.comp3500.lab7;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Decryptor {
     String[] codeWords;
@@ -17,6 +15,9 @@ public class Decryptor {
 
         ArrayList<String> result = new ArrayList<>();
 
+        //매개변수 word에서 캐릭터가 중복되어서 서로 섞는 경우에 같은 단어가 동시에 나올 수 있음
+        //aaa를 섞으면 aaa가 총 6개 나온다 이걸 codeWord와 그냥 매칭하면 생기는 문제가
+        //반환을 6개 하게 됌
         ArrayList<String> codeWords = new ArrayList<>();
         for (String code : this.codeWords) {
             codeWords.add(code);

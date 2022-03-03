@@ -6,11 +6,12 @@ public class Program {
 
     public static void main(String[] args) {
         {
-            String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
+            //String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
+            String[] codeWords = new String[]{"aaaa"};
 
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("cat");
+            String[] candidates = decryptor.findCandidates("aa");
 
             assert (candidates.length == 1);
             assert (candidates[0].equals("cat"));
