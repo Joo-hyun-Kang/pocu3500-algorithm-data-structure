@@ -43,7 +43,7 @@ public class Decryptor {
     private String convertLowercase(String str) {
         char[] arr = str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
-            if (arr[i] <= 'Z') {
+            if (arr[i] >= 'A' && arr[i] <= 'Z') {
                 arr[i] ^= 32;
             }
         }
