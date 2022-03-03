@@ -68,7 +68,7 @@ public class Program {
             String[] codeWords = new String[]{"asdfasd"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("cat");
+            String[] candidates = decryptor.findCandidates(null);
 
             assert (candidates.length == 0);
         }

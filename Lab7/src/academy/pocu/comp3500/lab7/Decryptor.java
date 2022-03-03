@@ -10,7 +10,9 @@ public class Decryptor {
     }
 
     public String[] findCandidates(final String word) {
-
+        if (word == null) {
+            return new String[]{};
+        }
 
 
         String wordLowercase = convertLowercase(word);
