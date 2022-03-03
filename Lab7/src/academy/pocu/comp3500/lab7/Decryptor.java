@@ -1,6 +1,8 @@
 package academy.pocu.comp3500.lab7;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Decryptor {
     String[] codeWords;
@@ -15,27 +17,39 @@ public class Decryptor {
 
         ArrayList<String> result = new ArrayList<>();
 
-        findCandidatesRecursive(wordLowercase, 0, word.length() - 1, result);
+        ArrayList<String> codeWords = new ArrayList<>();
+        for (String code : this.codeWords) {
+            codeWords.add(code);
+        }
+
+        findCandidatesRecursive(wordLowercase, 0, word.length() - 1, result, codeWords);
 
         return result.toArray(new String[result.size()]);
     }
 
     //순열 재귀 이용 시간 복잡도 N! 사전 찾기
 
-    public void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result) {
+    public void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result, ArrayList<String> codeWords) {
         if (start == end) {
+            int index = 0;
             for (String code : codeWords) {
                 String lowercase = convertLowercase(code);
                 if (lowercase.equals(word)) {
                     result.add(lowercase);
+                    codeWords.remove(index);
                     break;
                 }
+                index++;
             }
         }
 
         for (int i = start; i <= end; i++) {
+            if (codeWords.size() <= 0) {
+                break;
+            }
+
             word = swap(word, start, i);
-            findCandidatesRecursive(word, start + 1, end, result);
+            findCandidatesRecursive(word, start + 1, end, result, codeWords);
             word = swap(word, start, i);
         }
     }
