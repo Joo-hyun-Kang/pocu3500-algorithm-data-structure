@@ -8,12 +8,6 @@ public class Program {
 
     public static void main(String[] args) {
         {
-            ArrayList<String> test = new ArrayList<>();
-            test.add("1234");
-            test.add("3333");
-            test.remove(1);
-
-
 
             String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
 
@@ -68,7 +62,15 @@ public class Program {
             String[] codeWords = new String[]{"asdfasd"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates(null);
+            String[] candidates = decryptor.findCandidates("as");
+
+            assert (candidates.length == 0);
+
+            candidates = decryptor.findCandidates("asd");
+
+            assert (candidates.length == 0);
+
+            candidates = decryptor.findCandidates("asf");
 
             assert (candidates.length == 0);
         }
@@ -98,6 +100,14 @@ public class Program {
             Decryptor decryptor = new Decryptor(codeWords);
 
             String[] candidates = decryptor.findCandidates("acfz");
+            assert (candidates.length == 0);
+        }
+
+        {
+            String[] codeWords = new String[]{"AcdERZZAA"};
+            Decryptor decryptor = new Decryptor(codeWords);
+
+            String[] candidates = decryptor.findCandidates("Acd");
             assert (candidates.length == 0);
         }
     }
