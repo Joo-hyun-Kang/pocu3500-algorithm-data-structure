@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Program {
 
     public static void main(String[] args) {
+        //bill's test
         {
-
             String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
 
             Decryptor decryptor = new Decryptor(codeWords);
@@ -49,6 +49,7 @@ public class Program {
             assert (candidates[1].equals("cats") || candidates[1].equals("acts"));
         }
 
+        //colleague test
         {
             String[] codeWords = new String[]{};
             Decryptor decryptor = new Decryptor(codeWords);
@@ -62,21 +63,13 @@ public class Program {
             String[] codeWords = new String[]{"asdfasd"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("as");
-
-            assert (candidates.length == 0);
-
-            candidates = decryptor.findCandidates("asd");
-
-            assert (candidates.length == 0);
-
-            candidates = decryptor.findCandidates("asf");
+            String[] candidates = decryptor.findCandidates("cat");
 
             assert (candidates.length == 0);
         }
 
         {
-            String[] codeWords = new String[]{"asDFasd", "asdFasd"};
+            String[] codeWords = new String[]{"asDFasd"};
             Decryptor decryptor = new Decryptor(codeWords);
 
             String[] candidates = decryptor.findCandidates("asDSAdf");
@@ -103,11 +96,29 @@ public class Program {
             assert (candidates.length == 0);
         }
 
+        //jokang's Test
         {
-            String[] codeWords = new String[]{"AcdERZZAA"};
+            String[] codeWords = new String[]{"acf"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("Acd");
+            String[] candidates = decryptor.findCandidates(null);
+            assert (candidates.length == 0);
+        }
+
+        {
+            String[] codeWords = new String[]{"acf"};
+            Decryptor decryptor = new Decryptor(codeWords);
+
+            String[] candidates = decryptor.findCandidates("");
+            assert (candidates.length == 0);
+        }
+
+        {
+            String[] codeWords = new String[]{"acf"};
+            Decryptor decryptor = new Decryptor(codeWords);
+
+            String[] candidates = decryptor.findCandidates("ac");
+
             assert (candidates.length == 0);
         }
     }
