@@ -1,6 +1,8 @@
 package academy.pocu.comp3500.lab7;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
@@ -10,8 +12,31 @@ public class Decryptor {
 
     Trie root = new Trie();
 
+    ArrayList<Node> nodes = new ArrayList<>();
+
     public Decryptor(final String[] codeWords) {
+
+        // 트라이의 원리?
+        // 한 글자를 떼서 생각 abcd
+        // a b
         for (String code : codeWords) {
+            String lowercaseCode = convertLowercase(code);
+
+            Node node = new Node(lowercaseCode);
+
+            for (int i = 0; i < lowercaseCode.length(); i++) {
+                int[] temp = node.getAlphabetCount();
+                temp[lowercaseCode.charAt(i) - 'a']++;
+                node.count++;
+            }
+
+            nodes.add(node);
+        }
+
+
+
+        /*
+       for (String code : codeWords) {
             String lowercaseCode = convertLowercase(code);
 
             Trie temp = root;
@@ -29,13 +54,48 @@ public class Decryptor {
             temp.setEndChar(true);
         }
 
+         */
+
     }
 
     public String[] findCandidates(final String word) {
         if (word == null) {
-            return null;
+            return new String[]{};
         }
 
+
+
+        String lowercaseCode = convertLowercase(word);
+
+        Node wordNode = new Node(lowercaseCode);
+
+        for (int i = 0; i < lowercaseCode.length(); i++) {
+            int[] temp = wordNode.getAlphabetCount();
+            temp[lowercaseCode.charAt(i) - 'a']++;
+            wordNode.count++;
+        }
+
+        ArrayList<String> result = new ArrayList<>();
+        for (Node node : nodes) {
+            if (node.getCount() == wordNode.getCount()) {
+                int[] nodeAlphabet = node.getAlphabetCount();
+                int[] wordAlphabet = wordNode.getAlphabetCount();
+
+                int i = 0;
+                while (i < nodeAlphabet.length && nodeAlphabet[i] == wordAlphabet[i]) {
+                    i++;
+                }
+
+                if (i == nodeAlphabet.length) {
+                    result.add(node.getStr());
+                }
+            }
+        }
+
+
+        return result.toArray(new String[]{});
+
+        /*
         String lowerWord = convertLowercase(word);
 
         ArrayList<String> result = new ArrayList<>();
@@ -43,41 +103,27 @@ public class Decryptor {
         findCandidatesRecursive(lowerWord, 0, lowerWord.length() - 1, result);
 
         return result.toArray(new String[]{});
+
+         */
     }
 
+    /*
     private void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result) {
+        // 글자가 일정하지 않을 때 날리기
+        // trie를 BFS
+        // abcd 모든 조합에 대해서 대칭하기
+        // N! -> 일정 단어장
+        // 일정 단어장 ->
 
-        // start는 깊이별로 고정
-        // i가 움직인다
-        // aabc
-        // aabc
-        //    1
-        //    1
-        // 모두 다 바꾼 경우의 수를 담을거냐? 아니면 그냥 가면서 할거냐?
-        // 일단 브루트 포스로 조진다
-        // 담으면서 갈거면 ArrayList 이용해서 뺀다
-
-        if (start == end) {
-            Trie temp = root;
-            for (int i = 0; i < word.length(); i++) {
-                if (temp.getChild().containsKey(word.charAt(i)) == false) {
-                    break;
-                }
-
-                temp = temp.getChild().get(word.charAt(i));
-
-                if (i == word.length() - 1 && temp.isEndChar() == true && !result.contains(word)) {
-                    result.add(word);
-                }
-            }
+        HashMap<Character, Boolean> isVisted = new HashMap<>();
+        for (int i = 0; i < word.length(); i++) {
+            isVisted.put(word.charAt(i), false);
         }
 
-        for (int i = start; i <= end; i++) {
-            word = swap(word, start, i);
-            findCandidatesRecursive(word, start + 1, end, result);
-            word = swap(word, start, i);
-        }
+        root.getChild().
     }
+
+     */
 
     private String convertLowercase(String str) {
         char[] arr = str.toCharArray();
@@ -99,6 +145,8 @@ public class Decryptor {
     }
 
     //순열 재귀 이용 시간 복잡도 N! 사전 찾기
+    //속도가 느려서 테스트를 통과하지 못한다
+    //DFS식으로 끝까지 가는 것이 아니라 BFS를 사용하면 된다!
     private void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result, ArrayList<String> codeWords) {
         if (start == end) {
             int index = 0;

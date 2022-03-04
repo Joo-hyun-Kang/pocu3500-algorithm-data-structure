@@ -78,7 +78,7 @@ public class Program {
         }
 
         {
-            String[] codeWords = new String[]{"asDFasd", "dasw", "xvcz", "qweaz", "123"};
+            String[] codeWords = new String[]{"asDFasd", "dasw", "xvcz", "qweaz"};
             Decryptor decryptor = new Decryptor(codeWords);
 
             for (String word : codeWords) {
@@ -114,12 +114,12 @@ public class Program {
         }
 
         {
-            String[] codeWords = new String[]{"aaa"};
+            String[] codeWords = new String[]{"numberissidsfsfdsfsfewfwfwefewfwes"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("aa");
+            String[] candidates = decryptor.findCandidates("numberissidsfsfdsfsfewfwfwefewfwes");
 
-            assert (candidates.length == 0);
+            assert (candidates.length == 1);
         }
     }
 }
