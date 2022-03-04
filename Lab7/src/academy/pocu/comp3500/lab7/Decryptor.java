@@ -1,6 +1,7 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
@@ -27,7 +28,16 @@ public class Decryptor {
 
             nodes.add(node);
         }
+        // 기수정렬 사용
+        /*
+        HashMap<String, ArrayList<String>> test = new HashMap<>();
+        test.put("dog", new ArrayList<>());
+        if (test.containsKey("dog")) {
+            test.get("dog").add("god");
+        }
 
+
+         */
         // 이전에 시도 했던 트라이 방법
         /*
        for (String code : codeWords) {
@@ -77,6 +87,8 @@ public class Decryptor {
             if (node.getCount() == wordNode.getCount()) {
                 int[] nodeAlphabet = node.getAlphabetCount();
                 int[] wordAlphabet = wordNode.getAlphabetCount();
+
+                nodeAlphabet.equals(wordAlphabet);
 
                 int i = 0;
                 while (i < nodeAlphabet.length && nodeAlphabet[i] == wordAlphabet[i]) {
