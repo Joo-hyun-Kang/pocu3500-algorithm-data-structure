@@ -2,11 +2,12 @@ package academy.pocu.comp3500.lab7;
 
 public class Node {
     String str;
-    int[] alphabetCount;
+    int[] alphabetCount = new int[26];
     int count;
 
+    public Node() {}
+
     public Node(String str) {
-        alphabetCount = new int[26];
         this.str = str;
     }
 

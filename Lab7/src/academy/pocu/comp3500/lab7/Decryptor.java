@@ -1,24 +1,19 @@
 package academy.pocu.comp3500.lab7;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
     // 해시맵은 기본 버킷 16개 배열 알파벳은 26개
     // 해시맵을 사용하나 배열을 사용하나 별 차이 없다
     // 더 간편한 해시맵 선택
-
-    Trie root = new Trie();
-
+    
+    // 트라이로 구현하면 순서가 중요하게 되는데 그러면
+    // word의 모든 경우의 수를 계산하거나 아니면 계산하는 도중에 트라이를 탐색해야 함
+    // 그러나 글자의 개수와 알파벳 총 수의 길이가 같기만 하면 같은 후보글자라고 생각할 수 있다
     ArrayList<Node> nodes = new ArrayList<>();
 
     public Decryptor(final String[] codeWords) {
-
-        // 트라이의 원리?
-        // 한 글자를 떼서 생각 abcd
-        // a b
         for (String code : codeWords) {
             String lowercaseCode = convertLowercase(code);
 
@@ -33,8 +28,7 @@ public class Decryptor {
             nodes.add(node);
         }
 
-
-
+        // 이전에 시도 했던 트라이 방법
         /*
        for (String code : codeWords) {
             String lowercaseCode = convertLowercase(code);
@@ -63,15 +57,18 @@ public class Decryptor {
             return new String[]{};
         }
 
+        Node wordNode = new Node();
 
-
-        String lowercaseCode = convertLowercase(word);
-
-        Node wordNode = new Node(lowercaseCode);
-
-        for (int i = 0; i < lowercaseCode.length(); i++) {
+        for (int i = 0; i < word.length(); i++) {
             int[] temp = wordNode.getAlphabetCount();
-            temp[lowercaseCode.charAt(i) - 'a']++;
+            char ch = word.charAt(i);
+
+            if (ch >= 'A' && ch <= 'Z') {
+                ch ^= 32;
+            }
+
+            temp[ch - 'a']++;
+
             wordNode.count++;
         }
 
@@ -107,24 +104,33 @@ public class Decryptor {
          */
     }
 
+    //N! word의 모든 조합을 trie와 비교하는 로직
     /*
     private void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result) {
-        // 글자가 일정하지 않을 때 날리기
-        // trie를 BFS
-        // abcd 모든 조합에 대해서 대칭하기
-        // N! -> 일정 단어장
-        // 일정 단어장 ->
+        //root는 트라이의 꼭지점으로 전역변수였는데 삭제함
+        if (start == end) {
+            Trie temp = root;
+            for (int i = 0; i < word.length(); i++) {
+                if (temp.getChild().containsKey(word.charAt(i)) == false) {
+                    break;
+                }
 
-        HashMap<Character, Boolean> isVisted = new HashMap<>();
-        for (int i = 0; i < word.length(); i++) {
-            isVisted.put(word.charAt(i), false);
+                temp = temp.getChild().get(word.charAt(i));
+
+                if (i == word.length() - 1 && temp.isEndChar() == true && !result.contains(word)) {
+                    result.add(word);
+                }
+            }
         }
 
-        root.getChild().
+        for (int i = start; i <= end; i++) {
+            word = swap(word, start, i);
+            findCandidatesRecursive(word, start + 1, end, result);
+            word = swap(word, start, i);
+        }
     }
-
      */
-
+    
     private String convertLowercase(String str) {
         char[] arr = str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
