@@ -4,8 +4,10 @@ public class Node {
     String str;
     int[] alphabetCount = new int[26];
     int count;
+    int sum;
 
-    public Node() {}
+    public Node() {
+    }
 
     public Node(String str) {
         this.str = str;
