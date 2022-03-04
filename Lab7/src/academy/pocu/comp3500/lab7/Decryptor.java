@@ -25,7 +25,6 @@ public class Decryptor {
                 int index = lowercaseCode.charAt(i) - 'a';
                 temp[index]++;
                 node.count++;
-                node.sum += index;
             }
 
             nodes.add(node);
@@ -83,13 +82,11 @@ public class Decryptor {
             temp[index]++;
 
             wordNode.count++;
-            wordNode.sum += index;
         }
 
         ArrayList<String> result = new ArrayList<>();
         for (Node node : nodes) {
-            if (node.getCount() == wordNode.getCount() && node.sum == wordNode.sum) {
-                /*
+            if (node.getCount() == wordNode.getCount()) {
                 int[] nodeAlphabet = node.getAlphabetCount();
                 int[] wordAlphabet = wordNode.getAlphabetCount();
 
@@ -104,7 +101,6 @@ public class Decryptor {
                     result.add(node.getStr());
                 }
 
-                 */
                 result.add(node.getStr());
             }
         }
