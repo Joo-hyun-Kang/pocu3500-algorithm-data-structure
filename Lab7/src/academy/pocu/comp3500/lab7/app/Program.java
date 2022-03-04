@@ -114,10 +114,10 @@ public class Program {
         }
 
         {
-            String[] codeWords = new String[]{"acf"};
+            String[] codeWords = new String[]{"aaa"};
             Decryptor decryptor = new Decryptor(codeWords);
 
-            String[] candidates = decryptor.findCandidates("ac");
+            String[] candidates = decryptor.findCandidates("aa");
 
             assert (candidates.length == 0);
         }

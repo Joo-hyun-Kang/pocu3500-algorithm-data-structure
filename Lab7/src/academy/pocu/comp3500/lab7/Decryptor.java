@@ -1,8 +1,6 @@
 package academy.pocu.comp3500.lab7;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
@@ -35,7 +33,7 @@ public class Decryptor {
 
     public String[] findCandidates(final String word) {
         if (word == null) {
-            return new String[]{};
+            return null;
         }
 
         String lowerWord = convertLowercase(word);
@@ -62,7 +60,7 @@ public class Decryptor {
         if (start == end) {
             Trie temp = root;
             for (int i = 0; i < word.length(); i++) {
-                if(temp.getChild().containsKey(word.charAt(i)) == false) {
+                if (temp.getChild().containsKey(word.charAt(i)) == false) {
                     break;
                 }
 
