@@ -28,6 +28,22 @@ public class Decryptor {
             nodes.add(node);
         }
 
+
+        // 기수정렬 사용
+        /*
+
+        String은 기수 정렬된 배열
+        HashMap<String, ArrayList<String>> test = new HashMap<>();
+        test.put("dog", new ArrayList<>());
+        if (test.containsKey("dog")) {
+            test.get("dog").add("god");
+        }
+
+        찾는 건 들어온 값 기수 정렬 후에
+        해시 함수로 찾고 ArrayList반환
+
+
+
         // 이전에 시도 했던 트라이 방법
         /*
        for (String code : codeWords) {
