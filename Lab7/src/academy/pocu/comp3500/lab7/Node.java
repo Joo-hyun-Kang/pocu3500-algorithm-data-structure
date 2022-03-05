@@ -5,7 +5,8 @@ public class Node {
     int[] alphabetCount = new int[26];
     int count;
 
-    public Node() {}
+    public Node() {
+    }
 
     public Node(String str) {
         this.str = str;

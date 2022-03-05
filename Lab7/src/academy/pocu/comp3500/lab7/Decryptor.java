@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
+
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
     // 해시맵은 기본 버킷 16개 배열 알파벳은 26개
@@ -53,10 +54,13 @@ public class Decryptor {
 
             dictionary.get(sortedCode).add(lowercaseCode);
         }
-
-
-
-
+        // 기수정렬 사용
+        /*
+        HashMap<String, ArrayList<String>> test = new HashMap<>();
+        test.put("dog", new ArrayList<>());
+        if (test.containsKey("dog")) {
+            test.get("dog").add("god");
+        }
 
 
 
