@@ -1,46 +1,63 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
 
 public class Decryptor {
     // 트라이를 이용할 때 해시맵 or 배열?
     // 해시맵은 기본 버킷 16개 배열 알파벳은 26개
     // 해시맵을 사용하나 배열을 사용하나 별 차이 없다
     // 더 간편한 해시맵 선택
-    
-    // 트라이로 구현하면 순서가 중요하게 되는데 그러면
-    // word의 모든 경우의 수를 계산하거나 아니면 계산하는 도중에 트라이를 탐색해야 함
-    // 그러나 글자의 개수와 알파벳 총 수의 길이가 같기만 하면 같은 후보글자라고 생각할 수 있다
-    ArrayList<Node> nodes = new ArrayList<>();
+
+    HashMap<String, ArrayList<String>> dictionary = new HashMap<>();
 
     public Decryptor(final String[] codeWords) {
-        for (String code : codeWords) {
-            String lowercaseCode = convertLowercase(code);
-
-            Node node = new Node(lowercaseCode);
-
-            for (int i = 0; i < lowercaseCode.length(); i++) {
-                int[] temp = node.getAlphabetCount();
-                temp[lowercaseCode.charAt(i) - 'a']++;
-                node.count++;
-            }
-
-            nodes.add(node);
-        }
-
-
         // 기수정렬 사용
         /*
 
-        String은 기수 정렬된 배열
-        HashMap<String, ArrayList<String>> test = new HashMap<>();
-        test.put("dog", new ArrayList<>());
-        if (test.containsKey("dog")) {
-            test.get("dog").add("god");
+        // 접근방법 1 : 트라이로 후보 문자열을 만들고 매개변수로 들어오는 word의 모든 조합에 대해 비교
+        // 문제점 : word를 모든 조합으로 비교하는데 N!, 트라이를 탐색하는데 N
+        // 트라이로 해결할려면 정렬하고 비교하는데 O(1)이 나와야 한다
+
+
+        // 접근방법 2 : 순서가 중요하지 않으므로 글자 개수와 알파벳의 총 수 길이 비교
+        // 트라이로 구현하면 순서가 중요하게 되는데 그러면
+        // word의 모든 경우의 수를 계산하거나 아니면 계산하는 도중에 트라이를 탐색해야 함
+        // 그러나 글자의 개수와 알파벳 총 수의 길이가 같기만 하면 같은 후보글자라고 생각할 수 있다
+
+        // 현재 문제점 : 시간복잡도 O(n^2), 들어오는 문자열 당 순서가 상관 없기 때문에 암호문 하나의 a-z까지의 문자의 개수와 각 a-z의 개수를 비교함
+        // 해결책 : int[]를 해시코드로 비교 or 기수정렬 이용해서 정렬된 문자열끼리 비교
+
+        // 접근방법 3 : 가장 빠른 기수정렬을 사용해서 순서를 다 동일하게 만들고 비교한다. 접근 방법 2에서 조금 더 발전해서 순서가 상관 없으니 정렬한다
+        //             후보 문자열 정렬 n^2, 매개변수 정렬 n, 해시로 비교 O(1)
+        // https://www.zerocho.com/category/Algorithm/post/58007c338475ed00152d6c4c
+        // https://yabmoons.tistory.com/248
+        */
+
+
+
+        //String은 기수 정렬된 배열
+        //찾는 건 들어온 값 기수 정렬 후에
+        //해시 함수로 찾고 ArrayList반환
+
+
+        for (String code : codeWords) {
+            String lowercaseCode = convertLowercase(code);
+
+            String sortedCode = radixSort(lowercaseCode);
+
+            if (!dictionary.containsKey(sortedCode)) {
+                dictionary.put(sortedCode, new ArrayList<>());
+            }
+
+            dictionary.get(sortedCode).add(lowercaseCode);
         }
 
-        찾는 건 들어온 값 기수 정렬 후에
-        해시 함수로 찾고 ArrayList반환
+
+
+
+
 
 
 
@@ -73,40 +90,15 @@ public class Decryptor {
             return new String[]{};
         }
 
-        Node wordNode = new Node();
+        String lowercaseWord = convertLowercase(word);
 
-        for (int i = 0; i < word.length(); i++) {
-            int[] temp = wordNode.getAlphabetCount();
-            char ch = word.charAt(i);
+        String sortedWord = radixSort(lowercaseWord);
 
-            if (ch >= 'A' && ch <= 'Z') {
-                ch ^= 32;
-            }
-
-            temp[ch - 'a']++;
-
-            wordNode.count++;
+        if (dictionary.containsKey(sortedWord)) {
+            return dictionary.get(sortedWord).toArray(new String[]{});
         }
 
-        ArrayList<String> result = new ArrayList<>();
-        for (Node node : nodes) {
-            if (node.getCount() == wordNode.getCount()) {
-                int[] nodeAlphabet = node.getAlphabetCount();
-                int[] wordAlphabet = wordNode.getAlphabetCount();
-
-                int i = 0;
-                while (i < nodeAlphabet.length && nodeAlphabet[i] == wordAlphabet[i]) {
-                    i++;
-                }
-
-                if (i == nodeAlphabet.length) {
-                    result.add(node.getStr());
-                }
-            }
-        }
-
-
-        return result.toArray(new String[]{});
+        return new String[]{};
 
         /*
         String lowerWord = convertLowercase(word);
@@ -146,7 +138,39 @@ public class Decryptor {
         }
     }
      */
-    
+
+    private String radixSort(String word) {
+        char[] wordChar = word.toCharArray();
+
+        Stack<Character>[] stacks = new Stack[10];
+        for (int i = 0; i < stacks.length; i++) {
+            stacks[i] = new Stack<>();
+        }
+
+        int pos = 1000;
+        for (int i = 1; i < pos; i = i * 10) {
+            for (int j = wordChar.length - 1; j >= 0; j--) {
+                int index = 0;
+
+                if (wordChar[j] > i) {
+                    index = wordChar[j] / i % 10;
+                }
+
+                stacks[index].push(wordChar[j]);
+            }
+
+            int index = 0;
+            for (int k = 0; k < stacks.length; k++) {
+                while (!stacks[k].empty()) {
+                    wordChar[index] = stacks[k].pop();
+                    index++;
+                }
+            }
+        }
+
+        return new String(wordChar);
+    }
+
     private String convertLowercase(String str) {
         char[] arr = str.toCharArray();
         for (int i = 0; i < str.length(); i++) {
@@ -166,9 +190,13 @@ public class Decryptor {
         return new String(arr);
     }
 
-    //순열 재귀 이용 시간 복잡도 N! 사전 찾기
-    //속도가 느려서 테스트를 통과하지 못한다
-    //DFS식으로 끝까지 가는 것이 아니라 BFS를 사용하면 된다!
+    private void swap(int[] nums, int index1, int index2) {
+        int temp = nums[index1];
+        nums[index1] = nums[index2];
+        nums[index2] = temp;
+    }
+
+    //순열 재귀 이용 시간 복잡도 N! 사전 찾기 속도가 느려서 테스트를 통과하지 못한다
     private void findCandidatesRecursive(String word, int start, int end, ArrayList<String> result, ArrayList<String> codeWords) {
         if (start == end) {
             int index = 0;
@@ -233,9 +261,5 @@ public class Decryptor {
         }
     }
 
-    private void swap(int[] nums, int index1, int index2) {
-        int temp = nums[index1];
-        nums[index1] = nums[index2];
-        nums[index2] = temp;
-    }
+
 }
