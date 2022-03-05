@@ -21,51 +21,7 @@ public class Decryptor {
         // 문제점 : word를 모든 조합으로 비교하는데 N!, 트라이를 탐색하는데 N
         // 트라이로 해결할려면 정렬하고 비교하는데 O(1)이 나와야 한다
 
-
-        // 접근방법 2 : 순서가 중요하지 않으므로 글자 개수와 알파벳의 총 수 길이 비교
-        // 트라이로 구현하면 순서가 중요하게 되는데 그러면
-        // word의 모든 경우의 수를 계산하거나 아니면 계산하는 도중에 트라이를 탐색해야 함
-        // 그러나 글자의 개수와 알파벳 총 수의 길이가 같기만 하면 같은 후보글자라고 생각할 수 있다
-
-        // 현재 문제점 : 시간복잡도 O(n^2), 들어오는 문자열 당 순서가 상관 없기 때문에 암호문 하나의 a-z까지의 문자의 개수와 각 a-z의 개수를 비교함
-        // 해결책 : int[]를 해시코드로 비교 or 기수정렬 이용해서 정렬된 문자열끼리 비교
-
-        // 접근방법 3 : 가장 빠른 기수정렬을 사용해서 순서를 다 동일하게 만들고 비교한다. 접근 방법 2에서 조금 더 발전해서 순서가 상관 없으니 정렬한다
-        //             후보 문자열 정렬 n^2, 매개변수 정렬 n, 해시로 비교 O(1)
-        // https://www.zerocho.com/category/Algorithm/post/58007c338475ed00152d6c4c
-        // https://yabmoons.tistory.com/248
-        */
-
-
-
-        //String은 기수 정렬된 배열
-        //찾는 건 들어온 값 기수 정렬 후에
-        //해시 함수로 찾고 ArrayList반환
-
-
-        for (String code : codeWords) {
-            String lowercaseCode = convertLowercase(code);
-
-            String sortedCode = radixSort(lowercaseCode);
-
-            if (!dictionary.containsKey(sortedCode)) {
-                dictionary.put(sortedCode, new ArrayList<>());
-            }
-
-            dictionary.get(sortedCode).add(lowercaseCode);
-        }
-        // 기수정렬 사용
-        /*
-        HashMap<String, ArrayList<String>> test = new HashMap<>();
-        test.put("dog", new ArrayList<>());
-        if (test.containsKey("dog")) {
-            test.get("dog").add("god");
-        }
-
-
-
-
-        // 이전에 시도 했던 트라이 방법
+        // 접근 방법 1의 트라이
         /*
        for (String code : codeWords) {
             String lowercaseCode = convertLowercase(code);
@@ -87,6 +43,31 @@ public class Decryptor {
 
          */
 
+        // 접근방법 2 : 순서가 중요하지 않으므로 글자 개수와 알파벳의 총 수 길이 비교
+        // 트라이로 구현하면 순서가 중요하게 되는데 그러면
+        // word의 모든 경우의 수를 계산하거나 아니면 계산하는 도중에 트라이를 탐색해야 함
+        // 그러나 글자의 개수와 알파벳 총 수의 길이가 같기만 하면 같은 후보글자라고 생각할 수 있다
+
+        // 현재 문제점 : 시간복잡도 O(n^2), 들어오는 문자열 당 순서가 상관 없기 때문에 암호문 하나의 a-z까지의 문자의 개수와 각 a-z의 개수를 비교함
+        // 해결책 : int[]를 해시코드로 비교 or 기수정렬 이용해서 정렬된 문자열끼리 비교
+
+        // 접근방법 3 : 가장 빠른 기수정렬을 사용해서 순서를 다 동일하게 만들고 비교한다. 접근 방법 2에서 조금 더 발전해서 순서가 상관 없으니 정렬한다
+        //             후보 문자열 정렬 n^2, 매개변수 정렬 n, 해시로 비교 O(1)
+        // https://www.zerocho.com/category/Algorithm/post/58007c338475ed00152d6c4c
+        // https://yabmoons.tistory.com/248
+
+
+        for (String code : codeWords) {
+            String lowercaseCode = convertLowercase(code);
+
+            String sortedCode = radixSort(lowercaseCode);
+
+            if (!dictionary.containsKey(sortedCode)) {
+                dictionary.put(sortedCode, new ArrayList<>());
+            }
+
+            dictionary.get(sortedCode).add(lowercaseCode);
+        }
     }
 
     public String[] findCandidates(final String word) {
@@ -146,9 +127,9 @@ public class Decryptor {
     private String radixSort(String word) {
         char[] wordChar = word.toCharArray();
 
-        Stack<Character>[] stacks = new Stack[10];
-        for (int i = 0; i < stacks.length; i++) {
-            stacks[i] = new Stack<>();
+        ArrayList<Stack<Character>> stacks = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            stacks.add(new Stack<>());
         }
 
         int pos = 1000;
@@ -160,13 +141,13 @@ public class Decryptor {
                     index = wordChar[j] / i % 10;
                 }
 
-                stacks[index].push(wordChar[j]);
+                stacks.get(index).push(wordChar[j]);
             }
 
             int index = 0;
-            for (int k = 0; k < stacks.length; k++) {
-                while (!stacks[k].empty()) {
-                    wordChar[index] = stacks[k].pop();
+            for (int k = 0; k < stacks.size(); k++) {
+                while (!stacks.get(k).empty()) {
+                    wordChar[index] = stacks.get(k).pop();
                     index++;
                 }
             }
@@ -226,7 +207,7 @@ public class Decryptor {
     }
 
     //순열 for문으로 작성
-    public void printPermutation(int nums[]) {
+    public void printPermutation(int[] nums) {
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < nums.length; j++) {
                 if (i != j) {
@@ -241,7 +222,7 @@ public class Decryptor {
     }
 
     //순열 재귀로 작성
-    public void printPermutationRecursive(int nums[], int start, int end) {
+    public void printPermutationRecursive(int[] nums, int start, int end) {
         if (start == end) {
             for (int num : nums) {
                 System.out.printf("%d", num);
