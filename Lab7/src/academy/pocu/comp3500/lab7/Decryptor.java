@@ -17,29 +17,39 @@ public class Decryptor {
         // 기수정렬 사용
         /*
 
+        // 이번과제에서 배운 문제풀이 방법 : N!로 모든 경우의 수를 고려해야 할 때 정렬하면 시간복잡도를 O(nlogN)이나 O(n)으로 줄 일 수 있다
+        // 암호문이 아니라 평문이고 책에서 단어들이 있다면 O(n)
+        // 암호문이라서 모든 조합에 대해서 생각해봐야 한다고 생각되지만, 그냥 정렬하고, 책에 있는 단어들도 정렬해둔다
+        // 그리고 정렬된 것들 중에 같은 걸 찾고, 같은 정렬을 가지는 애들을 반환하면 O(nlogN)이나 O(n)으로 풀 수 있다
+
         // 접근방법 1 : 트라이로 후보 문자열을 만들고 매개변수로 들어오는 word의 모든 조합에 대해 비교
         // 문제점 : word를 모든 조합으로 비교하는데 N!, 트라이를 탐색하는데 N
         // 트라이로 해결할려면 정렬하고 비교하는데 O(1)이 나와야 한다
+        // 개선 방안: 트라이 방법도 고민을 해봤는데 개체 생성 시 정렬을 해서 트라이에 다 저장해두고 중복은 따로 트라이 가지에 저장해두고
+        // findCandidate()에서 매개변수 정렬 O(n) 또는 O(nlogN) +  트라이를 검색하는데 O(n)이 될 것 같은데 올바른 접근일까?
+         */
+
+        /*
 
         // 접근 방법 1의 트라이
         /*
-       for (String code : codeWords) {
-            String lowercaseCode = convertLowercase(code);
+           for (String code : codeWords) {
+                String lowercaseCode = convertLowercase(code);
 
-            Trie temp = root;
+                Trie temp = root;
 
-            for (int i = 0; i < lowercaseCode.length(); i++) {
-                char ch = lowercaseCode.charAt(i);
+                for (int i = 0; i < lowercaseCode.length(); i++) {
+                    char ch = lowercaseCode.charAt(i);
 
-                if (temp.getChild().containsKey(ch) == false) {
-                    temp.getChild().put(ch, new Trie(ch));
+                    if (temp.getChild().containsKey(ch) == false) {
+                        temp.getChild().put(ch, new Trie(ch));
+                    }
+
+                    temp = temp.getChild().get(ch);
                 }
 
-                temp = temp.getChild().get(ch);
+                temp.setEndChar(true);
             }
-
-            temp.setEndChar(true);
-        }
 
          */
 
