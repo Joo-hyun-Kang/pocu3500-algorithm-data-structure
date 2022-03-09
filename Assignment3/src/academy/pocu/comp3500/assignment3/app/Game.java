@@ -478,30 +478,39 @@ final class Game {
         boolean isFromPieceWhite = Character.isLowerCase(fromPiece);
         boolean isToPieceWhite = Character.isLowerCase(toPiece);
 
+        // 갈 곳에 무언가가 있고 그게 하얀색 말끼리라면 ㄴㄴ
         if (toPiece != 0 && isFromPieceWhite == isToPieceWhite) {
             return false;
         }
 
+        // 갈 곳에 무언가가 있고 이동한 열이 같은 경우(폰은 서로 다른 쪽으로 이동해야 하니까)
         if (toPiece != 0 && move.fromX == move.toX) {
             return false;
         }
 
+        // 폰이 처음에 움직였는지 안 움직였는지 체크
         boolean hasMoved = isFromPieceWhite ? move.fromY != 6 : move.fromY != 1;
 
+        // 폰이 2칸 이동할 때
         if (!hasMoved && move.fromX == move.toX && Math.abs(move.toY - move.fromY) == 2) {
             if (move.toY > move.fromY && !isFromPieceWhite && board[move.toY - 1][move.toX] == 0) {
                 return true;
             }
 
             return move.toY < move.fromY && isFromPieceWhite && board[move.toY + 1][move.toX] == 0;
+
+        // 폰이 1칸 이동할 때
         } else if (move.fromX == move.toX && Math.abs(move.toY - move.fromY) == 1) {
             if (move.toY > move.fromY && !isFromPieceWhite) {
                 return true;
             }
 
             return move.toY < move.fromY && isFromPieceWhite;
+
+        // 폰이 다른 폰을 잡았을 때
         } else if (move.toX == move.fromX - 1 || move.toX == move.fromX + 1) {
             if (toPiece != 0 && isToPieceWhite != isFromPieceWhite) {
+                // 검은 말인지 햐안 말인지 체크
                 return isFromPieceWhite ? move.toY == move.fromY - 1 : move.toY == move.fromY + 1;
             }
         }
