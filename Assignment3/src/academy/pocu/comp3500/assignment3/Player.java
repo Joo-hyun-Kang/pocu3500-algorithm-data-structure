@@ -11,8 +11,11 @@ import java.util.Map;
 
 public class Player extends PlayerBase {
     //PieceType[] pieces = new PieceType[] { PieceType.PAWN, PieceType.KNIHGT, PieceType.BISHOP, PieceType.QUEEN, PieceType.KING };
+    private static int turnCount = 0;
 
-    PieceType[] pieces = new PieceType[] { PieceType.PAWN };
+    private final int MAXIMUN_PREDICATION_TURN = 2;
+
+    private PieceType[] pieces = new PieceType[] { PieceType.PAWN };
 
     private final static int BOARD_SIZE = 8;
 
@@ -82,11 +85,7 @@ public class Player extends PlayerBase {
         // D1 상대 move 16
         // D2 나 move 16 * 16
         // D3 상대 move 16 * 16 * 16
-
-
-
-
-
+        
 
         // 폰, 나이트, 비숍 ... 킹
         // 6개 말 중에 선택 후 움직이고 vaild 검토 그 상태에서
@@ -97,17 +96,86 @@ public class Player extends PlayerBase {
         // 2. board를 재활용해서 하는 방법?
         // 3. 가지치기 ㄱㄱ
 
-        HashMap<Move, Integer> result = getNextMoveRecursive(board, opponentMove, 0);
-        Move optimalMove = null;
-        for (Map.Entry<Move, Integer> entrySet : result.entrySet()) {
-            optimalMove = entrySet.getKey();
-        }
+        NextMove optimalNextMove = getNextMoveRecursive(board, opponentMove);
 
-        return optimalMove;
+        return optimalNextMove.getChildMove();
     }
 
-    private HashMap<Move, Integer> getNextMoveRecursive(final char[][] board, Move opponentMove, final int depth) {
+    // 가지치기 도입
+    // 체스말 추가해서 넣기
+    private NextMove getNextMoveRecursive(final char[][] board, Move opponentMove) {
+        // 재귀의 종료조건으로 현재 board에 대해서 평가 후 반환
+        // T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
+        // 화이트는 값이 높을수록 블랙은 값이 낮을수록 유리
+        if (turnCount  - 1 == MAXIMUN_PREDICATION_TURN) {
 
+            boolean isWhiteKingAlive = false;
+            boolean isBlackKingAlive = false;
+
+            int score = 0;
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                for (int x = 0; x < BOARD_SIZE; x++) {
+                    if (board[y][x] != 0) {
+                        switch (board[y][x]) {
+                            case 'p':
+                                score += 1;
+                                break;
+                            case 'n':
+                                score += 3;
+                                break;
+                            case 'b':
+                                score += 3;
+                                break;
+                            case 'r':
+                                score += 5;
+                                break;
+                            case 'q':
+                                score += 9;
+                                break;
+                            case 'k':
+                                score += 100;
+                                isWhiteKingAlive = true;
+                                break;
+                            case 'P':
+                                score -= 1;
+                                break;
+                            case 'N':
+                                score -= 3;
+                                break;
+                            case 'B':
+                                score -= 3;
+                                break;
+                            case 'R':
+                                score -= 5;
+                                break;
+                            case 'Q':
+                                score -= 9;
+                                break;
+                            case 'K':
+                                score -= 100;
+                                isBlackKingAlive = true;
+                                break;
+                            default:
+                                assert (false);
+                        }
+                    }
+                }
+            }
+
+            if (!isWhiteKingAlive) {
+                score = Integer.MIN_VALUE;
+            }
+
+            if (!isBlackKingAlive) {
+                score = Integer.MAX_VALUE;
+            }
+
+            NextMove nextMove = new NextMove(opponentMove, null, score);
+
+            turnCount--;
+
+            return nextMove;
+        }
 
 
         /*
@@ -140,14 +208,16 @@ public class Player extends PlayerBase {
             }
             */
 
-
-        char pieceSymbol = 'p';
-
+        //AI가 블랙으로 시작하냐, 화이트로 시작하냐에 따라 0부터 시작하는 턴이 누구인지 달라진다
         boolean isAiWhite = super.isWhite();
 
-        boolean isPeaceWhite = isAiWhite ? depth % 2 == 0 : depth % 2 != 0;
+        boolean isWhitePieceTurn = isAiWhite ? turnCount % 2 == 0 : turnCount % 2 != 0;
 
-        if (!isPeaceWhite) {
+
+        //현재 보드에서 말들을 찾고 움직일 수 있는 모든 옵션을 얻는다
+        char pieceSymbol = 'p';
+
+        if (!isWhitePieceTurn) {
             pieceSymbol ^= 32;
         }
 
@@ -157,164 +227,86 @@ public class Player extends PlayerBase {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 if (board[y][x] == pieceSymbol) {
                     HashMap<Move, char[][]> temp = getPossabilityNextMove(board, x, y);
-
                     moveOptions.putAll(temp);
                 }
             }
         }
 
-        // 종료조건
-        if (depth > 2) {
-            ArrayList<Integer> scores = new ArrayList<>();
-            ArrayList<Move> moves = new ArrayList<>();
 
+        //재귀로 움직일 수 있는 모든 옵션에 대해서 다음 수로 보낸다
+        ArrayList<NextMove> nextMoves = new ArrayList<>();
+        for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
+            turnCount++;
 
-            for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
-                boolean isOpponentKingAlive = false;
+            nextMoves.add(getNextMoveRecursive(entrySet.getValue(), entrySet.getKey()));
+        }
 
-                int score = 0;
+        //내 AI가 하얀색 적은 블랙
+        //내 AI 턴일 때 Max를 선택해서 넘긴다 --> 그런데 이건 여기서 맥스를 선택하는게 아니라 여기서는 점수계싼 만..
+        //ㅇㅋㄷㅋ
 
-                char[][] caseBoard = createCopy(entrySet.getValue());
+        // 점수 계산하는 것에 따라서 최악 최선 선택이 달라지네.
 
-                for (int y = 0; y < BOARD_SIZE; y++) {
-                    for (int x = 0; x < BOARD_SIZE; x++) {
-                        if (isPeaceWhite && caseBoard[y][x] != 0) {
-                            switch (caseBoard[y][x]) {
-                                case 'p':
-                                    score += 1;
-                                    break;
-                                case 'n':
-                                    score += 3;
-                                    break;
-                                case 'b':
-                                    score += 3;
-                                    break;
-                                case 'r':
-                                    score += 5;
-                                    break;
-                                case 'q':
-                                    score += 9;
-                                    break;
-                                case 'k':
-                                    score += 100;
-                                    break;
-                                case 'K':
-                                    isOpponentKingAlive = true;
-                                    break;
-                            }
-                        } else if (!isPeaceWhite && caseBoard[y][x] != 0) {
-                            switch (caseBoard[y][x]) {
-                                case 'P':
-                                    score += 1;
-                                    break;
-                                case 'N':
-                                    score += 3;
-                                    break;
-                                case 'B':
-                                    score += 3;
-                                    break;
-                                case 'R':
-                                    score += 5;
-                                    break;
-                                case 'Q':
-                                    score += 9;
-                                    break;
-                                case 'K':
-                                    score += 100;
-                                    break;
-                                case 'k':
-                                    isOpponentKingAlive = true;
-                                    break;
-                            }
-                        }
+        //boolean isAiWhite = super.isWhite();
 
-                    }
-                }
+        //boolean isWhitePieceTurn = isAiWhite ? turnCount % 2 == 0 : turnCount % 2 != 0;
 
-                if (!isOpponentKingAlive) {
-                    score = Integer.MAX_VALUE;
-                }
+        // 내 AI가 화이트일 때
+        // T0 나 화이트 최대값
+        // T1 적 블랙 최소값
+        // T2 나 화이트 최대값
 
-                scores.add(score);
-                moves.add(entrySet.getKey());
-            }
+        // 내 AI가 블랙일 때 달라져야 한다
+        // T0 나 블랙 최소값
+        // T1 적 화이트 최대값
+        // T2 나 블랙 최소값.
 
+        // T3 입성 시 계산
+
+        NextMove optiamlMove = null;
+        if (isWhitePieceTurn) {
             int max = Integer.MIN_VALUE;
             int maxIndex = -1;
-            for (int i = 0; i < scores.size(); i++) {
-                if (scores.get(i) > max) {
-                    max = scores.get(i);
+
+
+            for (int i = 0; i < nextMoves.size(); i++) {
+                if (max < nextMoves.get(i).score) {
+                    max = nextMoves.get(i).score;
                     maxIndex = i;
                 }
             }
 
-            HashMap<Move, Integer> result = new HashMap<>();
-            result.put(opponentMove, max);
-
-            return result;
-        }
-
-
-        HashMap<Move, Integer> optimalMovePossibe = new HashMap<>();
-        for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
-            optimalMovePossibe.putAll(getNextMoveRecursive(entrySet.getValue(), entrySet.getKey(),depth + 1));
-        }
-
-        Move optiamlMove = null;
-        if (isPeaceWhite) {
-            int max = Integer.MIN_VALUE;
-            for (Map.Entry<Move, Integer> entrySet : optimalMovePossibe.entrySet()) {
-                if (entrySet.getValue() > max) {
-                    max = entrySet.getValue();
-                    optiamlMove = entrySet.getKey();
-                }
+            if (maxIndex == -1) {
+                int tmp = 1;
+                System.out.println(tmp);
             }
-        } else if(!isPeaceWhite) {
-            int min = Integer.MAX_VALUE;
-            for (Map.Entry<Move, Integer> entrySet : optimalMovePossibe.entrySet()) {
-                if (entrySet.getValue() < min) {
-                    min = entrySet.getValue();
-                    optiamlMove = entrySet.getKey();
-                }
-            }
-        }
 
-        HashMap<Move, Integer> optimalResult = new HashMap<>();
-
-        if (depth != 0) {
-            optimalResult.put(opponentMove, optimalMovePossibe.get(optiamlMove));
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), max);
         } else {
-            optimalResult.put(optiamlMove, optimalMovePossibe.get(optiamlMove));
+            int min = Integer.MAX_VALUE;
+
+            int minIndex = -1;
+
+            for (int i = 0; i < nextMoves.size(); i++) {
+                if (min > nextMoves.get(i).score) {
+                    min = nextMoves.get(i).score;
+                    minIndex = i;
+                }
+            }
+
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
         }
 
-        return optimalResult;
+        if (turnCount != 0) {
+            turnCount--;
+        }
+
+        return optiamlMove;
     }
-
-
-            // 디텍토에서는 인덱스 반환환
-        //움직일 장기말 선택 위치 쳌
-
-
-        // 개체지향이니까 move를 PAWN에 저장하고 있을 듯
-        // 절차지향으로 사용하면
-
-        //그 장기말들 폰이면 8개에 대해서 순환
-
-
-        // 시간복잡도
-        // 움직일 수 있나? 움직일 수 있는 모든 가능성
-        // 16개의 말이 있고 각각 음직일 수 있는 가능성을 10개라고 하면
-        // 16 * 10 = 160가지 상대편도 160가지 움직일 수 있기에 턴마다 160^n씩 증가하게 되네....
-
-        // 폰이 움직일 수 있는 방식
-        // 처음에 앞으로 2칸, 그리고 1칸씩 전진, 옆에 적이 있을 때 잡을 수 있음
-
 
     private HashMap<Move, char[][]> getPossabilityNextMove(final char[][] board, final int x, final int y) {
         return getPossabilityPawnMove(board, x, y);
     }
-
-
 
     private HashMap<Move, char[][]> getPossabilityPawnMove(final char[][] board, final int x, final int y) {
 
