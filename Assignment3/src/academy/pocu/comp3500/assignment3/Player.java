@@ -238,7 +238,11 @@ public class Player extends PlayerBase {
         for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
             turnCount++;
 
-            nextMoves.add(getNextMoveRecursive(entrySet.getValue(), entrySet.getKey()));
+            NextMove tempOrNull = getNextMoveRecursive(entrySet.getValue(), entrySet.getKey());
+
+            if (tempOrNull != null) {
+                nextMoves.add(tempOrNull);
+            }
         }
 
         //내 AI가 하얀색 적은 블랙
@@ -270,31 +274,49 @@ public class Player extends PlayerBase {
 
 
             for (int i = 0; i < nextMoves.size(); i++) {
-                if (max < nextMoves.get(i).score) {
+                if (max <= nextMoves.get(i).score) {
                     max = nextMoves.get(i).score;
                     maxIndex = i;
                 }
             }
 
-            if (maxIndex == -1) {
-                int tmp = 1;
-                System.out.println(tmp);
+            if (nextMoves.size() != 0) {
+                optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), max);
+            } else {
+                optiamlMove = new NextMove(opponentMove, null, max);
             }
-
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), max);
         } else {
             int min = Integer.MAX_VALUE;
 
             int minIndex = -1;
 
             for (int i = 0; i < nextMoves.size(); i++) {
-                if (min > nextMoves.get(i).score) {
+                if (min >= nextMoves.get(i).score) {
                     min = nextMoves.get(i).score;
                     minIndex = i;
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
+            if (nextMoves.size() != 0) {
+                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
+            } else {
+                optiamlMove = new NextMove(opponentMove, new Move(), min);
+            }
+        }
+
+        if (turnCount == 0 && optiamlMove == null) {
+            int noPlaceX = -1;
+            int noPlaceY = -1;
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                for (int x = 0; x < BOARD_SIZE; x++) {
+                    if (board[y][x] == pieceSymbol) {
+                        noPlaceX = x;
+                        noPlaceY = y;
+                    }
+                }
+            }
+
+            optiamlMove = new NextMove(opponentMove, new Move(noPlaceX, noPlaceY, noPlaceX, noPlaceY), 0);
         }
 
         if (turnCount != 0) {
