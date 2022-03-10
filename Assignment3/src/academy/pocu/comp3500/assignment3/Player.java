@@ -93,18 +93,24 @@ public class Player extends PlayerBase {
         // 다시 상대가 6개의 말 중에 선택 후 움직이고 vaild 검토 그 상테에서
         // .... 종료조건 depths.
 
+        // 1. 폰, 나이트, 비숍 ... 킹 추가
+        // 2. board를 재활용해서 하는 방법?
+        // 3. 가지치기 ㄱㄱ
 
+        HashMap<Move, Integer> result = getNextMoveRecursive(board, opponentMove, 0);
+        Move optimalMove = null;
+        for (Map.Entry<Move, Integer> entrySet : result.entrySet()) {
+            optimalMove = entrySet.getKey();
+        }
 
-
-        return getNextMoveRecursive(board, opponentMove, null, 0);
+        return optimalMove;
     }
 
-    private Move getNextMoveRecursive(char[][] board, Move opponentMove, PieceType pieceType, int depth) {
+    private HashMap<Move, Integer> getNextMoveRecursive(final char[][] board, Move opponentMove, final int depth) {
 
 
-        ArrayList<Integer> scores = new ArrayList<>();
-        ArrayList<Move> moves = new ArrayList<>();
 
+        /*
         for (PieceType piece : pieces) {
             char pieceSymbol = 0;
             switch (piece) {
@@ -128,96 +134,47 @@ public class Player extends PlayerBase {
                     pieceSymbol = 'k';
                     break;
 
-                     */
+
                 default:
                     assert (false);
             }
+            */
 
-            boolean isPlayerWhite = super.isWhite();
-            if (!isPlayerWhite) {
-                pieceSymbol ^= 32;
-            }
 
-            //chage name
-            HashMap<Move, char[][]> moveOptions = new HashMap<>();
+        char pieceSymbol = 'p';
 
-            for (int y = 0; y < BOARD_SIZE; y++) {
-                for (int x = 0; x < BOARD_SIZE; x++) {
-                    if (board[y][x] == pieceSymbol) {
-                        HashMap<Move, char[][]> temp = getPossabilityNextMove(board, x, y, piece);
+        boolean isAiWhite = super.isWhite();
 
-                        moveOptions.putAll(temp);
-                    }
+        boolean isPeaceWhite = isAiWhite ? depth % 2 == 0 : depth % 2 != 0;
+
+        if (!isPeaceWhite) {
+            pieceSymbol ^= 32;
+        }
+
+        HashMap<Move, char[][]> moveOptions = new HashMap<>();
+
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                if (board[y][x] == pieceSymbol) {
+                    HashMap<Move, char[][]> temp = getPossabilityNextMove(board, x, y);
+
+                    moveOptions.putAll(temp);
                 }
             }
+        }
 
-            // 밑에 평가 함수 고쳐서 모든 가능성 계산할 것
-            // 그리고 나서 그 가능성을 던져주고
-            // 평가는 애들이 몇개 남아 있는지로 게산해서
-            // 나 일 때는 최대값
-            // 적일 때는 최소값 반환
-
-            // 그리고 테스트 통과하면 리펙토링해서 깊이 늘리기
-
-
-            // depth 가 짝수일 때는 나
-            // 홀수일 때는 적
-
-            // 나 일 경우 최대값으로 반환
-            // 상대일 경우 최소값으로 반환
-
-            // 하얀색일 때       블랙일 때
-            // depth 1 블랙     하얀
-            // depth 2 하얀색    블랙
-            // depth 3 블랙     하양
-
-            // depth 0
-            // ooooo
-            //
-            //   x
-            // xx xx
-
-            // depth 1
-            // oo oo
-            //   o
-            //   x
-            // xx xx
-
-            // depth 2
-            // oo oo
-            //   o
-            // x x
-            //  x xx
-
-            // depth 3일 때는 안 보고 depth 2일때 상황
-
-
-
+        // 종료조건
+        if (depth > 2) {
+            ArrayList<Integer> scores = new ArrayList<>();
+            ArrayList<Move> moves = new ArrayList<>();
 
 
             for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
-                if (depth < 2) {
-                    
-                    Move best =  getNextMoveRecursive(entrySet.getValue(), entrySet.getKey(), pieceType, depth + 1);
-                    //best가 지금 수에 대해서 아래에서 보낸 미니 ㅁ개스
-                    //best를 또 모아서 여기서 최적 ㄱㄱ
-                    // 그리고 일단 piece를 나누는 건 나중에 하자
-
-
-                    //1. 수정해야 할 거 뎁스가 깊어질 때 상대껄로 안 나옴
-                    //2. 지금 미니맥스가 아니라 재귀로 파고 들어가서 가장 최적의 상태를 반환하고 있음 따라서 수정 필요
-                    // 받아서 다시 또 계산해서 최고 최저 하기
-                    //3. 한 가지 문제가 더 있었는데 기억 안나네? 아마 피스 나누는 거 나중에?
-
-                }
-
-                boolean isPeaceWhite = isPlayerWhite ? depth % 2 == 0 : depth % 2 != 0;
-
                 boolean isOpponentKingAlive = false;
 
                 int score = 0;
 
-                char[][] caseBoard = entrySet.getValue();
+                char[][] caseBoard = createCopy(entrySet.getValue());
 
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     for (int x = 0; x < BOARD_SIZE; x++) {
@@ -242,10 +199,10 @@ public class Player extends PlayerBase {
                                     score += 100;
                                     break;
                                 case 'K':
-                                    isOpponentKingAlive = false;
+                                    isOpponentKingAlive = true;
                                     break;
                             }
-                        }else if (!isPeaceWhite && caseBoard[y][x] != 0) {
+                        } else if (!isPeaceWhite && caseBoard[y][x] != 0) {
                             switch (caseBoard[y][x]) {
                                 case 'P':
                                     score += 1;
@@ -266,7 +223,7 @@ public class Player extends PlayerBase {
                                     score += 100;
                                     break;
                                 case 'k':
-                                    isOpponentKingAlive = false;
+                                    isOpponentKingAlive = true;
                                     break;
                             }
                         }
@@ -282,21 +239,56 @@ public class Player extends PlayerBase {
                 moves.add(entrySet.getKey());
             }
 
+            int max = Integer.MIN_VALUE;
+            int maxIndex = -1;
+            for (int i = 0; i < scores.size(); i++) {
+                if (scores.get(i) > max) {
+                    max = scores.get(i);
+                    maxIndex = i;
+                }
+            }
+
+            HashMap<Move, Integer> result = new HashMap<>();
+            result.put(opponentMove, max);
+
+            return result;
         }
 
-        int max = Integer.MIN_VALUE;
-        int maxIndex = -1;
-        for (int i = 0; i < scores.size(); i++) {
-            if (scores.get(i) > max) {
-                max = scores.get(i);
-                maxIndex = i;
+
+        HashMap<Move, Integer> optimalMovePossibe = new HashMap<>();
+        for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
+            optimalMovePossibe.putAll(getNextMoveRecursive(entrySet.getValue(), entrySet.getKey(),depth + 1));
+        }
+
+        Move optiamlMove = null;
+        if (isPeaceWhite) {
+            int max = Integer.MIN_VALUE;
+            for (Map.Entry<Move, Integer> entrySet : optimalMovePossibe.entrySet()) {
+                if (entrySet.getValue() > max) {
+                    max = entrySet.getValue();
+                    optiamlMove = entrySet.getKey();
+                }
+            }
+        } else if(!isPeaceWhite) {
+            int min = Integer.MAX_VALUE;
+            for (Map.Entry<Move, Integer> entrySet : optimalMovePossibe.entrySet()) {
+                if (entrySet.getValue() < min) {
+                    min = entrySet.getValue();
+                    optiamlMove = entrySet.getKey();
+                }
             }
         }
 
-        return moves.get(maxIndex);
+        HashMap<Move, Integer> optimalResult = new HashMap<>();
 
+        if (depth != 0) {
+            optimalResult.put(opponentMove, optimalMovePossibe.get(optiamlMove));
+        } else {
+            optimalResult.put(optiamlMove, optimalMovePossibe.get(optiamlMove));
+        }
 
-
+        return optimalResult;
+    }
 
 
             // 디텍토에서는 인덱스 반환환
@@ -316,37 +308,13 @@ public class Player extends PlayerBase {
 
         // 폰이 움직일 수 있는 방식
         // 처음에 앞으로 2칸, 그리고 1칸씩 전진, 옆에 적이 있을 때 잡을 수 있음
-        }
 
 
-
-
-
-    private HashMap<Move, char[][]> getPossabilityNextMove(final char[][] board, final int x, final int y, final PieceType type) {
-
-        switch (type) {
-            case PAWN:
-                return getPossabilityPawnMove(board, x, y);
-                /*
-            case KNIHGT:
-                break;
-            case BISHOP:
-                break;
-            case ROOK:
-                break;
-            case QUEEN:
-                break;
-            case KING:
-                break;
-
-                 */
-            default:
-                assert (false);
-        }
-
-        return null;
-
+    private HashMap<Move, char[][]> getPossabilityNextMove(final char[][] board, final int x, final int y) {
+        return getPossabilityPawnMove(board, x, y);
     }
+
+
 
     private HashMap<Move, char[][]> getPossabilityPawnMove(final char[][] board, final int x, final int y) {
 
@@ -388,8 +356,9 @@ public class Player extends PlayerBase {
                 char toPiece = board[move.toY][move.toX];
 
                 boolean isToPieceWhite = Character.isLowerCase(toPiece);
+                //
 
-                if ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                if (toPiece != 0 && ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite))) {
                     char[][] newBoard = createCopy(board);
 
                     newBoard[move.toY][move.toX] = board[y][x];
