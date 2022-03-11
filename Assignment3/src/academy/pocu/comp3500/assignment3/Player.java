@@ -278,7 +278,7 @@ public class Player extends PlayerBase {
                 if (max < nextMoves.get(i).score) {
                     max = nextMoves.get(i).score;
                     maxIndex = i;
-                } else if (max == nextMoves.get(i).score) {
+                } else if (max != Integer.MIN_VALUE && max == nextMoves.get(i).score) {
                     Random random  = new Random();
                     if (random.nextBoolean()) {
                         max = nextMoves.get(i).score;
@@ -288,19 +288,19 @@ public class Player extends PlayerBase {
             }
 
             if (maxIndex != -1) {
-                optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), max);
+                optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), nextMoves.get(maxIndex).score);
             } else {
-                optiamlMove = new NextMove(opponentMove, null, max);
+                return null;
             }
         } else {
             int min = Integer.MAX_VALUE;
             int minIndex = -1;
 
             for (int i = 0; i < nextMoves.size(); i++) {
-                if (min >= nextMoves.get(i).score) {
+                if (min > nextMoves.get(i).score) {
                     min = nextMoves.get(i).score;
                     minIndex = i;
-                } else if (min == nextMoves.get(i).score) {
+                } else if (min != Integer.MAX_VALUE && min == nextMoves.get(i).score) {
                     Random random = new Random();
                     if (random.nextBoolean()) {
                         min = nextMoves.get(i).score;
@@ -310,9 +310,9 @@ public class Player extends PlayerBase {
             }
 
             if (minIndex != -1) {
-                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
+                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), nextMoves.get(minIndex).score);
             } else {
-                optiamlMove = new NextMove(opponentMove, null, min);
+                return null;
             }
         }
 
