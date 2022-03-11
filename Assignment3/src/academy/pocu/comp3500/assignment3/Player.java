@@ -4,18 +4,13 @@ import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
 import javax.swing.plaf.IconUIResource;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Player extends PlayerBase {
     //PieceType[] pieces = new PieceType[] { PieceType.PAWN, PieceType.KNIHGT, PieceType.BISHOP, PieceType.QUEEN, PieceType.KING };
     private static int turnCount = 0;
 
-    private final int MAXIMUN_PREDICATION_TURN = 2;
-
-    private PieceType[] pieces = new PieceType[] { PieceType.PAWN };
+    private final int MAXIMUNTURN = 2;
 
     private final static int BOARD_SIZE = 8;
 
@@ -28,6 +23,17 @@ public class Player extends PlayerBase {
             {1, -1},
             {-1, -1},
             {0, -2}
+    };
+
+    private static int[][] knightMoveOffset = {
+            {-2, -1},
+            {-2, 1},
+            {-1, -2},
+            {-1, 2},
+            {1, -2},
+            {1, 2},
+            {2, -1},
+            {2, 1}
     };
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
@@ -107,7 +113,7 @@ public class Player extends PlayerBase {
         // 재귀의 종료조건으로 현재 board에 대해서 평가 후 반환
         // T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
         // 화이트는 값이 높을수록 블랙은 값이 낮을수록 유리
-        if (turnCount  - 1 == MAXIMUN_PREDICATION_TURN) {
+        if (turnCount  - 1 == MAXIMUNTURN) {
 
             boolean isWhiteKingAlive = false;
             boolean isBlackKingAlive = false;
@@ -163,11 +169,11 @@ public class Player extends PlayerBase {
             }
 
             if (!isWhiteKingAlive) {
-                score = Integer.MIN_VALUE;
+                score = Integer.MIN_VALUE + 1;
             }
 
             if (!isBlackKingAlive) {
-                score = Integer.MAX_VALUE;
+                score = Integer.MAX_VALUE - 1;
             }
 
             NextMove nextMove = new NextMove(opponentMove, null, score);
@@ -178,36 +184,6 @@ public class Player extends PlayerBase {
         }
 
 
-        /*
-        for (PieceType piece : pieces) {
-            char pieceSymbol = 0;
-            switch (piece) {
-                case PAWN:
-                    pieceSymbol = 'p';
-                    break;
-                    /*
-                case KNIHGT:
-                    pieceSymbol = 'n';
-                    break;
-                case BISHOP:
-                    pieceSymbol = 'b';
-                    break;
-                case ROOK:
-                    pieceSymbol = 'r';
-                    break;
-                case QUEEN:
-                    pieceSymbol = 'q';
-                    break;
-                case KING:
-                    pieceSymbol = 'k';
-                    break;
-
-
-                default:
-                    assert (false);
-            }
-            */
-
         //AI가 블랙으로 시작하냐, 화이트로 시작하냐에 따라 0부터 시작하는 턴이 누구인지 달라진다
         boolean isAiWhite = super.isWhite();
 
@@ -215,19 +191,45 @@ public class Player extends PlayerBase {
 
 
         //현재 보드에서 말들을 찾고 움직일 수 있는 모든 옵션을 얻는다
-        char pieceSymbol = 'p';
-
-        if (!isWhitePieceTurn) {
-            pieceSymbol ^= 32;
-        }
+        char[] pieceSymbols = new char[] { 'p', 'n', 'b', 'r', 'q', 'k' };
 
         HashMap<Move, char[][]> moveOptions = new HashMap<>();
 
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
-                if (board[y][x] == pieceSymbol) {
-                    HashMap<Move, char[][]> temp = getPossabilityNextMove(board, x, y);
-                    moveOptions.putAll(temp);
+                if (board[y][x] != 0) {
+                    HashMap<Move, char[][]> temp = null;
+                        if (isWhitePieceTurn) {
+                            switch (board[y][x]) {
+                                case 'p':
+                                    temp = getPossabilityPawnMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                                case 'n':
+                                    temp = getPossabilityKnightMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                                case 'b':
+                                    temp = getPossabilityBishopMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                            }
+                        }  else {
+                            switch (board[y][x]) {
+                                case 'P':
+                                    temp = getPossabilityPawnMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                                case 'N':
+                                    temp = getPossabilityKnightMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                                case 'B':
+                                    temp = getPossabilityBishopMove(board, x, y);
+                                    moveOptions.putAll(temp);
+                                    break;
+                            }
+                        }
                 }
             }
         }
@@ -272,51 +274,46 @@ public class Player extends PlayerBase {
             int max = Integer.MIN_VALUE;
             int maxIndex = -1;
 
-
             for (int i = 0; i < nextMoves.size(); i++) {
-                if (max <= nextMoves.get(i).score) {
+                if (max < nextMoves.get(i).score) {
                     max = nextMoves.get(i).score;
                     maxIndex = i;
+                } else if (max == nextMoves.get(i).score) {
+                    Random random  = new Random();
+                    if (random.nextBoolean()) {
+                        max = nextMoves.get(i).score;
+                        maxIndex = i;
+                    }
                 }
             }
 
-            if (nextMoves.size() != 0) {
+            if (maxIndex != -1) {
                 optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), max);
             } else {
                 optiamlMove = new NextMove(opponentMove, null, max);
             }
         } else {
             int min = Integer.MAX_VALUE;
-
             int minIndex = -1;
 
             for (int i = 0; i < nextMoves.size(); i++) {
                 if (min >= nextMoves.get(i).score) {
                     min = nextMoves.get(i).score;
                     minIndex = i;
-                }
-            }
-
-            if (nextMoves.size() != 0) {
-                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
-            } else {
-                optiamlMove = new NextMove(opponentMove, new Move(), min);
-            }
-        }
-
-        if (turnCount == 0 && optiamlMove == null) {
-            int noPlaceX = -1;
-            int noPlaceY = -1;
-            for (int y = 0; y < BOARD_SIZE; y++) {
-                for (int x = 0; x < BOARD_SIZE; x++) {
-                    if (board[y][x] == pieceSymbol) {
-                        noPlaceX = x;
-                        noPlaceY = y;
+                } else if (min == nextMoves.get(i).score) {
+                    Random random  = new Random();
+                    if (random.nextBoolean()) {
+                        min = nextMoves.get(i).score;
+                        minIndex = i;
                     }
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, new Move(noPlaceX, noPlaceY, noPlaceX, noPlaceY), 0);
+            if (minIndex != -1) {
+                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), min);
+            } else {
+                optiamlMove = new NextMove(opponentMove, null, min);
+            }
         }
 
         if (turnCount != 0) {
@@ -324,10 +321,6 @@ public class Player extends PlayerBase {
         }
 
         return optiamlMove;
-    }
-
-    private HashMap<Move, char[][]> getPossabilityNextMove(final char[][] board, final int x, final int y) {
-        return getPossabilityPawnMove(board, x, y);
     }
 
     private HashMap<Move, char[][]> getPossabilityPawnMove(final char[][] board, final int x, final int y) {
@@ -410,81 +403,116 @@ public class Player extends PlayerBase {
         return moves;
     }
 
-
-    private Move getMaxPawnMovement(char[][] board, int x, int y) {
-
+    private HashMap<Move, char[][]> getPossabilityKnightMove(final char[][] board, final int x, final int y) {
         char fromPiece = board[y][x];
 
         boolean isFormPieceWhite = Character.isLowerCase(fromPiece);
 
-        final int WHITE_MOVE_OFFSET_START = 0;
-        final int BLACK_MOVE_OFFSET_START = 4;
+        HashMap<Move, char[][]> moves = new HashMap<>();
 
-        int playerIndex = isFormPieceWhite ? WHITE_MOVE_OFFSET_START : BLACK_MOVE_OFFSET_START;
+        for (int i = 0; i < knightMoveOffset.length; i++) {
+            // 이동할 수 있는지 검사
+            int toX = x + knightMoveOffset[i][0];
+            int toY = y + knightMoveOffset[i][1];
 
-        ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Integer> scores = new ArrayList<>();
+            if (toX < 0 || toX >= BOARD_SIZE || toY < 0 || toY >= BOARD_SIZE) {
+                continue;
+            }
 
+            // 이동하려는 곳에 아무것도 없거나 말을 잡을 수 있을 때
+            char toPiece = board[toY][toX];
 
-        //1칸 전진하는 경우
-        Move move = new Move(x, y, x + pawnMoveOffset[playerIndex][0], y + pawnMoveOffset[playerIndex][1]);
+            boolean isToPieceWhite = Character.isLowerCase(toPiece);
 
-        if (move.toY < BOARD_SIZE) {
-            char toPiece = board[move.toY][move.toX];
-            if (toPiece == 0) {
-                moves.add(move);
-                scores.add(0);
+            if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                char[][] newBoard = createCopy(board);
+
+                newBoard[toY][toX] = fromPiece;
+
+                newBoard[y][x] = 0;
+
+                Move move = new Move(x, y, toX, toY);
+
+                moves.put(move, newBoard);
             }
         }
+        return moves;
+    }
 
-        playerIndex++;
+    private HashMap<Move, char[][]> getPossabilityBishopMove(final char[][] board, final int x, final int y) {
+        HashMap<Move, char[][]> moves = new HashMap<>();
 
-        //옆에 애를 잡는 경우
-        for (int i = 0; i < 2; i++) {
-            move = new Move(x, y, x + pawnMoveOffset[playerIndex][0], y + pawnMoveOffset[playerIndex][1]);
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.NORTHEAST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.NORTWEST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.SOUTHEAST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.SOUTHWEST));
 
-            if (move.toX < BOARD_SIZE && move.toY < BOARD_SIZE) {
-                char toPiece = board[move.toY][move.toX];
-                boolean isToPieceWhite = Character.isLowerCase(toPiece);
+        return moves;
+    }
 
-                if (toPiece != 0 && !isToPieceWhite) {
-                    //뭐인지에 따라 평가함수 작성하기
-                    moves.add(move);
-                    scores.add(20);
+    private HashMap<Move, char[][]> getPossabilityBishopMoveSub(final char[][] board, final int x, final int y, final Movement movement) {
+        char fromPiece = board[y][x];
+
+        boolean isFormPieceWhite = Character.isLowerCase(fromPiece);
+
+        HashMap<Move, char[][]> moves = new HashMap<>();
+
+        int xIncrement = 0;
+        int yIncrement = 0;
+
+        switch (movement) {
+            case NORTHEAST:
+                xIncrement = 1;
+                yIncrement = 1;
+                break;
+            case NORTWEST:
+                xIncrement = -1;
+                yIncrement = 1;
+                break;
+            case SOUTHEAST:
+                xIncrement = 1;
+                yIncrement = -1;
+                break;
+            case SOUTHWEST:
+                xIncrement = -1;
+                yIncrement = -1;
+                break;
+            default:
+                assert (false);
+        }
+
+        int toX = x + xIncrement;
+        int toY = y + yIncrement;
+        boolean isPieceOverlap = false;
+
+        while (toX >= 0 && toX < BOARD_SIZE && toY >= 0 && toY < BOARD_SIZE && !isPieceOverlap) {
+            char toPiece = board[toY][toX];
+
+            boolean isToPieceWhite = Character.isLowerCase(toPiece);
+
+            if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                if ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                    isPieceOverlap = true;
                 }
+
+                char[][] newBoard = createCopy(board);
+
+                newBoard[toY][toX] = fromPiece;
+
+                newBoard[y][x] = 0;
+
+                Move move = new Move(x, y, toX, toY);
+
+                moves.put(move, newBoard);
+            } else {
+                isPieceOverlap = true;
             }
 
-            playerIndex++;
+            toX += xIncrement;
+            toY += yIncrement;
         }
 
-
-        //2칸 전진하는 경우
-        move = new Move(x, y, x + pawnMoveOffset[playerIndex][0], y + pawnMoveOffset[playerIndex][1]);
-
-        boolean hasMoved = isFormPieceWhite ? y != 6 : y != 2;
-        if (!hasMoved && move.toY < BOARD_SIZE) {
-            char toPiece = board[move.toY][move.toX];
-            if (toPiece == 0) {
-                moves.add(move);
-                scores.add(0);
-            }
-        }
-
-        playerIndex++;
-        assert(playerIndex == 4 || playerIndex == 8);
-
-        int max = Integer.MIN_VALUE;
-        int maxIndex = -1;
-
-        for (int i = 0; i < scores.size(); i++) {
-            if (scores.get(i) > max) {
-                max = scores.get(i);
-                maxIndex = i;
-            }
-        }
-
-        assert(maxIndex != -1);
-        return moves.get(maxIndex);
+        return moves;
     }
 
     private char[][] createCopy(char[][] board) {
