@@ -37,7 +37,7 @@ public class Player extends PlayerBase {
 
     private final static int BOARD_SIZE = 8;
 
-    private final int MAXIMUN_TURN = 3;
+    private final int MAXIMUN_TURN = 2;
 
     private int turnCount = 0;
 
