@@ -9,10 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
-    // Project layOut
-    // 재귀로 파고 들어가되 체스는 모든 경우의 수가 너무 많기 때문에 스택 오버플로우가 생긴다
-    // 따라서, 미니맥스 + 알파베타 가지치기를 활용해야 한다
-
     //1. minMax
     //내가 둘 때는 상대가 최대 이득이 되는게 자식에서 반환되고 나는 그 중에서 내 최대 이득을 선택하여 호출자에게 반환
     //상대가 둘 때는 내가 최대 이득이 되는게 자식에서 반환되고 상대는 최대 이득이 되는 걸 호출자에게 반환
