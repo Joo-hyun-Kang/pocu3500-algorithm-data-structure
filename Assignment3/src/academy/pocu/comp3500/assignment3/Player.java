@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
-    //PieceType[] pieces = new PieceType[] { PieceType.PAWN, PieceType.KNIHGT, PieceType.BISHOP, PieceType.QUEEN, PieceType.KING };
     private static int turnCount = 0;
 
     private final int MAXIMUN_TURN = 2;
@@ -38,7 +37,7 @@ public class Player extends PlayerBase {
             {2, 1}
     };
 
-    private static final int[][] kingMoveOffsets = {
+    private static int[][] kingMoveOffsets = {
             {-1, 1},
             {-1, 0},
             {-1, -1},
@@ -334,6 +333,13 @@ public class Player extends PlayerBase {
                     max = nextMoves.get(i).score;
                     turn = nextMoves.get(i).turn;
                     index = i;
+                } else if (max == nextMoves.get(i).score) {
+                    Random random = new Random();
+                    if (random.nextBoolean()) {
+                        max = nextMoves.get(i).score;
+                        turn = nextMoves.get(i).turn;
+                        index = i;
+                    }
                 }
             }
 
@@ -353,6 +359,13 @@ public class Player extends PlayerBase {
                     min = nextMoves.get(i).score;
                     turn = nextMoves.get(i).turn;
                     index = i;
+                } else if (min == nextMoves.get(i).score) {
+                    Random random = new Random();
+                    if (random.nextBoolean()) {
+                        min = nextMoves.get(i).score;
+                        turn = nextMoves.get(i).turn;
+                        index = i;
+                    }
                 }
             }
 
@@ -535,7 +548,7 @@ public class Player extends PlayerBase {
             boolean isToPieceWhite = Character.isLowerCase(toPiece);
 
             if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
-                if ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                if ((isFormPieceWhite && !isToPieceWhite && toPiece != 0) || (!isFormPieceWhite && isToPieceWhite && toPiece != 0)) {
                     isPieceOverlap = true;
                 }
 
@@ -590,7 +603,7 @@ public class Player extends PlayerBase {
                 yIncrement = 0;
                 break;
             case WEST:
-                xIncrement = 1;
+                xIncrement = -1;
                 yIncrement = 0;
                 break;
             case SOUTH:
@@ -611,7 +624,7 @@ public class Player extends PlayerBase {
             boolean isToPieceWhite = Character.isLowerCase(toPiece);
 
             if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
-                if ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                if ((isFormPieceWhite && !isToPieceWhite && toPiece != 0) || (!isFormPieceWhite && isToPieceWhite && toPiece != 0)) {
                     isPieceOverlap = true;
                 }
 

@@ -368,8 +368,9 @@ final class Game {
         final char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
 
         // White pieces
-        board[3][4] = 'K';
-        board[4][4] = 'k';
+        board[4][3] = 'K';
+        board[7][3] = 'q';
+        board[7][4] = 'k';
 
 
 
