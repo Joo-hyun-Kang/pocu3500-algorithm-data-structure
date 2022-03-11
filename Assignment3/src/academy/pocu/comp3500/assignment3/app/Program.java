@@ -92,29 +92,6 @@ public class Program {
         }
 
         {
-            // player captures piece when possible
-            char[][] board = {
-                    {'R', 'N', 'B', 'K', 0, 'B', 'N', 'R'},
-                    {'P', 'P', 'P', 0, 0, 'P', 'P', 'P'},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 'Q', 0},
-                    {0, 0, 0, 0, 0, 'b', 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0},
-            };
-            Player player = new Player(true, 10000);
-
-            Move move = player.getNextMove(board);
-
-            assert Game.isMoveValid(board, player, move);
-            assert move.fromX == 5;
-            assert move.fromY == 5;
-            assert move.toX == 6;
-            assert move.toY == 4;
-        }
-
-        {
             // player captures piece when there are multiple pieces
             char[][] board = {
                     {0, 0, 0, 'K', 0, 0, 0, 0},
@@ -218,7 +195,6 @@ public class Program {
         }
     }
 
-
      */
 
     public static void main(String[] args) {
@@ -297,5 +273,4 @@ public class Program {
             e.printStackTrace();
         }
     }
-
 }

@@ -11,7 +11,7 @@ import java.util.Random;
 public class Player extends PlayerBase {
     private static int turnCount = 0;
 
-    private final int MAXIMUN_TURN = 2;
+    private final int MAXIMUN_TURN = 3;
 
     private final static int BOARD_SIZE = 8;
 
@@ -325,25 +325,35 @@ public class Player extends PlayerBase {
             }
 
             int max = nextMoves.get(0).score;
-            int turn = nextMoves.get(0).turn;
+            int maxTurn = nextMoves.get(0).turn;
             int index = 0;
 
             for (int i = 1; i < nextMoves.size(); i++) {
-                if (max < nextMoves.get(i).score || (max == nextMoves.get(i).score && turn > nextMoves.get(i).turn)) {
+                if (max < nextMoves.get(i).score) {
                     max = nextMoves.get(i).score;
-                    turn = nextMoves.get(i).turn;
+                    maxTurn = nextMoves.get(i).turn;
                     index = i;
                 } else if (max == nextMoves.get(i).score) {
-                    Random random = new Random();
-                    if (random.nextBoolean()) {
+                    if (max < 0 && maxTurn < nextMoves.get(i).turn) {
                         max = nextMoves.get(i).score;
-                        turn = nextMoves.get(i).turn;
+                        maxTurn = nextMoves.get(i).turn;
                         index = i;
+                    } else if (max > 0 && maxTurn > nextMoves.get(i).turn) {
+                        max = nextMoves.get(i).score;
+                        maxTurn = nextMoves.get(i).turn;
+                        index = i;
+                    } else if (maxTurn == nextMoves.get(i).turn){
+                        Random random = new Random();
+                        if (random.nextBoolean()) {
+                            max = nextMoves.get(i).score;
+                            maxTurn = nextMoves.get(i).turn;
+                            index = i;
+                        }
                     }
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), max, turn);
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), max, maxTurn);
 
         } else {
             if (nextMoves.size() == 0) {
@@ -351,25 +361,35 @@ public class Player extends PlayerBase {
             }
 
             int min = nextMoves.get(0).score;
-            int turn = nextMoves.get(0).turn;
+            int MinTurn = nextMoves.get(0).turn;
             int index = 0;
 
             for (int i = 1; i < nextMoves.size(); i++) {
-                if (min > nextMoves.get(i).score || (min == nextMoves.get(i).score && turn > nextMoves.get(i).turn)) {
+                if (min > nextMoves.get(i).score) {
                     min = nextMoves.get(i).score;
-                    turn = nextMoves.get(i).turn;
+                    MinTurn = nextMoves.get(i).turn;
                     index = i;
                 } else if (min == nextMoves.get(i).score) {
-                    Random random = new Random();
-                    if (random.nextBoolean()) {
+                    if (min < 0 && MinTurn > nextMoves.get(i).turn) {
                         min = nextMoves.get(i).score;
-                        turn = nextMoves.get(i).turn;
+                        MinTurn = nextMoves.get(i).turn;
                         index = i;
+                    } else if (min > 0 && MinTurn < nextMoves.get(i).turn) {
+                        min = nextMoves.get(i).score;
+                        MinTurn = nextMoves.get(i).turn;
+                        index = i;
+                    } else if (MinTurn == nextMoves.get(i).turn){
+                        Random random = new Random();
+                        if (random.nextBoolean()) {
+                            min = nextMoves.get(i).score;
+                            MinTurn = nextMoves.get(i).turn;
+                            index = i;
+                        }
                     }
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, turn);
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, MinTurn);
 
         }
 
@@ -442,8 +462,11 @@ public class Player extends PlayerBase {
 
         boolean hasMoved = isFormPieceWhite ? y != 6 : y != 1;
         if (!hasMoved && move.toY >= 0 && move.toY < BOARD_SIZE) {
+
+            char pawnFrontPiece = board[y + pawnMoveOffset[playerIndex - 3][1]][x + pawnMoveOffset[playerIndex - 3][0]];
             char toPiece = board[move.toY][move.toX];
-            if (toPiece == 0) {
+
+            if (pawnFrontPiece == 0 && toPiece == 0) {
                 char[][] newBoard = createCopy(board);
 
                 newBoard[move.toY][move.toX] = board[y][x];
