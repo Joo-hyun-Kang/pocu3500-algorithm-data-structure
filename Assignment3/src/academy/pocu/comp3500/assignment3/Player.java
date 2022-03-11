@@ -38,6 +38,17 @@ public class Player extends PlayerBase {
             {2, 1}
     };
 
+    private static final int[][] kingMoveOffsets = {
+            {-1, 1},
+            {-1, 0},
+            {-1, -1},
+            {0, 1},
+            {0, -1},
+            {1, 1},
+            {1, 0},
+            {1, -1}
+    };
+
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
     }
@@ -213,8 +224,20 @@ public class Player extends PlayerBase {
                                 temp = getPossabilityBishopMove(board, x, y);
                                 moveOptions.putAll(temp);
                                 break;
+                            case 'r':
+                                temp = getPossabilityRookMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'q':
+                                temp = getPossabilityQueenMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'k':
+                                temp = getPossabilityKingMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
                         }
-                    }  else {
+                    } else {
                         switch (board[y][x]) {
                             case 'P':
                                 temp = getPossabilityPawnMove(board, x, y);
@@ -226,6 +249,18 @@ public class Player extends PlayerBase {
                                 break;
                             case 'B':
                                 temp = getPossabilityBishopMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'R':
+                                temp = getPossabilityRookMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'Q':
+                                temp = getPossabilityQueenMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'K':
+                                temp = getPossabilityKingMove(board, x, y);
                                 moveOptions.putAll(temp);
                                 break;
                         }
@@ -279,7 +314,7 @@ public class Player extends PlayerBase {
                     max = nextMoves.get(i).score;
                     maxIndex = i;
                 } else if (max != Integer.MIN_VALUE && max == nextMoves.get(i).score) {
-                    Random random  = new Random();
+                    Random random = new Random();
                     if (random.nextBoolean()) {
                         max = nextMoves.get(i).score;
                         maxIndex = i;
@@ -512,6 +547,134 @@ public class Player extends PlayerBase {
             toY += yIncrement;
         }
 
+        return moves;
+    }
+
+    private HashMap<Move, char[][]> getPossabilityRookMove(final char[][] board, final int x, final int y) {
+        HashMap<Move, char[][]> moves = new HashMap<>();
+
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.NORTH));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.WEST));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.EAST));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.SOUTH));
+
+        return moves;
+    }
+
+    private HashMap<Move, char[][]> getPossabilityRookMoveSub(final char[][] board, final int x, final int y, final Movement movement) {
+        char fromPiece = board[y][x];
+
+        boolean isFormPieceWhite = Character.isLowerCase(fromPiece);
+
+        HashMap<Move, char[][]> moves = new HashMap<>();
+
+        int xIncrement = 0;
+        int yIncrement = 0;
+
+        switch (movement) {
+            case NORTH:
+                xIncrement = 0;
+                yIncrement = 1;
+                break;
+            case EAST:
+                xIncrement = 1;
+                yIncrement = 0;
+                break;
+            case WEST:
+                xIncrement = 1;
+                yIncrement = 0;
+                break;
+            case SOUTH:
+                xIncrement = 0;
+                yIncrement = -1;
+                break;
+            default:
+                assert (false);
+        }
+
+        int toX = x + xIncrement;
+        int toY = y + yIncrement;
+        boolean isPieceOverlap = false;
+
+        while (toX >= 0 && toX < BOARD_SIZE && toY >= 0 && toY < BOARD_SIZE && !isPieceOverlap) {
+            char toPiece = board[toY][toX];
+
+            boolean isToPieceWhite = Character.isLowerCase(toPiece);
+
+            if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                if ((isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                    isPieceOverlap = true;
+                }
+
+                char[][] newBoard = createCopy(board);
+
+                newBoard[toY][toX] = fromPiece;
+
+                newBoard[y][x] = 0;
+
+                Move move = new Move(x, y, toX, toY);
+
+                moves.put(move, newBoard);
+            } else {
+                isPieceOverlap = true;
+            }
+
+            toX += xIncrement;
+            toY += yIncrement;
+        }
+
+        return moves;
+    }
+
+    private HashMap<Move, char[][]> getPossabilityQueenMove(final char[][] board, final int x, final int y) {
+        HashMap<Move, char[][]> moves = new HashMap<>();
+
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.NORTH));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.WEST));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.EAST));
+        moves.putAll(getPossabilityRookMoveSub(board, x, y, Movement.SOUTH));
+
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.NORTHEAST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.NORTWEST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.SOUTHEAST));
+        moves.putAll(getPossabilityBishopMoveSub(board, x, y, Movement.SOUTHWEST));
+
+        return moves;
+    }
+
+    private HashMap<Move, char[][]> getPossabilityKingMove(final char[][] board, final int x, final int y) {
+        char fromPiece = board[y][x];
+
+        boolean isFormPieceWhite = Character.isLowerCase(fromPiece);
+
+        HashMap<Move, char[][]> moves = new HashMap<>();
+
+        for (int i = 0; i < kingMoveOffsets.length; i++) {
+            // 이동할 수 있는지 검사
+            int toX = x + kingMoveOffsets[i][0];
+            int toY = y + kingMoveOffsets[i][1];
+
+            if (toX < 0 || toX >= BOARD_SIZE || toY < 0 || toY >= BOARD_SIZE) {
+                continue;
+            }
+
+            // 이동하려는 곳에 아무것도 없거나 말을 잡을 수 있을 때
+            char toPiece = board[toY][toX];
+
+            boolean isToPieceWhite = Character.isLowerCase(toPiece);
+
+            if (toPiece == 0 || (isFormPieceWhite && !isToPieceWhite) || (!isFormPieceWhite && isToPieceWhite)) {
+                char[][] newBoard = createCopy(board);
+
+                newBoard[toY][toX] = fromPiece;
+
+                newBoard[y][x] = 0;
+
+                Move move = new Move(x, y, toX, toY);
+
+                moves.put(move, newBoard);
+            }
+        }
         return moves;
     }
 

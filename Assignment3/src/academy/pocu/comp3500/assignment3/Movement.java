@@ -4,5 +4,9 @@ public enum Movement {
     NORTHEAST,
     NORTWEST,
     SOUTHEAST,
-    SOUTHWEST
+    SOUTHWEST,
+    NORTH,
+    WEST,
+    EAST,
+    SOUTH,
 };
