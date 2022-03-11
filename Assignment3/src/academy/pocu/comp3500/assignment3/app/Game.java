@@ -323,6 +323,7 @@ final class Game {
 
     private static char[][] createNewBoard() {
 
+        /*
         final char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
 
         // White pieces
@@ -361,16 +362,17 @@ final class Game {
 
 
 
-        /*
+         */
+
+
         final char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
 
         // White pieces
-        board[6][2] = 'p';
-        board[5][3] = 'K';
-        board[7][3] = 'k';
+        board[3][4] = 'K';
+        board[4][4] = 'k';
 
 
-         */
+
 
         return board;
     }

@@ -6,11 +6,13 @@ public class NextMove {
     public Move parentMove;
     public Move childMove;
     int score;
+    int turn;
 
-    public NextMove(Move parentMove, Move childMove, int score) {
+    public NextMove(Move parentMove, Move childMove, int score, int turnCount) {
         this.parentMove = parentMove;
         this.childMove = childMove;
         this.score = score;
+        this.turn = turnCount;
     }
 
     public Move getParentMoveOrNull() {

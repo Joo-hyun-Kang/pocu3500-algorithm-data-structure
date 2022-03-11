@@ -126,7 +126,8 @@ public class Player extends PlayerBase {
         // 재귀의 종료조건으로 현재 board에 대해서 평가 후 반환
         // T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
         // 화이트는 값이 높을수록 블랙은 값이 낮을수록 유리
-        if (turnCount - 1 == MAXIMUN_TURN) {
+        // 턴 카운트가 1일 때부터 바로 킹을 잡을 수 있는 경우
+        if (turnCount > 0) {
 
             boolean isWhiteKingAlive = false;
             boolean isBlackKingAlive = false;
@@ -182,18 +183,32 @@ public class Player extends PlayerBase {
             }
 
             if (!isWhiteKingAlive) {
-                score = Integer.MIN_VALUE + 1;
+                score = Integer.MIN_VALUE;
+
+                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
+
+                turnCount--;
+
+                return nextMove;
             }
 
             if (!isBlackKingAlive) {
-                score = Integer.MAX_VALUE - 1;
+                score = Integer.MAX_VALUE;
+
+                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
+
+                turnCount--;
+
+                return nextMove;
             }
 
-            NextMove nextMove = new NextMove(opponentMove, null, score);
+            if (turnCount - 1 == MAXIMUN_TURN) {
+                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
 
-            turnCount--;
+                turnCount--;
 
-            return nextMove;
+                return nextMove;
+            }
         }
 
 
@@ -306,49 +321,43 @@ public class Player extends PlayerBase {
 
         NextMove optiamlMove = null;
         if (isWhitePieceTurn) {
-            int max = Integer.MIN_VALUE;
-            int maxIndex = -1;
+            if (nextMoves.size() == 0) {
+                return null;
+            }
 
-            for (int i = 0; i < nextMoves.size(); i++) {
-                if (max < nextMoves.get(i).score) {
+            int max = nextMoves.get(0).score;
+            int turn = nextMoves.get(0).turn;
+            int index = 0;
+
+            for (int i = 1; i < nextMoves.size(); i++) {
+                if (max < nextMoves.get(i).score || (max == nextMoves.get(i).score && turn > nextMoves.get(i).turn)) {
                     max = nextMoves.get(i).score;
-                    maxIndex = i;
-                } else if (max != Integer.MIN_VALUE && max == nextMoves.get(i).score) {
-                    Random random = new Random();
-                    if (random.nextBoolean()) {
-                        max = nextMoves.get(i).score;
-                        maxIndex = i;
-                    }
+                    turn = nextMoves.get(i).turn;
+                    index = i;
                 }
             }
 
-            if (maxIndex != -1) {
-                optiamlMove = new NextMove(opponentMove, nextMoves.get(maxIndex).getParentMoveOrNull(), nextMoves.get(maxIndex).score);
-            } else {
-                return null;
-            }
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), max, turn);
+
         } else {
-            int min = Integer.MAX_VALUE;
-            int minIndex = -1;
+            if (nextMoves.size() == 0) {
+                return null;
+            }
 
-            for (int i = 0; i < nextMoves.size(); i++) {
-                if (min > nextMoves.get(i).score) {
+            int min = nextMoves.get(0).score;
+            int turn = nextMoves.get(0).turn;
+            int index = 0;
+
+            for (int i = 1; i < nextMoves.size(); i++) {
+                if (min > nextMoves.get(i).score || (min == nextMoves.get(i).score && turn > nextMoves.get(i).turn)) {
                     min = nextMoves.get(i).score;
-                    minIndex = i;
-                } else if (min != Integer.MAX_VALUE && min == nextMoves.get(i).score) {
-                    Random random = new Random();
-                    if (random.nextBoolean()) {
-                        min = nextMoves.get(i).score;
-                        minIndex = i;
-                    }
+                    turn = nextMoves.get(i).turn;
+                    index = i;
                 }
             }
 
-            if (minIndex != -1) {
-                optiamlMove = new NextMove(opponentMove, nextMoves.get(minIndex).getParentMoveOrNull(), nextMoves.get(minIndex).score);
-            } else {
-                return null;
-            }
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, turn);
+
         }
 
         if (turnCount != 0) {
