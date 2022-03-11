@@ -3,14 +3,16 @@ package academy.pocu.comp3500.assignment3;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
-import javax.swing.plaf.IconUIResource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class Player extends PlayerBase {
     //PieceType[] pieces = new PieceType[] { PieceType.PAWN, PieceType.KNIHGT, PieceType.BISHOP, PieceType.QUEEN, PieceType.KING };
     private static int turnCount = 0;
 
-    private final int MAXIMUNTURN = 2;
+    private final int MAXIMUN_TURN = 2;
 
     private final static int BOARD_SIZE = 8;
 
@@ -113,7 +115,7 @@ public class Player extends PlayerBase {
         // 재귀의 종료조건으로 현재 board에 대해서 평가 후 반환
         // T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
         // 화이트는 값이 높을수록 블랙은 값이 낮을수록 유리
-        if (turnCount  - 1 == MAXIMUNTURN) {
+        if (turnCount - 1 == MAXIMUN_TURN) {
 
             boolean isWhiteKingAlive = false;
             boolean isBlackKingAlive = false;
@@ -191,45 +193,43 @@ public class Player extends PlayerBase {
 
 
         //현재 보드에서 말들을 찾고 움직일 수 있는 모든 옵션을 얻는다
-        char[] pieceSymbols = new char[] { 'p', 'n', 'b', 'r', 'q', 'k' };
-
         HashMap<Move, char[][]> moveOptions = new HashMap<>();
 
         for (int y = 0; y < BOARD_SIZE; y++) {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 if (board[y][x] != 0) {
                     HashMap<Move, char[][]> temp = null;
-                        if (isWhitePieceTurn) {
-                            switch (board[y][x]) {
-                                case 'p':
-                                    temp = getPossabilityPawnMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                                case 'n':
-                                    temp = getPossabilityKnightMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                                case 'b':
-                                    temp = getPossabilityBishopMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                            }
-                        }  else {
-                            switch (board[y][x]) {
-                                case 'P':
-                                    temp = getPossabilityPawnMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                                case 'N':
-                                    temp = getPossabilityKnightMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                                case 'B':
-                                    temp = getPossabilityBishopMove(board, x, y);
-                                    moveOptions.putAll(temp);
-                                    break;
-                            }
+                    if (isWhitePieceTurn) {
+                        switch (board[y][x]) {
+                            case 'p':
+                                temp = getPossabilityPawnMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'n':
+                                temp = getPossabilityKnightMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'b':
+                                temp = getPossabilityBishopMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
                         }
+                    }  else {
+                        switch (board[y][x]) {
+                            case 'P':
+                                temp = getPossabilityPawnMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'N':
+                                temp = getPossabilityKnightMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                            case 'B':
+                                temp = getPossabilityBishopMove(board, x, y);
+                                moveOptions.putAll(temp);
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -301,7 +301,7 @@ public class Player extends PlayerBase {
                     min = nextMoves.get(i).score;
                     minIndex = i;
                 } else if (min == nextMoves.get(i).score) {
-                    Random random  = new Random();
+                    Random random = new Random();
                     if (random.nextBoolean()) {
                         min = nextMoves.get(i).score;
                         minIndex = i;
