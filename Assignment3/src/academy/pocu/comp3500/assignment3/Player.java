@@ -9,11 +9,37 @@ import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
-    private static int turnCount = 0;
+    // Project layOut
+    // 재귀로 파고 들어가되 체스는 모든 경우의 수가 너무 많기 때문에 스택 오버플로우가 생긴다
+    // 따라서, 미니맥스 + 알파베타 가지치기를 활용해야 한다
+
+    //1. minMax
+    //내가 둘 때는 상대가 최대 이득이 되는게 자식에서 반환되고 나는 그 중에서 내 최대 이득을 선택하여 호출자에게 반환
+    //상대가 둘 때는 내가 최대 이득이 되는게 자식에서 반환되고 상대는 최대 이득이 되는 걸 호출자에게 반환
+
+    //상대방 차례일 때 좋은 상황들(음수일수록 좋음 그래서 자식에서 최소값 반환)
+    //       10  5 -10
+    //나는 이제 10을 나에게 가장 좋은 10을 선택해서 반환한다
+    //이해를 위한 중요한 개념은 높을수록 나에게 유리하고 낮을수록 상대에게 유리하다
+
+    //2. 알파-베타 가치치기
+    //https://going-to-end.tistory.com/entry/%EC%95%8C%ED%8C%8C-%EB%B2%A0%ED%83%80-%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0-Alpha-beta-pruning
+    //http://egloos.zum.com/musicdiary/v/4274653
+    //http://wiki.hash.kr/index.php/%EC%95%8C%ED%8C%8C%EB%B2%A0%ED%83%80_%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0
+
+
+    //3. 전부다 훑을 수 없으니까 최대 깊이에서 나에게 얼마나 유리할지 공식화해야 한다
+    //간단한 점수 계산 법으로 살아있는 말 마다 점수를 가져가기
+
+    //4. 좋은 알고리듬
+    //점수 계산 함수가 얼마나 뛰어난 지
+    //얼마나 깊이 볼 수 있는 지 -> 알파베타 가지치기
+
+    private final static int BOARD_SIZE = 8;
 
     private final int MAXIMUN_TURN = 3;
 
-    private final static int BOARD_SIZE = 8;
+    private int turnCount = 0;
 
     private static int[][] pawnMoveOffset = {
             {0, 1},
@@ -52,35 +78,6 @@ public class Player extends PlayerBase {
         super(isWhite, maxMoveTimeMilliseconds);
     }
 
-
-    // Project layOut
-    // 재귀로 파고 들어가되 체스는 모든 경우의 수가 너무 많기 때문에 스택 오버플로우가 생긴다
-    // 따라서, 미니맥스 + 알파베타 가지치기를 활용해야 한다
-
-    //1. minMax
-    //내가 둘 때는 상대가 최대 이득이 되는게 자식에서 반환되고 나는 그 중에서 내 최대 이득을 선택하여 호출자에게 반환
-    //상대가 둘 때는 내가 최대 이득이 되는게 자식에서 반환되고 상대는 최대 이득이 되는 걸 호출자에게 반환
-
-    //상대방 차례일 때 좋은 상황들(음수일수록 좋음 그래서 자식에서 최소값 반환)
-    //       10  5 -10
-    //나는 이제 10을 나에게 가장 좋은 10을 선택해서 반환한다
-    //이해를 위한 중요한 개념은 높을수록 나에게 유리하고 낮을수록 상대에게 유리하다
-
-    //2. 알파-베타 가치치기
-    //https://going-to-end.tistory.com/entry/%EC%95%8C%ED%8C%8C-%EB%B2%A0%ED%83%80-%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0-Alpha-beta-pruning
-    //http://egloos.zum.com/musicdiary/v/4274653
-    //http://wiki.hash.kr/index.php/%EC%95%8C%ED%8C%8C%EB%B2%A0%ED%83%80_%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0
-
-
-    //3. 전부다 훑을 수 없으니까 최대 깊이에서 나에게 얼마나 유리할지 공식화해야 한다
-    //간단한 점수 계산 법으로 살아있는 말 마다 점수를 가져가기
-
-    //4. 좋은 알고리듬
-    //점수 계산 함수가 얼마나 뛰어난 지
-    //얼마나 깊이 볼 수 있는 지 -> 알파베타 가지치기
-
-
-
     @Override
     public Move getNextMove(char[][] board) {
         return getNextMove(board, null);
@@ -89,43 +86,13 @@ public class Player extends PlayerBase {
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
 
-        //8 * 8
-
-        // 1. 플레이어가 블랙인지 화이트인지 확인
-        // boolean aiPlayer = super.isWhite();
-
-
-        // 2. 일단 말을 선택하고 그 말에 대해서 움직임을 계산한다
-        // 딕텍토에서는 모든 인덱스에 대해서 처음부터 다 넣어보면 됌
-        // 여기에는 인덱스에 대해서 접근할 수 있는게 말에 따라서 다름 따라서 말로 접근해야 함
-        // 말은 저장하는 방식은 호출해야 한되니까 안 되고,
-        // D0 폰 move
-        // D1 상대 move 16
-        // D2 나 move 16 * 16
-        // D3 상대 move 16 * 16 * 16
-        
-
-        // 폰, 나이트, 비숍 ... 킹
-        // 6개 말 중에 선택 후 움직이고 vaild 검토 그 상태에서
-        // 다시 상대가 6개의 말 중에 선택 후 움직이고 vaild 검토 그 상테에서
-        // .... 종료조건 depths.
-
-        // 1. 폰, 나이트, 비숍 ... 킹 추가
-        // 2. board를 재활용해서 하는 방법?
-        // 3. 가지치기 ㄱㄱ
-
         NextMove optimalNextMove = getNextMoveRecursive(board, opponentMove);
 
         return optimalNextMove.getChildMove();
     }
 
-    // 가지치기 도입
-    // 체스말 추가해서 넣기
     private NextMove getNextMoveRecursive(final char[][] board, Move opponentMove) {
-        // 재귀의 종료조건으로 현재 board에 대해서 평가 후 반환
-        // T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
-        // 화이트는 값이 높을수록 블랙은 값이 낮을수록 유리
-        // 턴 카운트가 1일 때부터 바로 킹을 잡을 수 있는 경우
+        // 재귀의 종료조건으로 현재 board에 대해서 평가 후 조건에 따라 반환
         if (turnCount > 0) {
 
             boolean isWhiteKingAlive = false;
@@ -181,6 +148,7 @@ public class Player extends PlayerBase {
                 }
             }
 
+            // 킹이 잡혔을 때는 재귀가 끝나는 턴이 아니더라도 early return
             if (!isWhiteKingAlive) {
                 score = Integer.MIN_VALUE;
 
@@ -191,6 +159,7 @@ public class Player extends PlayerBase {
                 return nextMove;
             }
 
+            // 킹이 잡혔을 때는 재귀가 끝나는 턴이 아니더라도 early return
             if (!isBlackKingAlive) {
                 score = Integer.MAX_VALUE;
 
@@ -201,6 +170,7 @@ public class Player extends PlayerBase {
                 return nextMove;
             }
 
+            // 예를 들어, T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
             if (turnCount - 1 == MAXIMUN_TURN) {
                 NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
 
@@ -296,16 +266,6 @@ public class Player extends PlayerBase {
             }
         }
 
-        //내 AI가 하얀색 적은 블랙
-        //내 AI 턴일 때 Max를 선택해서 넘긴다 --> 그런데 이건 여기서 맥스를 선택하는게 아니라 여기서는 점수계싼 만..
-        //ㅇㅋㄷㅋ
-
-        // 점수 계산하는 것에 따라서 최악 최선 선택이 달라지네.
-
-        //boolean isAiWhite = super.isWhite();
-
-        //boolean isWhitePieceTurn = isAiWhite ? turnCount % 2 == 0 : turnCount % 2 != 0;
-
         // 내 AI가 화이트일 때
         // T0 나 화이트 최대값
         // T1 적 블랙 최소값
@@ -315,8 +275,6 @@ public class Player extends PlayerBase {
         // T0 나 블랙 최소값
         // T1 적 화이트 최대값
         // T2 나 블랙 최소값.
-
-        // T3 입성 시 계산
 
         NextMove optiamlMove = null;
         if (isWhitePieceTurn) {
@@ -342,7 +300,7 @@ public class Player extends PlayerBase {
                         max = nextMoves.get(i).score;
                         maxTurn = nextMoves.get(i).turn;
                         index = i;
-                    } else if (maxTurn == nextMoves.get(i).turn){
+                    } else if (maxTurn == nextMoves.get(i).turn) {
                         Random random = new Random();
                         if (random.nextBoolean()) {
                             max = nextMoves.get(i).score;
@@ -361,35 +319,35 @@ public class Player extends PlayerBase {
             }
 
             int min = nextMoves.get(0).score;
-            int MinTurn = nextMoves.get(0).turn;
+            int minTurn = nextMoves.get(0).turn;
             int index = 0;
 
             for (int i = 1; i < nextMoves.size(); i++) {
                 if (min > nextMoves.get(i).score) {
                     min = nextMoves.get(i).score;
-                    MinTurn = nextMoves.get(i).turn;
+                    minTurn = nextMoves.get(i).turn;
                     index = i;
                 } else if (min == nextMoves.get(i).score) {
-                    if (min < 0 && MinTurn > nextMoves.get(i).turn) {
+                    if (min < 0 && minTurn > nextMoves.get(i).turn) {
                         min = nextMoves.get(i).score;
-                        MinTurn = nextMoves.get(i).turn;
+                        minTurn = nextMoves.get(i).turn;
                         index = i;
-                    } else if (min > 0 && MinTurn < nextMoves.get(i).turn) {
+                    } else if (min > 0 && minTurn < nextMoves.get(i).turn) {
                         min = nextMoves.get(i).score;
-                        MinTurn = nextMoves.get(i).turn;
+                        minTurn = nextMoves.get(i).turn;
                         index = i;
-                    } else if (MinTurn == nextMoves.get(i).turn){
+                    } else if (minTurn == nextMoves.get(i).turn) {
                         Random random = new Random();
                         if (random.nextBoolean()) {
                             min = nextMoves.get(i).score;
-                            MinTurn = nextMoves.get(i).turn;
+                            minTurn = nextMoves.get(i).turn;
                             index = i;
                         }
                     }
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, MinTurn);
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, minTurn);
 
         }
 
