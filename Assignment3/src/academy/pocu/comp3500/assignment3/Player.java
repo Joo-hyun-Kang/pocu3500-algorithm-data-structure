@@ -9,9 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
-    // Project layOut
-    // 재귀로 파고 들어가되 체스는 모든 경우의 수가 너무 많기 때문에 스택 오버플로우가 생긴다
-    // 따라서, 미니맥스 + 알파베타 가지치기를 활용해야 한다
+    // Project layOut : 미니맥스 + 알파베타 가지치기를 활용해야 한다
 
     //1. minMax
     //내가 둘 때는 상대가 최대 이득이 되는게 자식에서 반환되고 나는 그 중에서 내 최대 이득을 선택하여 호출자에게 반환
@@ -23,21 +21,45 @@ public class Player extends PlayerBase {
     //이해를 위한 중요한 개념은 높을수록 나에게 유리하고 낮을수록 상대에게 유리하다
 
     //2. 알파-베타 가치치기
-    //https://going-to-end.tistory.com/entry/%EC%95%8C%ED%8C%8C-%EB%B2%A0%ED%83%80-%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0-Alpha-beta-pruning
-    //http://egloos.zum.com/musicdiary/v/4274653
-    //http://wiki.hash.kr/index.php/%EC%95%8C%ED%8C%8C%EB%B2%A0%ED%83%80_%EA%B0%80%EC%A7%80%EC%B9%98%EA%B8%B0
+    /*
+        ==================================================================================
+        function alphabeta(node, depth, α, β, Player)
+        if  depth = 0 or node is a terminal node
+            return the heuristic value of node
+        if  Player = MaxPlayer
+            for each child of node
+        α := max(α, alphabeta(child, depth-1, α, β, not(Player) ))
+                if β ≤ α
+                    break                             (* Beta cut-off *)
+                return α
+        else
+                for each child of node
+        β := min(β, alphabeta(child, depth-1, α, β, not(Player) ))
+                if β ≤ α
+                    break                             (* Alpha cut-off *)
+                return β
+                (* Initial call *)
+        alphabeta(origin, depth, -infinity, +infinity, MaxPlayer)
+        ==================================================================================
+    */
+    // 규칙
+    // min - max - min 일 때 2번째 max의 값을 뽑을 노드들 중에서 첫번째 노드를 제외하고 두번째 노드부터는 그 노드의 자식 값
+    // 즉, 3번째 min에서 첫번째 노드보다 같거나 큰 값이 나오면 가지치면 된다. 반대로,
+    // max - min - max 일 때 2번째 min의 값을 뽑을 노드들 중에서 첫번째 노드를 제외하고 두번째 노드부터는 그 노드의 자식 값
+    // 즉, 3번째 max에서 첫번째 노드보다 같거나 작은 값이 나오면 가지치면 된다.
 
+    // 증명
+    // 증명은 간단하다. 가정을 사용하면 된다. 위에 두 경우에 대해서 트리를 만들고 2번째의 첫번째 노드가 1번째로 올라가는 걸 뽑인하고 가정하고
+    // 예를 살펴보면 위에 규칙에 따라서 다른 경우는 살펴보지도 않아도 된다. 다른 때는 살펴봐야 하지만.
+    // 이게 되는 근본적인 이유는 max, min 관계에서 노드 관계가 그렇게 규칙성 있음
 
-    //3. 전부다 훑을 수 없으니까 최대 깊이에서 나에게 얼마나 유리할지 공식화해야 한다
-    //간단한 점수 계산 법으로 살아있는 말 마다 점수를 가져가기
-
-    //4. 좋은 알고리듬
+    //3. 좋은 알고리듬
     //점수 계산 함수가 얼마나 뛰어난 지
     //얼마나 깊이 볼 수 있는 지 -> 알파베타 가지치기
 
     private final static int BOARD_SIZE = 8;
 
-    private final int MAXIMUN_TURN = 2;
+    private final int MAXIMUN_TURN = 3;
 
     private int turnCount = 0;
 
@@ -86,12 +108,18 @@ public class Player extends PlayerBase {
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
 
-        NextMove optimalNextMove = getNextMoveRecursive(board, opponentMove);
+        NextMove optimalNextMove = getNextMoveRecursive(board, opponentMove, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         return optimalNextMove.getChildMove();
     }
 
-    private NextMove getNextMoveRecursive(final char[][] board, Move opponentMove) {
+    private NextMove getNextMoveRecursive(final char[][] board, Move opponentMove, int alpha, int beta) {
+        //AI가 블랙으로 시작하냐, 화이트로 시작하냐에 따라 0부터 시작하는 턴이 누구인지 달라진다
+        boolean isAiWhite = super.isWhite();
+
+        boolean isWhitePieceTurn = isAiWhite ? turnCount % 2 == 0 : turnCount % 2 != 0;
+
+
         // 재귀의 종료조건으로 현재 board에 대해서 평가 후 조건에 따라 반환
         if (turnCount > 0) {
 
@@ -148,11 +176,12 @@ public class Player extends PlayerBase {
                 }
             }
 
+
             // 킹이 잡혔을 때는 재귀가 끝나는 턴이 아니더라도 early return
             if (!isWhiteKingAlive) {
                 score = Integer.MIN_VALUE;
 
-                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
+                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount, score, beta);
 
                 turnCount--;
 
@@ -163,7 +192,7 @@ public class Player extends PlayerBase {
             if (!isBlackKingAlive) {
                 score = Integer.MAX_VALUE;
 
-                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
+                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount, score, beta);
 
                 turnCount--;
 
@@ -172,19 +201,17 @@ public class Player extends PlayerBase {
 
             // 예를 들어, T3가 되어도 T3를 하지 않고 T2에 반환함으로 - 1 => T3는 들어가지도 않아서 -1을 해준다
             if (turnCount - 1 == MAXIMUN_TURN) {
-                NextMove nextMove = new NextMove(opponentMove, null, score, turnCount);
-
+                NextMove nextMove = null;
+                if (isWhitePieceTurn) {
+                    nextMove = new NextMove(opponentMove, null, score, turnCount, score, beta);
+                } else {
+                    nextMove = new NextMove(opponentMove, null, score, turnCount, alpha, score);
+                }
                 turnCount--;
 
                 return nextMove;
             }
         }
-
-
-        //AI가 블랙으로 시작하냐, 화이트로 시작하냐에 따라 0부터 시작하는 턴이 누구인지 달라진다
-        boolean isAiWhite = super.isWhite();
-
-        boolean isWhitePieceTurn = isAiWhite ? turnCount % 2 == 0 : turnCount % 2 != 0;
 
 
         //현재 보드에서 말들을 찾고 움직일 수 있는 모든 옵션을 얻는다
@@ -259,29 +286,46 @@ public class Player extends PlayerBase {
         for (Map.Entry<Move, char[][]> entrySet : moveOptions.entrySet()) {
             turnCount++;
 
-            NextMove tempOrNull = getNextMoveRecursive(entrySet.getValue(), entrySet.getKey());
+            NextMove tempOrNull = getNextMoveRecursive(entrySet.getValue(), entrySet.getKey(), alpha, beta);
 
             if (tempOrNull != null) {
                 nextMoves.add(tempOrNull);
+
+                if (isWhitePieceTurn) {
+                    alpha = Math.max(alpha, tempOrNull.alpha);
+                    if (beta <= alpha) {
+                        if (turnCount != 0) {
+                            turnCount--;
+                        }
+
+                        return new NextMove(opponentMove, tempOrNull.getChildMove(), tempOrNull.score, tempOrNull.turn, tempOrNull.score, beta);
+                    }
+                } else {
+                    beta = Math.min(beta, tempOrNull.beta);
+                    if (beta <= alpha) {
+                        if (turnCount != 0) {
+                            turnCount--;
+                        }
+
+                        return new NextMove(opponentMove, tempOrNull.getChildMove(), tempOrNull.score, tempOrNull.turn, alpha, tempOrNull.score);
+                    }
+                }
             }
         }
 
-        // 내 AI가 화이트일 때
-        // T0 나 화이트 최대값
-        // T1 적 블랙 최소값
-        // T2 나 화이트 최대값
 
-        // 내 AI가 블랙일 때 달라져야 한다
-        // T0 나 블랙 최소값
-        // T1 적 화이트 최대값
-        // T2 나 블랙 최소값.
-
+        // 재귀에서 반환된 값에 대해서 MinMax 알고리듬을 돌린다
         NextMove optiamlMove = null;
-        if (isWhitePieceTurn) {
-            if (nextMoves.size() == 0) {
-                return null;
-            }
 
+        // 내 AI가 화이트일 때     |   내 AI가 블랙일 때
+        // T0 나 화이트 최대값     |   T0 나 블랙 최소값
+        // T1 적 블랙 최소값       |   T1 적 화이트 최대값
+        // T2 나 화이트 최대값     |   T2 나 블랙 최소값.
+        if (nextMoves.size() == 0) {
+            return null;
+        }
+
+        if (isWhitePieceTurn) {
             int max = nextMoves.get(0).score;
             int maxTurn = nextMoves.get(0).turn;
             int index = 0;
@@ -311,13 +355,8 @@ public class Player extends PlayerBase {
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), max, maxTurn);
-
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), max, maxTurn, max, beta);
         } else {
-            if (nextMoves.size() == 0) {
-                return null;
-            }
-
             int min = nextMoves.get(0).score;
             int minTurn = nextMoves.get(0).turn;
             int index = 0;
@@ -347,8 +386,7 @@ public class Player extends PlayerBase {
                 }
             }
 
-            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, minTurn);
-
+            optiamlMove = new NextMove(opponentMove, nextMoves.get(index).getParentMoveOrNull(), min, minTurn, alpha, min);
         }
 
         if (turnCount != 0) {
