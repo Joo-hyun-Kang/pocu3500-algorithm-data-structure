@@ -109,12 +109,12 @@ public class Program {
                     {'x', ' ', ' ', ' ', 'x', ' ', 'x'},
                     {'x', ' ', 'x', ' ', 'x', ' ', 'x'},
                     {'x', ' ', 'x', ' ', ' ', ' ', 'x'},
-                    {'x', 'E', 'x', ' ', 'x', ' ', 'x'},
-                    {'x', ' ', ' ', ' ', 'x', ' ', 'x'},
+                    {'x', ' ', 'x', 'x', 'x', 'x', 'x'},
+                    {'x', ' ', ' ', ' ', ' ', 'E', 'x'},
                     {'x', 'x', 'x', 'x', 'x', 'x', 'x'}
             };
 
-            List<Point> result = MazeSolver.findPath(maze7x7, new Point(5, 5));
+            List<Point> result = MazeSolver.findPath(maze7x7, new Point(1, 1));
             assert (result.size() == 12 || result.size() == 10);
             if (result.size() == 12) {
                 assert (result.get(0).getX() == 5 && result.get(0).getY() == 5);
