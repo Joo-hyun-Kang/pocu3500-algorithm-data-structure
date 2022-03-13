@@ -38,8 +38,6 @@ public final class MazeSolver {
         final int NORTH = -1;
         final int SOUTH = 1;
 
-
-
         Stack<Point> moves = new Stack<>();
 
         moves.add(start);
@@ -56,9 +54,12 @@ public final class MazeSolver {
 
         List<Point> points = new ArrayList<>();
         List<Point> result = new ArrayList<>();
-        int childCount = 0;
+        Stack<Integer> deleteIdx = new Stack<>();
+        int childCount = 1;
+
         while (!moves.empty()) {
             Point current = moves.pop();
+            childCount--;
 
             int currentX = current.getX();
             int currentY = current.getY();
@@ -73,9 +74,11 @@ public final class MazeSolver {
                 break;
             }
 
-            if (maze[currentY][currentX] == 'x') {;
-                if (childCount == moves.size()) {
+            if (maze[currentY][currentX] == 'x') {
+                if (childCount == deleteIdx.peek()) {
                     points.remove(points.size() - 1);
+
+                    deleteIdx.pop();
                 }
                 continue;
             }
@@ -83,12 +86,14 @@ public final class MazeSolver {
             maze[currentY][currentX] = 'x';
             points.add(current);
 
+            deleteIdx.push(moves.size());
+
             moves.add(new Point(currentX, currentY + SOUTH));
             moves.add(new Point(currentX + RIGHT, currentY));
             moves.add(new Point(currentX, currentY + NORTH));
             moves.add(new Point(currentX + LEFT, currentY));
 
-            childCount = moves.size() - 4;
+            childCount += 4;
         }
 
         return result;
