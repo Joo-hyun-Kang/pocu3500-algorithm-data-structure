@@ -8,6 +8,8 @@ import java.util.*;
 public final class Project {
     ArrayList<Task> schedule;
     HashSet<String> isCircle;
+    HashMap<String, Task> transTask;
+    HashMap<String, Task> inOrderTasks;
 
     public Project(final Task[] tasks) {
         //먼저 정상인거 먼저 구함
@@ -44,11 +46,21 @@ public final class Project {
 
         this.schedule = sortedList;
         this.isCircle = isCircle;
+        this.transTask = transTask;
+        this.inOrderTasks = inOrderTasks;
     }
 
     public int findTotalManMonths(final String task) {
-        // 모든 Task에 대해서 DST를 한다
+        //모든 Task에 대해서 DST를 한다
+        int totalEstimate = 0;
+        Task mildStone = inOrderTasks.get(task);
+        HashMap<String, Task> discoverd = new HashMap<>();
 
+        totalEstimate = depthFirstSerach(mildStone, discoverd);
+
+        return totalEstimate;
+
+        /*
         int totalEstimate = 0;
         int i = 0;
         do {
@@ -66,6 +78,8 @@ public final class Project {
 
 
         return totalEstimate;
+
+         */
     }
 
     public int findMinDuration(final String task) {
@@ -109,6 +123,20 @@ public final class Project {
         arrayList.add(task);
     }
 
+    private int depthFirstSerach(Task task, HashMap<String, Task> discoverd) {
+        int result = task.getEstimate();
+        discoverd.put(task.getTitle(), task);
+
+        for (Task preTask : task.getPredecessors()) {
+            if (isCircle.contains(preTask) || discoverd.containsKey(preTask.getTitle())) {
+                continue;
+            }
+
+            result += depthFirstSerach(preTask, discoverd);
+        }
+
+        return result;
+    }
 
 
     private static HashMap<String, Task> transposeTask(final Task[] tasks) {
