@@ -4,35 +4,42 @@ import academy.pocu.comp3500.assignment4.project.Task;
 
 import java.util.*;
 
+
 public final class Project {
-    LinkedList<Task> schedule;
+    ArrayList<Task> schedule;
     HashSet<String> isCircle;
 
     public Project(final Task[] tasks) {
+        //먼저 정상인거 먼저 구함
+        HashMap<String, Task> transTask = transposeTask(tasks);
         HashSet<Task> discoverd = new HashSet<>();
-        LinkedList<Task> dsTList = new LinkedList<>();
+        LinkedList<Task> dstReveseList = new LinkedList<>();
 
+        for (HashMap.Entry<String, Task> entry : transTask.entrySet()) {
+            if (discoverd.contains(entry.getValue())) {
+                continue;
+            }
+
+            topologicalSortRecursive(entry.getValue(), discoverd, dstReveseList);
+        }
+
+        HashMap<String, Task> inOrderTasks = new HashMap<>();
         for (Task task : tasks) {
+            inOrderTasks.put(task.getTitle(), task);
+        }
+
+        ArrayList<Task> sortedList = new ArrayList<>();
+        HashSet<String> isCircle = new HashSet<>();
+        discoverd.clear();
+        while (!dstReveseList.isEmpty()) {
+            Task task = inOrderTasks.get(dstReveseList.getFirst().getTitle());
+            dstReveseList.removeFirst();
+            assert(task != null);
             if (discoverd.contains(task)) {
                 continue;
             }
 
-            topologicalSortRecursive(task, discoverd, dsTList);
-        }
-
-        HashMap<String, Task> transTask = transposeTask(tasks);
-        LinkedList<Task> sortedList = new LinkedList<>();
-        HashSet<String> overlaped = new HashSet<>();
-        HashSet<String> isCircle = new HashSet<>();
-        while (!dsTList.isEmpty()) {
-            Task task = transTask.get(dsTList.getFirst().getTitle());
-            dsTList.removeFirst();
-            assert(task != null);
-            if (overlaped.contains(task.getTitle())) {
-                continue;
-            }
-
-            topologicalSortRecursive2(task, overlaped, isCircle, sortedList, false);
+            topologicalSortRecursive(task, discoverd, sortedList, isCircle, false);
         }
 
         this.schedule = sortedList;
@@ -69,12 +76,6 @@ public final class Project {
         return -1;
     }
 
-    private List<String> findSchedule(final Task[] tasks, final boolean includeMaintenance) {
-        // 모든 task에 대해서 DFS를 돌리고 그 결과에 대해서 역순으로 돌린다
-
-        return null;
-    }
-
     private static void topologicalSortRecursive(Task task, HashSet<Task> discoverd, LinkedList<Task> linkedList) {
         discoverd.add(task);
 
@@ -89,24 +90,26 @@ public final class Project {
         linkedList.addFirst(task);
     }
 
-    private static void topologicalSortRecursive2(Task task, HashSet<String> overlaped, HashSet<String> isCircle, LinkedList<Task> linkedList, boolean isRecursive) {
-        overlaped.add(task.getTitle());
+    private static void topologicalSortRecursive(Task task, HashSet<Task> discoverd, ArrayList<Task> arrayList, HashSet<String> isCircle, boolean isRecursive) {
+        discoverd.add(task);
 
         for (Task preTask : task.getPredecessors()) {
             if (isRecursive) {
                 isCircle.add(task.getTitle());
             }
 
-            if (overlaped.contains(preTask.getTitle())) {
+            if (discoverd.contains(preTask)) {
                 continue;
             }
 
             isCircle.add(task.getTitle());
-            topologicalSortRecursive2(preTask, overlaped, isCircle, linkedList, true);
+            topologicalSortRecursive(preTask, discoverd, arrayList, isCircle, true);
         }
 
-        linkedList.addFirst(task);
+        arrayList.add(task);
     }
+
+
 
     private static HashMap<String, Task> transposeTask(final Task[] tasks) {
         HashMap<String, Task> transTask = new HashMap<>();
