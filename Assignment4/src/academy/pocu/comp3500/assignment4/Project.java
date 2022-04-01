@@ -36,7 +36,7 @@ public final class Project {
         while (!dstReveseList.isEmpty()) {
             Task task = inOrderTasks.get(dstReveseList.getFirst().getTitle());
             dstReveseList.removeFirst();
-            assert(task != null);
+            assert (task != null);
             if (discoverd.contains(task)) {
                 continue;
             }
@@ -51,7 +51,7 @@ public final class Project {
     }
 
     public int findTotalManMonths(final String task) {
-        //모든 Task에 대해서 DST를 한다
+        //String에 대해서 DST탐색을 해서 모든 Estimate를 더 한다
         int totalEstimate = 0;
         Task mildStone = inOrderTasks.get(task);
         HashMap<String, Task> discoverd = new HashMap<>();
@@ -59,30 +59,14 @@ public final class Project {
         totalEstimate = depthFirstSerach(mildStone, discoverd);
 
         return totalEstimate;
-
-        /*
-        int totalEstimate = 0;
-        int i = 0;
-        do {
-            Task temp = schedule.get(i);
-            if (isCircle.contains(temp.getTitle())) {
-                continue;
-            }
-            
-            totalEstimate += temp.getEstimate();
-
-            if (task.equals(temp.getTitle())) {
-                break;
-            }
-        } while (++i < schedule.size());
-
-
-        return totalEstimate;
-
-         */
     }
 
     public int findMinDuration(final String task) {
+        //String에 대해서 DST탐색을 해서 같은 깊이에 대해서 가장 큰 Estimate만 구한다
+        //DST + max
+
+
+
         return -1;
     }
 

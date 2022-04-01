@@ -1,13 +1,7 @@
 package academy.pocu.comp3500.assignment4.app;
 
-import academy.pocu.comp3500.assignment4.Course;
 import academy.pocu.comp3500.assignment4.Project;
 import academy.pocu.comp3500.assignment4.project.Task;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 
 public class Program {
 
