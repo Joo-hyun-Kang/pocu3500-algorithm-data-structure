@@ -68,9 +68,7 @@ public final class Project {
         Task mildStone = inOrderTasks.get(task);
         HashMap<String, Task> discoverd = new HashMap<>();
 
-        //findMaxDurationBranch(mildStone, HashMap<String, Task> discoverd);
-
-        return -1;
+        return findMaxDurationBranch(mildStone, discoverd);
     }
 
     public int findMaxBonusCount(final String task) {
@@ -147,6 +145,25 @@ public final class Project {
 
             result += depthFirstSerach(preTask, discoverd);
         }
+
+        return result;
+    }
+
+    private int findMaxDurationBranch(Task task, HashMap<String, Task> discoverd) {
+        int result = task.getEstimate();
+        discoverd.put(task.getTitle(), task);
+
+        int max = 0;
+        for (Task preTask : task.getPredecessors()) {
+            if (isCircle.containsKey(preTask.getTitle()) || discoverd.containsKey(preTask.getTitle())) {
+                continue;
+            }
+
+            int ret = findMaxDurationBranch(preTask, discoverd);
+            max = Math.max(ret, max);
+            discoverd.clear();
+        }
+        result += max;
 
         return result;
     }

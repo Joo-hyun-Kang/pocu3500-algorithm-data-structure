@@ -6,16 +6,15 @@ import academy.pocu.comp3500.assignment4.project.Task;
 public class Program {
 
     public static void main(String[] args) {
-        Task[] tasks = createTasksOrigin();
+        Task[] tasks = createTasks();
 
         Project project = new Project(tasks);
 
-        int manMonths1 = project.findTotalManMonths("D");
+        int manMonths1 = project.findTotalManMonths("ms1");
         assert (manMonths1 == 17);
 
         int manMonths2 = project.findTotalManMonths("ms2");
         assert (manMonths2 == 46);
-
 
         int minDuration1 = project.findMinDuration("ms1");
         assert (minDuration1 == 14);
@@ -179,35 +178,28 @@ public class Program {
 
     private static Task[] createTasksOrigin() {
 
-        //Task a = new Task("A", 12);
-        //Task b = new Task("B", 7);
-        //Task c = new Task("C", 10);
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
         Task d = new Task("D", 9);
-        //Task e = new Task("E", 8);
-        //Task f = new Task("F", 11);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
         Task g = new Task("G", 14);
         Task h = new Task("H", 13);
-        //Task i = new Task("I", 6);
+        Task i = new Task("I", 6);
 
-        //i.addPredecessor(f);
-        //f.addPredecessor(e);
-        //e.addPredecessor(b, c);
-        //d.addPredecessor(c, h);
+        i.addPredecessor(f);
+        f.addPredecessor(e);
+        e.addPredecessor(b, c);
+        d.addPredecessor(c, h);
 
         //Only this Test
         d.addPredecessor(h);
 
-        //c.addPredecessor(b);
-        //b.addPredecessor(a);
+        c.addPredecessor(b);
+        b.addPredecessor(a);
         h.addPredecessor(g);
         g.addPredecessor(d);
-
-        /*
-        return new Task[]{
-               f, g, h, i,  a, b, c, d, e
-        };
-
-         */
 
         return new Task[]{
                 g, h, d
