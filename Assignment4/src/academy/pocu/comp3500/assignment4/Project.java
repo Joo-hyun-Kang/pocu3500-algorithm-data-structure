@@ -54,6 +54,7 @@ public final class Project {
         this.inOrderTasks = inOrderTasks;
     }
 
+    //task까지 끝내려면 총 몇 개월이 걸리는 지 == 한 달 안에 끝내려면 몇 명이 필요한 지
     //String에 대해서 DST탐색을 해서 모든 Estimate를 더 한다
     public int findTotalManMonths(final String task) {
         Task mildStone = inOrderTasks.get(task);
@@ -62,17 +63,23 @@ public final class Project {
         return depthFirstSerach(mildStone, discoverd);
     }
 
+    //task까지의 일감에 각 1명씩 투입했을 떄 최소 몇 달이 걸리는 지
+    //String에 대해서 DST탐색을 해서 같은 깊이에 대해서 가장 큰 Estimate만 구한다
     public int findMinDuration(final String task) {
-        //String에 대해서 DST탐색을 해서 같은 깊이에 대해서 가장 큰 Estimate만 구한다
-        //DST + max
         Task mildStone = inOrderTasks.get(task);
         HashMap<String, Task> discoverd = new HashMap<>();
 
         return findMaxDurationBranch(mildStone, discoverd);
     }
 
+    //각 일감을 한 달에 마치지만 다른 브런치에 있는 일감은 동시에 진행 가능
+    //브런치의 최소 값을 가져온다 && 브런치가 양쪽으로 갈라지는 경우에는 최소 값을 분할해야 함
+    //task로부터 뒤를 순환하다가 방문한 적이 있는 경우가 브런치가 갈라지는 경우이고 다른 갈라진 쪽 브런치만큼 빼준다
     public int findMaxBonusCount(final String task) {
-        return -1;
+        Task mildStone = inOrderTasks.get(task);
+        HashMap<String, Integer> discoverd = new HashMap<>();
+
+        return findMaxBonusCountRecursive(mildStone, discoverd);
     }
 
     private static void topologicalSortRecursive(Task task, HashMap<String, Task> discoverd, LinkedList<Task> linkedList) {
@@ -164,6 +171,45 @@ public final class Project {
             discoverd.clear();
         }
         result += max;
+
+        return result;
+    }
+
+    private int findMaxBonusCountRecursive(Task task, HashMap<String, Integer> discoverd) {
+        int result = task.getEstimate();
+
+        int branchBonusCountTotal = 0;
+        for (Task preTask : task.getPredecessors()) {
+            if (isCircle.containsKey(preTask.getTitle())) {
+                continue;
+            }
+
+            if (discoverd.containsKey(preTask.getTitle())) {
+                int branchMin = discoverd.get(preTask.getTitle());
+
+                List<Task> nextTasks = transTask.get(preTask.getTitle()).getPredecessors();
+                for (Task nextTask : nextTasks) {
+                    if (nextTask.getTitle().equals(task.getTitle())) {
+                        continue;
+                    }
+
+                    if (!discoverd.containsKey(nextTask.getTitle())) {
+                        continue;
+                    }
+
+                    branchMin -= nextTask.getEstimate();
+                }
+
+                branchBonusCountTotal += branchMin;
+                continue;
+            }
+
+            branchBonusCountTotal += findMaxBonusCountRecursive(preTask, discoverd);
+        }
+
+        result = branchBonusCountTotal != 0 ? Math.min(branchBonusCountTotal, result) : result;
+
+        discoverd.put(task.getTitle(), result);
 
         return result;
     }

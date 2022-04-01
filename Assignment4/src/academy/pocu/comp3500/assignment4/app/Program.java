@@ -6,30 +6,30 @@ import academy.pocu.comp3500.assignment4.project.Task;
 public class Program {
 
     public static void main(String[] args) {
-        Task[] tasks = createTasks();
+        {
+            Task[] tasks = createTasks();
 
-        Project project = new Project(tasks);
+            Project project = new Project(tasks);
 
-        int manMonths1 = project.findTotalManMonths("ms1");
-        assert (manMonths1 == 17);
+            int manMonths1 = project.findTotalManMonths("ms1");
+            assert (manMonths1 == 17);
 
-        int manMonths2 = project.findTotalManMonths("ms2");
-        assert (manMonths2 == 46);
+            int manMonths2 = project.findTotalManMonths("ms2");
+            assert (manMonths2 == 46);
 
-        int minDuration1 = project.findMinDuration("ms1");
-        assert (minDuration1 == 14);
+            int minDuration1 = project.findMinDuration("ms1");
+            assert (minDuration1 == 14);
 
-        int minDuration2 = project.findMinDuration("ms2");
-        assert (minDuration2 == 32);
+            int minDuration2 = project.findMinDuration("ms2");
+            assert (minDuration2 == 32);
 
-        /*
-        int bonusCount1 = project.findMaxBonusCount("ms1");
-        assert (bonusCount1 == 6);
+            int bonusCount1 = project.findMaxBonusCount("ms1");
+            assert (bonusCount1 == 6);
 
-        int bonusCount2 = project.findMaxBonusCount("ms2");
-        assert (bonusCount2 == 6);
-         */
-        /*
+            int bonusCount2 = project.findMaxBonusCount("ms2");
+            assert (bonusCount2 == 6);
+        }
+
         {
             Task a = new Task("A", 3);
             Task b = new Task("B", 5);
@@ -96,9 +96,7 @@ public class Program {
             int bonusCount2 = project.findMaxBonusCount("ms2");
             assert (bonusCount2 == 4);
         }
-         */
 
-        /*
         {
             Task a = new Task("A", 2);
             Task b = new Task("B", 1);
@@ -123,8 +121,6 @@ public class Program {
             int bonusCount1 = project.findMaxBonusCount("G");
             assert (bonusCount1 == 3);
         }
-
-         */
     }
 
     private static Task[] createTasks() {
