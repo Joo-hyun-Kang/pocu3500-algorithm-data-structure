@@ -177,6 +177,7 @@ public final class Project {
 
     private int findMaxBonusCountRecursive(Task task, HashMap<String, Integer> discoverd) {
         int result = task.getEstimate();
+        boolean isZeroBonus = false;
 
         int branchBonusCountTotal = 0;
         for (Task preTask : task.getPredecessors()) {
@@ -186,9 +187,12 @@ public final class Project {
 
             if (discoverd.containsKey(preTask.getTitle())) {
                 int branchMin = discoverd.get(preTask.getTitle());
+                if (branchMin == Integer.MIN_VALUE) {
+                    isZeroBonus = true;
+                    continue;
+                }
 
                 branchBonusCountTotal += branchMin;
-
                 continue;
             }
 
@@ -196,18 +200,16 @@ public final class Project {
 
             int preTaskBonusCount = ret - task.getEstimate();
 
-            preTaskBonusCount = preTaskBonusCount < 0 ? -1 : preTaskBonusCount;
+            preTaskBonusCount = preTaskBonusCount < 0 ? Integer.MIN_VALUE : preTaskBonusCount;
 
             discoverd.put(preTask.getTitle(), preTaskBonusCount);
 
             branchBonusCountTotal += ret;
         }
 
-        if (branchBonusCountTotal > 0) {
+        if (branchBonusCountTotal != 0) {
             result = Math.min(branchBonusCountTotal, result);
-        }
-
-        if (branchBonusCountTotal < 0) {
+        } else if (isZeroBonus) {
             result = 0;
         }
 
