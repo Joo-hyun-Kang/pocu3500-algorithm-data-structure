@@ -187,27 +187,29 @@ public final class Project {
             if (discoverd.containsKey(preTask.getTitle())) {
                 int branchMin = discoverd.get(preTask.getTitle());
 
-                List<Task> nextTasks = transTask.get(preTask.getTitle()).getPredecessors();
-                for (Task nextTask : nextTasks) {
-                    if (nextTask.getTitle().equals(task.getTitle())) {
-                        continue;
-                    }
-
-                    if (!discoverd.containsKey(nextTask.getTitle())) {
-                        continue;
-                    }
-
-                    branchMin -= nextTask.getEstimate();
-                }
-
                 branchBonusCountTotal += branchMin;
+
                 continue;
             }
 
-            branchBonusCountTotal += findMaxBonusCountRecursive(preTask, discoverd);
+            int ret = findMaxBonusCountRecursive(preTask, discoverd);
+
+            int preTaskBonusCount = ret - task.getEstimate();
+
+            preTaskBonusCount = preTaskBonusCount < 0 ? -1 : preTaskBonusCount;
+
+            discoverd.put(preTask.getTitle(), preTaskBonusCount);
+
+            branchBonusCountTotal += ret;
         }
 
-        result = branchBonusCountTotal != 0 ? Math.min(branchBonusCountTotal, result) : result;
+        if (branchBonusCountTotal > 0) {
+            result = Math.min(branchBonusCountTotal, result);
+        }
+
+        if (branchBonusCountTotal < 0) {
+            result = 0;
+        }
 
         discoverd.put(task.getTitle(), result);
 

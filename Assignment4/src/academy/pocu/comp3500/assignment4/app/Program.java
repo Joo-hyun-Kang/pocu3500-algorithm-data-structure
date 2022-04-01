@@ -7,6 +7,16 @@ public class Program {
 
     public static void main(String[] args) {
         {
+            Task[] tasks = createTasksOrigin();
+
+            Project project = new Project(tasks);
+
+            int bonusCount1 = project.findMaxBonusCount("E");
+            assert (bonusCount1 == 7);
+        }
+
+
+        {
             Task[] tasks = createTasks();
 
             Project project = new Project(tasks);
@@ -173,7 +183,6 @@ public class Program {
     }
 
     private static Task[] createTasksOrigin() {
-
         Task a = new Task("A", 12);
         Task b = new Task("B", 7);
         Task c = new Task("C", 10);
@@ -188,17 +197,13 @@ public class Program {
         f.addPredecessor(e);
         e.addPredecessor(b, c);
         d.addPredecessor(c, h);
-
-        //Only this Test
-        d.addPredecessor(h);
-
         c.addPredecessor(b);
         b.addPredecessor(a);
         h.addPredecessor(g);
         g.addPredecessor(d);
 
         return new Task[]{
-                g, h, d
+                a, b, c, d, e, f, g, h, i
         };
     }
 }
