@@ -9,10 +9,10 @@ import java.util.List;
 
 
 public final class Project {
-    ArrayList<Task> schedule;
-    HashMap<String, Task> isCircle;
-    HashMap<String, Task> transTask;
-    HashMap<String, Task> inOrderTasks;
+    private ArrayList<Task> schedule;
+    private HashMap<String, Task> isCircle;
+    private HashMap<String, Task> transTask;
+    private HashMap<String, Task> inOrderTasks;
 
     //SCC가 있는 지 코사라주 알고리듬으로 찾아낸다
     public Project(final Task[] tasks) {
@@ -65,6 +65,10 @@ public final class Project {
     public int findMinDuration(final String task) {
         //String에 대해서 DST탐색을 해서 같은 깊이에 대해서 가장 큰 Estimate만 구한다
         //DST + max
+        Task mildStone = inOrderTasks.get(task);
+        HashMap<String, Task> discoverd = new HashMap<>();
+
+        //findMaxDurationBranch(mildStone, HashMap<String, Task> discoverd);
 
         return -1;
     }
@@ -106,21 +110,6 @@ public final class Project {
         arrayList.add(task);
     }
 
-    private int depthFirstSerach(Task task, HashMap<String, Task> discoverd) {
-        int result = task.getEstimate();
-        discoverd.put(task.getTitle(), task);
-
-        for (Task preTask : task.getPredecessors()) {
-            if (isCircle.containsKey(preTask.getTitle()) || discoverd.containsKey(preTask.getTitle())) {
-                continue;
-            }
-
-            result += depthFirstSerach(preTask, discoverd);
-        }
-
-        return result;
-    }
-
     private static HashMap<String, Task> transposeTask(final Task[] tasks) {
         HashMap<String, Task> transTask = new HashMap<>();
 
@@ -145,5 +134,20 @@ public final class Project {
         }
 
         return transTask;
+    }
+
+    private int depthFirstSerach(Task task, HashMap<String, Task> discoverd) {
+        int result = task.getEstimate();
+        discoverd.put(task.getTitle(), task);
+
+        for (Task preTask : task.getPredecessors()) {
+            if (isCircle.containsKey(preTask.getTitle()) || discoverd.containsKey(preTask.getTitle())) {
+                continue;
+            }
+
+            result += depthFirstSerach(preTask, discoverd);
+        }
+
+        return result;
     }
 }
