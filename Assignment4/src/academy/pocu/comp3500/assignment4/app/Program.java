@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
+
         {
             Task[] tasks = createTasksOrigin();
 
@@ -43,9 +44,6 @@ public class Program {
 
             int bonusCount1 = project.findMaxBonusCount("ms1");
             assert (bonusCount1 == 6);
-
-            int bonusCount2 = project.findMaxBonusCount("ms2");
-            assert (bonusCount2 == 6);
         }
 
         {
@@ -212,6 +210,22 @@ public class Program {
 
         return new Task[]{
                 a, b, c, d, e, f, g, h, i
+        };
+    }
+
+    private static Task[] getFindMaxBonusCountTestCode() {
+        Task a = new Task("A", 3);
+        Task b = new Task("B", 1);
+        Task c = new Task("C", 3);
+        Task f = new Task("F", 4);
+        Task d = new Task("D", 4);
+
+        b.addPredecessor(a);
+        d.addPredecessor(b, f);
+        f.addPredecessor(c);
+        c.addPredecessor(a);
+        return new Task[]{
+                b, c, a, f, d
         };
     }
 

@@ -1,13 +1,10 @@
-/*
 package academy.pocu.comp3500.assignment4;
 
 import academy.pocu.comp3500.assignment4.project.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+/*
 ** 과제 4의 의의를 프로젝트 관리 관점으로 생각해보았다
 1. findTotalManMonths : 전체 걸리는 시간을 manMonth 기준으로 구해준다
 2. findMinDuration : 1명을 외주를 주고 1명은 내주로 진행한다고 할 때 걸리는 최소시간
@@ -19,8 +16,9 @@ import java.util.List;
 5. 들어갈 수 있는 인원이 제한되는 경우 : bonus 이용해서 내수 최적 규모를 구해서 유지하고 + 남은 인원은 외주로 줌
     : 일정시간 제한이 있는 경우로 너무 많이 투입하면 빨리 끝나고, 너무 적게 투입하면 늦게 끝나니까
     : 또, 해당 일에 사람을 투입할수록 생산성이 늘어나지 않을 때
-
+ */
 public final class Project {
+    private final Task[] tasks;
     private ArrayList<Task> schedule;
     private HashMap<String, Task> isCircle;
     private HashMap<String, Task> transTask;
@@ -64,6 +62,7 @@ public final class Project {
         this.isCircle = isCircle;
         this.transTask = transTask;
         this.inOrderTasks = inOrderTasks;
+        this.tasks = tasks;
     }
 
     private static void topologicalSortRecursive(Task task, HashMap<String, Task> discoverd, LinkedList<Task> linkedList) {
@@ -153,7 +152,35 @@ public final class Project {
     // 여기에 안현준님 코드
     // 다른 구현으로 BST탐색을 해도 됌 또한 Task에서 뒤로 탐색하기 때문에 Circle에 걸릴 일이 없음으로
     // SCC를 생각해서 구현해주지 않아도 된다
+    public int findTotalManMonths2(final String task) {
+        int estimateCounter = 0;
+        final Queue<Task> queue = new LinkedList<>();
+        final HashMap<Task, Boolean> discovered = new HashMap<>();
 
+        for (int i = 0; i < this.tasks.length; i++) {
+            if (tasks[i].getTitle().equals(task)) {
+                queue.add(tasks[i]);
+                discovered.put(tasks[i], true);
+                break;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            final Task tempTask = queue.remove();
+            estimateCounter += tempTask.getEstimate();
+
+            if (!tempTask.getPredecessors().isEmpty()) {
+                final int size = tempTask.getPredecessors().size();
+                for (int i = 0; i < size; i++) {
+                    if (!discovered.containsKey(tempTask.getPredecessors().get(i))) {
+                        queue.add(tempTask.getPredecessors().get(i));
+                        discovered.put(tempTask.getPredecessors().get(i), true);
+                    }
+                }
+            }
+        }
+        return estimateCounter;
+    }
 
 
     //task까지의 일감에 각 1명씩 투입했을 떄 최소 몇 달이 걸리는 지
@@ -236,96 +263,21 @@ public final class Project {
 
         return result;
     }
-}
 
+    // 내가 못 풀었던 이유는
+    // 1. 가상의 테스크를 만들어서 갈라지고 합쳐지는 부분을 관리할 아이디어를 못 얻었음
+    // 2. 유량과 용량을 도입하지 않았음
 
- */
-
-
-
-package academy.pocu.comp3500.assignment4;
-
-import academy.pocu.comp3500.assignment4.project.Task;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.List;
-
-
-public final class Project {
-    private final Task[] tasks;
-
-    public Project(final Task[] tasks) {
-        this.tasks = tasks;
-    }
-
-    public int findTotalManMonths(final String task) {
-        int estimateCounter = 0;
-        final Queue<Task> queue = new LinkedList<>();
-        final HashMap<Task, Boolean> discovered = new HashMap<>();
-
-        for (int i = 0; i < this.tasks.length; i++) {
-            if (tasks[i].getTitle().equals(task)) {
-                queue.add(tasks[i]);
-                discovered.put(tasks[i], true);
-                break;
-            }
-        }
-
-        while (!queue.isEmpty()) {
-            final Task tempTask = queue.remove();
-            estimateCounter += tempTask.getEstimate();
-
-            if (!tempTask.getPredecessors().isEmpty()) {
-                final int size = tempTask.getPredecessors().size();
-                for (int i = 0; i < size; i++) {
-                    if (!discovered.containsKey(tempTask.getPredecessors().get(i))) {
-                        queue.add(tempTask.getPredecessors().get(i));
-                        discovered.put(tempTask.getPredecessors().get(i), true);
-                    }
-                }
-            }
-        }
-        return estimateCounter;
-    }
-
-    public int findMinDuration(final String task) {
-        final HashMap<String, Integer> maxDist = new HashMap<>();
-        Task targetTask = null;
-        for (Task searchTask : this.tasks) {
-            if (searchTask.getTitle().equals(task)) {
-                targetTask = searchTask;
-                break;
-            }
-        }
-        final ArrayList<Task> taskArrayList = topologycalSort(targetTask);
-        final int taskArrayListSize = taskArrayList.size();
-        int startIndex = 0;
-        for (int i = 0; i < taskArrayListSize; i++) {
-            if (taskArrayList.get(i).getPredecessors().isEmpty()) {
-                startIndex = i;
-                break;
-            }
-        }
-        maxDist.put(taskArrayList.get(startIndex).getTitle(), taskArrayList.get(startIndex).getEstimate());
-        for (int i = startIndex + 1; i < taskArrayListSize; i++) {
-            final Task searchTask = taskArrayList.get(i);
-            maxDist.put(searchTask.getTitle(), searchTask.getEstimate());
-            int index = i - 1;
-            for (int j = 0; j < searchTask.getPredecessors().size(); j++) {
-                while (index >= 0 && !searchTask.getPredecessors().contains(taskArrayList.get(index))) {
-                    index--;
-                }
-                maxDist.put(searchTask.getTitle(), Math.max(maxDist.get(searchTask.getTitle()), searchTask.getEstimate() + maxDist.get(taskArrayList.get(index).getTitle())));
-                index--;
-            }
-        }
-        return maxDist.get(targetTask.getTitle());
-    }
-
-    public int findMaxBonusCount(final String task) {
+    // 현준님의 코드
+    // 1. 가상의 테스크를 만든다
+    // 2. flow/Capcity를 각각 해시 맵을 통해서 만든다
+    // 3. BST를 통해서 가지 1개의 길을 구한다
+    // 4. 갈라지고 합쳐지는 곳에 가상 테스크까지 포함해서 가지 1개를 DST해서 최소값을 구한다
+    // 5. 3 - 4를 모든 가지가 끝날 때까지 실행한다
+    // *리뷰 : 로직이 간단하게 할 수 있는 부분이 있을 것 같음
+    //         복잡한게 3,4을 합쳐서 가지 구하고 탐색하는 걸 DST로 했으면 더 쉽게 읽혔을 거다
+    //         3번 코드가 왜 있는 지 의문이 들고 엄청 잘 안 읽혔다 물론 DST로 하면 안 되는 이유가 있을 수도..
+    public int findMaxBonusCountAnswer(final String task) {
         // 여러군데에서 일을 시작할 수 있기 때문에 그 시작들을 모아두기 위해서
         // 1개의 가상 시작점 아래에 시작점들을 모아둔다
         final Task firstTask = new Task("virtualFirstTask", 0);
@@ -360,14 +312,22 @@ public final class Project {
             queue.add(firstTask);
             visited.clear();
 
+            //시작 Task부터 BST탐색해서 visted를 만든다
             while (!queue.isEmpty()) {
                 final Task tempTask = queue.remove();
                 if (!capacity.containsKey(tempTask.getTitle())) {
                     continue;
                 }
                 final HashMap<String, Integer> nextTaskHashMap = capacity.get(tempTask.getTitle());
+
+                // 위상 정렬된 Task부터 순환하면서 시작 Task에 맞는 것들이 있으면 그 길을 만들어둔다
+                // 이미 계산한 Branch는 생략한다
                 for (int i = 0; i < taskArrayList.size(); i++) {
                     if (nextTaskHashMap.containsKey(taskArrayList.get(i).getTitle())) {
+
+                        // 밑에서 visted를 이용해서 가지의 최소값을 탐색하는데 그 때 쓸 visted를 만듬
+                        // 2개로 갈라지는 경우 1경우만 담는다 다음 건 다음 루프에 함
+                        // 용량 - 플로우해서 용량이 부족하면 그냥 넘어간다 그래서 해당하는 가지는 안 탐
                         if (nextTaskHashMap.get(taskArrayList.get(i).getTitle()) - flow.get(tempTask.getTitle()).get(taskArrayList.get(i).getTitle()) > 0
                                 && !visited.containsKey(taskArrayList.get(i))) {
                             queue.add(taskArrayList.get(i));
@@ -384,12 +344,20 @@ public final class Project {
                 break;
             }
 
+            // 마일드 스톤에서 시작함
             Task preTask = visited.get(endTask);
+
+            // 마일드 스톤에 대해서  flow테스크 용량 - 유량을 구함
             int minFlow = capacity.get(preTask.getTitle()).get(endTask.getTitle()) - flow.get(preTask.getTitle()).get(endTask.getTitle());
+
+            // 가장 마지막인 시작 Task까지 가서 두 개로 갈라지는 문제를 해결한다
+            // flow테스크 용량 - 유량과 minFlow를 비교한다
+            // visted된 것을 따라간다
             for (Task flowTask = preTask; !flowTask.equals(firstTask); flowTask = visited.get(flowTask)) {
                 minFlow = Math.min(minFlow, capacity.get(visited.get(flowTask).getTitle()).get(flowTask.getTitle()) - flow.get(visited.get(flowTask).getTitle()).get(flowTask.getTitle()));
             }
             preTask = visited.get(endTask);
+            //해당 브런치에 최소값으로 다 세팅함
             flow.get(preTask.getTitle()).put(endTask.getTitle(), flow.get(preTask.getTitle()).get(endTask.getTitle()) + minFlow);
             for (Task flowTask = preTask; !flowTask.equals(firstTask); flowTask = visited.get(flowTask)) {
                 flow.get(visited.get(flowTask).getTitle()).put(flowTask.getTitle(), flow.get(visited.get(flowTask).getTitle()).get(flowTask.getTitle()) + minFlow);
