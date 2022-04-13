@@ -3,13 +3,21 @@ package academy.pocu.comp3500.assignment4.app;
 import academy.pocu.comp3500.assignment4.Project;
 import academy.pocu.comp3500.assignment4.project.Task;
 
-public class Program {
+import java.util.ArrayList;
+import java.util.Scanner;
 
+public class Program {
     public static void main(String[] args) {
         {
             Task[] tasks = createTasksOrigin();
 
             Project project = new Project(tasks);
+
+            int manMonths1 = project.findTotalManMonths("F");
+            assert (manMonths1 == 48);
+
+            int minDuration1 = project.findMinDuration("F");
+            assert (minDuration1 == 48);
 
             int bonusCount1 = project.findMaxBonusCount("E");
             assert (bonusCount1 == 7);
@@ -205,5 +213,33 @@ public class Program {
         return new Task[]{
                 a, b, c, d, e, f, g, h, i
         };
+    }
+
+    private static void printPropertyCompetition() {
+            ArrayList<String> homeName = new ArrayList<>();
+            ArrayList<Double> competitation = new ArrayList<>();
+
+            while (true) {
+                Scanner sc = new Scanner(System.in);
+
+                System.out.print("이름 입력하셈(종료? Y눌러) : ");
+                String str = sc.nextLine();
+                if (str.equals("Y")) {
+                    break;
+                }
+                homeName.add(str);
+
+                System.out.print("모집인원 입력하셈 : ");
+                int capacity = Integer.parseInt(sc.nextLine());
+
+                System.out.print("접수한 인원 입력하셈 : ");
+                int application = Integer.parseInt(sc.nextLine());
+
+                competitation.add(application / (double)capacity);
+            }
+
+            for (int i = 0; i < homeName.size(); i++) {
+                System.out.printf("%s, 경쟁률 : %f\n", homeName.get(i), competitation.get(i));
+            }
     }
 }
